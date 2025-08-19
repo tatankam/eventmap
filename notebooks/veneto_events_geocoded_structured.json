@@ -1,0 +1,1687 @@
+{
+  "events": [
+    {
+      "id": "1",
+      "title": "Campolongo Tapogliano Theatre Event #1",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "A unique theatre opportunity awaits you in Campolongo Tapogliano. Join us at the charming Parco delle Risorgive for an event designed to inspire and entertain.",
+      "city": "Campolongo Tapogliano",
+      "location": {
+        "venue": "Parco delle Risorgive",
+        "address": "Parco delle Risorgive, Campolongo Tapogliano, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-25T13:31",
+      "end_date": "2025-08-25T14:31",
+      "url": "https://example.com/veneto-events/1"
+    },
+    {
+      "id": "2",
+      "title": "Soave Festival Event #2",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Unwind and enjoy a delightful festival experience in Soave at the picturesque Wine Museum. Relax and take in the atmosphere.",
+      "city": "Soave",
+      "location": {
+        "venue": "Wine Museum",
+        "address": "Wine Museum, Soave, Veneto",
+        "latitude": 45.4202303,
+        "longitude": 11.247722
+      },
+      "start_date": "2025-08-23T16:48",
+      "end_date": "2025-08-23T19:48",
+      "url": "https://example.com/veneto-events/2"
+    },
+    {
+      "id": "3",
+      "title": "San Donà di Piave Sport Event #3",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Expand your horizons with this insightful sport event in San Donà di Piave, hosted at the distinguished Municipal Library. Learn something new and be inspired.",
+      "city": "San Donà di Piave",
+      "location": {
+        "venue": "Municipal Library",
+        "address": "Municipal Library, San Donà di Piave, Veneto",
+        "latitude": 45.6294811,
+        "longitude": 12.5641057
+      },
+      "start_date": "2025-08-26T09:01",
+      "end_date": "2025-08-26T11:01",
+      "url": "https://example.com/veneto-events/3"
+    },
+    {
+      "id": "4",
+      "title": "Mestre Food & Drink Event #4",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Prepare for an unforgettable food & drink experience in the stunning city of Mestre, held at the magnificent Cataio Filippo. This event promises to be a highlight of the season!",
+      "city": "Mestre",
+      "location": {
+        "venue": "Cataio Filippo",
+        "address": "Cataio Filippo, Mestre, Veneto",
+        "latitude": 45.4943063,
+        "longitude": 12.2418053
+      },
+      "start_date": "2025-08-27T04:54",
+      "end_date": "2025-08-27T08:54",
+      "url": "https://example.com/veneto-events/4"
+    },
+    {
+      "id": "5",
+      "title": "Vicenza Exhibition Event #5",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Step into a world of wonder at this extraordinary exhibition event in Vicenza, held at the historic Rotonda di Vicenza. Prepare to be amazed!",
+      "city": "Vicenza",
+      "location": {
+        "venue": "Rotonda di Vicenza",
+        "address": "Rotonda di Vicenza, Vicenza, Veneto",
+        "latitude": 45.5266698,
+        "longitude": 11.5504036
+      },
+      "start_date": "2025-08-19T00:44",
+      "end_date": "2025-08-19T04:44",
+      "url": "https://example.com/veneto-events/5"
+    },
+    {
+      "id": "6",
+      "title": "Montagnana Conference Event #6",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Connect with fellow enthusiasts at this lively conference event in Montagnana, taking place at the welcoming Medieval Walls of Montagnana. Share your passion and make new friends.",
+      "city": "Montagnana",
+      "location": {
+        "venue": "Medieval Walls of Montagnana",
+        "address": "Medieval Walls of Montagnana, Montagnana, Veneto",
+        "latitude": 45.2333207,
+        "longitude": 11.4657779
+      },
+      "start_date": "2025-08-26T17:57",
+      "end_date": "2025-08-27T01:57",
+      "url": "https://example.com/veneto-events/6"
+    },
+    {
+      "id": "7",
+      "title": "Borghetto sul Mincio Food & Drink Event #7",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Expand your horizons with this insightful food & drink event in Borghetto sul Mincio, hosted at the distinguished Medieval village center. Learn something new and be inspired.",
+      "city": "Borghetto sul Mincio",
+      "location": {
+        "venue": "Medieval village center",
+        "address": "Medieval village center, Borghetto sul Mincio, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-19T16:41",
+      "end_date": "2025-08-20T02:41",
+      "url": "https://example.com/veneto-events/7"
+    },
+    {
+      "id": "8",
+      "title": "San Donà di Piave Theatre Event #8",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Seeking adventure in San Donà di Piave? Look no further than this captivating theatre event at Piazza Indipendenza. Fun and excitement are guaranteed!",
+      "city": "San Donà di Piave",
+      "location": {
+        "venue": "Piazza Indipendenza",
+        "address": "Piazza Indipendenza, San Donà di Piave, Veneto",
+        "latitude": 45.6294057,
+        "longitude": 12.5642475
+      },
+      "start_date": "2025-08-24T03:55",
+      "end_date": "2025-08-24T09:55",
+      "url": "https://example.com/veneto-events/8"
+    },
+    {
+      "id": "9",
+      "title": "Este Exhibition Event #9",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Expand your horizons with this insightful exhibition event in Este, hosted at the distinguished Museo Nazionale Atestino. Learn something new and be inspired.",
+      "city": "Este",
+      "location": {
+        "venue": "Museo Nazionale Atestino",
+        "address": "Museo Nazionale Atestino, Este, Veneto",
+        "latitude": 45.2296094,
+        "longitude": 11.6563462
+      },
+      "start_date": "2025-08-22T08:05",
+      "end_date": "2025-08-22T18:05",
+      "url": "https://example.com/veneto-events/9"
+    },
+    {
+      "id": "10",
+      "title": "Cittadella Theatre Event #10",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Seeking adventure in Cittadella? Look no further than this captivating theatre event at Museo della Città. Fun and excitement are guaranteed!",
+      "city": "Cittadella",
+      "location": {
+        "venue": "Museo della Città",
+        "address": "Museo della Città, Cittadella, Veneto",
+        "latitude": 45.6487941,
+        "longitude": 11.7835801
+      },
+      "start_date": "2025-08-24T08:29",
+      "end_date": "2025-08-24T09:29",
+      "url": "https://example.com/veneto-events/10"
+    },
+    {
+      "id": "11",
+      "title": "San Donà di Piave Theatre Event #11",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Unwind and enjoy a delightful theatre experience in San Donà di Piave at the picturesque Piazza Indipendenza. Relax and take in the atmosphere.",
+      "city": "San Donà di Piave",
+      "location": {
+        "venue": "Piazza Indipendenza",
+        "address": "Piazza Indipendenza, San Donà di Piave, Veneto",
+        "latitude": 45.6294057,
+        "longitude": 12.5642475
+      },
+      "start_date": "2025-08-28T11:47",
+      "end_date": "2025-08-28T14:47",
+      "url": "https://example.com/veneto-events/11"
+    },
+    {
+      "id": "12",
+      "title": "Portogruaro Arts & Crafts Event #12",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Immerse yourself in the rich culture of Portogruaro with this engaging arts & crafts event at the iconic Piazza della Repubblica. It's the perfect way to spend your time.",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Piazza della Repubblica",
+        "address": "Piazza della Repubblica, Portogruaro, Veneto",
+        "latitude": 45.7755764,
+        "longitude": 12.8376743
+      },
+      "start_date": "2025-08-19T12:50",
+      "end_date": "2025-08-19T22:50",
+      "url": "https://example.com/veneto-events/12"
+    },
+    {
+      "id": "13",
+      "title": "Jesolo Conference Event #13",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Dive into the world of conference at this exciting gathering in Jesolo. Located at the renowned Sea Life Aquarium, it's an event you won't want to miss.",
+      "city": "Jesolo",
+      "location": {
+        "venue": "Sea Life Aquarium",
+        "address": "Sea Life Aquarium, Jesolo, Veneto",
+        "latitude": 45.5367094,
+        "longitude": 12.6383337
+      },
+      "start_date": "2025-08-25T03:08",
+      "end_date": "2025-08-25T10:08",
+      "url": "https://example.com/veneto-events/13"
+    },
+    {
+      "id": "14",
+      "title": "Dolo Workshop Event #14",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Step into a world of wonder at this extraordinary workshop event in Dolo, held at the historic Villa Widmann. Prepare to be amazed!",
+      "city": "Dolo",
+      "location": {
+        "venue": "Villa Widmann",
+        "address": "Villa Widmann, Dolo, Veneto",
+        "latitude": 45.4234356,
+        "longitude": 12.0743252
+      },
+      "start_date": "2025-08-21T02:48",
+      "end_date": "2025-08-21T05:48",
+      "url": "https://example.com/veneto-events/14"
+    },
+    {
+      "id": "15",
+      "title": "Vicenza Conference Event #15",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "A unique conference opportunity awaits you in Vicenza. Join us at the charming Villa La Rotonda for an event designed to inspire and entertain.",
+      "city": "Vicenza",
+      "location": {
+        "venue": "Villa La Rotonda",
+        "address": "Villa La Rotonda, Vicenza, Veneto",
+        "latitude": 45.5488306,
+        "longitude": 11.5478825
+      },
+      "start_date": "2025-08-20T09:14",
+      "end_date": "2025-08-20T15:14",
+      "url": "https://example.com/veneto-events/15"
+    },
+    {
+      "id": "16",
+      "title": "San Vito di Cadore Conference Event #16",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Explore the vibrant conference scene in San Vito di Cadore with this special event at Lago di Antorno. Get ready for a day filled with discovery and enjoyment.",
+      "city": "San Vito di Cadore",
+      "location": {
+        "venue": "Lago di Antorno",
+        "address": "Lago di Antorno, San Vito di Cadore, Veneto",
+        "latitude": 46.458966,
+        "longitude": 12.2057415
+      },
+      "start_date": "2025-08-29T08:48",
+      "end_date": "2025-08-29T10:48",
+      "url": "https://example.com/veneto-events/16"
+    },
+    {
+      "id": "17",
+      "title": "San Vito di Cadore Theatre Event #17",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Expand your horizons with this insightful theatre event in San Vito di Cadore, hosted at the distinguished Lago di Antorno. Learn something new and be inspired.",
+      "city": "San Vito di Cadore",
+      "location": {
+        "venue": "Lago di Antorno",
+        "address": "Lago di Antorno, San Vito di Cadore, Veneto",
+        "latitude": 46.458966,
+        "longitude": 12.2057415
+      },
+      "start_date": "2025-08-27T20:44",
+      "end_date": "2025-08-27T21:44",
+      "url": "https://example.com/veneto-events/17"
+    },
+    {
+      "id": "18",
+      "title": "Asolo Sport Event #18",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Unwind and enjoy a delightful sport experience in Asolo at the picturesque Rocca di Asolo. Relax and take in the atmosphere.",
+      "city": "Asolo",
+      "location": {
+        "venue": "Rocca di Asolo",
+        "address": "Rocca di Asolo, Asolo, Veneto",
+        "latitude": 45.8046333,
+        "longitude": 11.9189322
+      },
+      "start_date": "2025-08-27T08:27",
+      "end_date": "2025-08-27T16:27",
+      "url": "https://example.com/veneto-events/18"
+    },
+    {
+      "id": "19",
+      "title": "Jesolo Exhibition Event #19",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Expand your horizons with this insightful exhibition event in Jesolo, hosted at the distinguished Parco Zoo Punta Verde. Learn something new and be inspired.",
+      "city": "Jesolo",
+      "location": {
+        "venue": "Parco Zoo Punta Verde",
+        "address": "Parco Zoo Punta Verde, Jesolo, Veneto",
+        "latitude": 45.5367094,
+        "longitude": 12.6383337
+      },
+      "start_date": "2025-08-19T08:41",
+      "end_date": "2025-08-19T14:41",
+      "url": "https://example.com/veneto-events/19"
+    },
+    {
+      "id": "20",
+      "title": "Portogruaro Workshop Event #20",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Expand your horizons with this insightful workshop event in Portogruaro, hosted at the distinguished Chiesa di Sant'Andrea. Learn something new and be inspired.",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Chiesa di Sant'Andrea",
+        "address": "Chiesa di Sant'Andrea, Portogruaro, Veneto",
+        "latitude": 45.775598,
+        "longitude": 12.8374571
+      },
+      "start_date": "2025-08-21T05:21",
+      "end_date": "2025-08-21T11:21",
+      "url": "https://example.com/veneto-events/20"
+    },
+    {
+      "id": "21",
+      "title": "Vittorio Veneto Sport Event #21",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "A unique sport opportunity awaits you in Vittorio Veneto. Join us at the charming Piazza del Popolo for an event designed to inspire and entertain.",
+      "city": "Vittorio Veneto",
+      "location": {
+        "venue": "Piazza del Popolo",
+        "address": "Piazza del Popolo, Vittorio Veneto, Veneto",
+        "latitude": 45.9897336,
+        "longitude": 12.295648
+      },
+      "start_date": "2025-08-29T17:21",
+      "end_date": "2025-08-29T18:21",
+      "url": "https://example.com/veneto-events/21"
+    },
+    {
+      "id": "22",
+      "title": "Treviso Workshop Event #22",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Immerse yourself in the rich culture of Treviso with this engaging workshop event at the iconic Villa Margherita. It's the perfect way to spend your time.",
+      "city": "Treviso",
+      "location": {
+        "venue": "Villa Margherita",
+        "address": "Villa Margherita, Treviso, Veneto",
+        "latitude": 45.6658505,
+        "longitude": 12.2455414
+      },
+      "start_date": "2025-08-28T23:43",
+      "end_date": "2025-08-29T09:43",
+      "url": "https://example.com/veneto-events/22"
+    },
+    {
+      "id": "23",
+      "title": "San Donà di Piave Tour Event #23",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "Expand your horizons with this insightful tour event in San Donà di Piave, hosted at the distinguished Municipal Library. Learn something new and be inspired.",
+      "city": "San Donà di Piave",
+      "location": {
+        "venue": "Municipal Library",
+        "address": "Municipal Library, San Donà di Piave, Veneto",
+        "latitude": 45.6294811,
+        "longitude": 12.5641057
+      },
+      "start_date": "2025-08-24T21:42",
+      "end_date": "2025-08-25T01:42",
+      "url": "https://example.com/veneto-events/23"
+    },
+    {
+      "id": "24",
+      "title": "Feltre Festival Event #24",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Seeking adventure in Feltre? Look no further than this captivating festival event at Museo Civico. Fun and excitement are guaranteed!",
+      "city": "Feltre",
+      "location": {
+        "venue": "Museo Civico",
+        "address": "Museo Civico, Feltre, Veneto",
+        "latitude": 46.0163755,
+        "longitude": 11.9062541
+      },
+      "start_date": "2025-08-21T14:19",
+      "end_date": "2025-08-22T00:19",
+      "url": "https://example.com/veneto-events/24"
+    },
+    {
+      "id": "25",
+      "title": "Montagnana Food & Drink Event #25",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Expand your horizons with this insightful food & drink event in Montagnana, hosted at the distinguished Duomo di Santa Maria Assunta. Learn something new and be inspired.",
+      "city": "Montagnana",
+      "location": {
+        "venue": "Duomo di Santa Maria Assunta",
+        "address": "Duomo di Santa Maria Assunta, Montagnana, Veneto",
+        "latitude": 45.2333207,
+        "longitude": 11.4657779
+      },
+      "start_date": "2025-08-21T10:14",
+      "end_date": "2025-08-21T14:14",
+      "url": "https://example.com/veneto-events/25"
+    },
+    {
+      "id": "26",
+      "title": "Vicenza Festival Event #26",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Immerse yourself in the rich culture of Vicenza with this engaging festival event at the iconic Porta Castello. It's the perfect way to spend your time.",
+      "city": "Vicenza",
+      "location": {
+        "venue": "Porta Castello",
+        "address": "Porta Castello, Vicenza, Veneto",
+        "latitude": 45.5488306,
+        "longitude": 11.5478825
+      },
+      "start_date": "2025-08-22T11:31",
+      "end_date": "2025-08-22T21:31",
+      "url": "https://example.com/veneto-events/26"
+    },
+    {
+      "id": "27",
+      "title": "Asolo Tour Event #27",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "Seeking adventure in Asolo? Look no further than this captivating tour event at Villa Maser. Fun and excitement are guaranteed!",
+      "city": "Asolo",
+      "location": {
+        "venue": "Villa Maser",
+        "address": "Villa Maser, Asolo, Veneto",
+        "latitude": 45.8007265,
+        "longitude": 11.9142444
+      },
+      "start_date": "2025-08-22T11:33",
+      "end_date": "2025-08-22T16:33",
+      "url": "https://example.com/veneto-events/27"
+    },
+    {
+      "id": "28",
+      "title": "Portogruaro Theatre Event #28",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Seeking adventure in Portogruaro? Look no further than this captivating theatre event at Museo Nazionale Concordiese. Fun and excitement are guaranteed!",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Museo Nazionale Concordiese",
+        "address": "Museo Nazionale Concordiese, Portogruaro, Veneto",
+        "latitude": 45.775345,
+        "longitude": 12.835497
+      },
+      "start_date": "2025-08-23T13:41",
+      "end_date": "2025-08-23T18:41",
+      "url": "https://example.com/veneto-events/28"
+    },
+    {
+      "id": "29",
+      "title": "Venice Exhibition Event #29",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Connect with fellow enthusiasts at this lively exhibition event in Venice, taking place at the welcoming Fondazione Querini Stampalia. Share your passion and make new friends.",
+      "city": "Venice",
+      "location": {
+        "venue": "Fondazione Querini Stampalia",
+        "address": "Fondazione Querini Stampalia, Venice, Veneto",
+        "latitude": 45.4364575,
+        "longitude": 12.3410349
+      },
+      "start_date": "2025-08-24T18:16",
+      "end_date": "2025-08-24T21:16",
+      "url": "https://example.com/veneto-events/29"
+    },
+    {
+      "id": "30",
+      "title": "Pedavena Conference Event #30",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Explore the vibrant conference scene in Pedavena with this special event at Villa Pasolini dall’Onda. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Pedavena",
+      "location": {
+        "venue": "Villa Pasolini dall’Onda",
+        "address": "Villa Pasolini dall’Onda, Pedavena, Veneto",
+        "latitude": 46.0396242,
+        "longitude": 11.8804327
+      },
+      "start_date": "2025-08-22T21:07",
+      "end_date": "2025-08-23T00:07",
+      "url": "https://example.com/veneto-events/30"
+    },
+    {
+      "id": "31",
+      "title": "Feltre Music Event #31",
+      "type": "Music",
+      "category": "Music",
+      "description": "Dive into the world of music at this exciting gathering in Feltre. Located at the renowned Palazzo della Magnifica Comunità, it's an event you won't want to miss.",
+      "city": "Feltre",
+      "location": {
+        "venue": "Palazzo della Magnifica Comunità",
+        "address": "Palazzo della Magnifica Comunità, Feltre, Veneto",
+        "latitude": 46.0163755,
+        "longitude": 11.9062541
+      },
+      "start_date": "2025-08-26T01:02",
+      "end_date": "2025-08-26T05:02",
+      "url": "https://example.com/veneto-events/31"
+    },
+    {
+      "id": "32",
+      "title": "Soave Workshop Event #32",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Step into a world of wonder at this extraordinary workshop event in Soave, held at the historic Castle of Soave. Prepare to be amazed!",
+      "city": "Soave",
+      "location": {
+        "venue": "Castle of Soave",
+        "address": "Castle of Soave, Soave, Veneto",
+        "latitude": 45.4202303,
+        "longitude": 11.247722
+      },
+      "start_date": "2025-08-22T00:20",
+      "end_date": "2025-08-22T07:20",
+      "url": "https://example.com/veneto-events/32"
+    },
+    {
+      "id": "33",
+      "title": "Venice Conference Event #33",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Dive into the world of conference at this exciting gathering in Venice. Located at the renowned Scuola Grande di San Rocco, it's an event you won't want to miss.",
+      "city": "Venice",
+      "location": {
+        "venue": "Scuola Grande di San Rocco",
+        "address": "Scuola Grande di San Rocco, Venice, Veneto",
+        "latitude": 45.4371908,
+        "longitude": 12.3345898
+      },
+      "start_date": "2025-08-24T20:21",
+      "end_date": "2025-08-24T22:21",
+      "url": "https://example.com/veneto-events/33"
+    },
+    {
+      "id": "34",
+      "title": "Padua Arts & Crafts Event #34",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Expand your horizons with this insightful arts & crafts event in Padua, hosted at the distinguished Abbazia di Santa Giustina. Learn something new and be inspired.",
+      "city": "Padua",
+      "location": {
+        "venue": "Abbazia di Santa Giustina",
+        "address": "Abbazia di Santa Giustina, Padua, Veneto",
+        "latitude": 45.4077172,
+        "longitude": 11.8734455
+      },
+      "start_date": "2025-08-20T04:40",
+      "end_date": "2025-08-20T06:40",
+      "url": "https://example.com/veneto-events/34"
+    },
+    {
+      "id": "35",
+      "title": "Venice Theatre Event #35",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Explore the vibrant theatre scene in Venice with this special event at Peggy Guggenheim Collection. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Venice",
+      "location": {
+        "venue": "Peggy Guggenheim Collection",
+        "address": "Peggy Guggenheim Collection, Venice, Veneto",
+        "latitude": 45.4371908,
+        "longitude": 12.3345898
+      },
+      "start_date": "2025-08-21T09:49",
+      "end_date": "2025-08-21T18:49",
+      "url": "https://example.com/veneto-events/35"
+    },
+    {
+      "id": "36",
+      "title": "Campolongo Tapogliano Festival Event #36",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Seeking adventure in Campolongo Tapogliano? Look no further than this captivating festival event at Chiesa di San Giovanni Battista. Fun and excitement are guaranteed!",
+      "city": "Campolongo Tapogliano",
+      "location": {
+        "venue": "Chiesa di San Giovanni Battista",
+        "address": "Chiesa di San Giovanni Battista, Campolongo Tapogliano, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-23T08:29",
+      "end_date": "2025-08-23T09:29",
+      "url": "https://example.com/veneto-events/36"
+    },
+    {
+      "id": "37",
+      "title": "Borghetto sul Mincio Conference Event #37",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Immerse yourself in the rich culture of Borghetto sul Mincio with this engaging conference event at the iconic Medieval village center. It's the perfect way to spend your time.",
+      "city": "Borghetto sul Mincio",
+      "location": {
+        "venue": "Medieval village center",
+        "address": "Medieval village center, Borghetto sul Mincio, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-22T00:49",
+      "end_date": "2025-08-22T01:49",
+      "url": "https://example.com/veneto-events/37"
+    },
+    {
+      "id": "38",
+      "title": "San Donà di Piave Sport Event #38",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Dive into the world of sport at this exciting gathering in San Donà di Piave. Located at the renowned Cittadella Medicea, it's an event you won't want to miss.",
+      "city": "San Donà di Piave",
+      "location": {
+        "venue": "Cittadella Medicea",
+        "address": "Cittadella Medicea, San Donà di Piave, Veneto",
+        "latitude": 45.6294811,
+        "longitude": 12.5641057
+      },
+      "start_date": "2025-08-22T09:58",
+      "end_date": "2025-08-22T19:58",
+      "url": "https://example.com/veneto-events/38"
+    },
+    {
+      "id": "39",
+      "title": "Valdagno Food & Drink Event #39",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Prepare for an unforgettable food & drink experience in the stunning city of Valdagno, held at the magnificent Church of San Clemente. This event promises to be a highlight of the season!",
+      "city": "Valdagno",
+      "location": {
+        "venue": "Church of San Clemente",
+        "address": "Church of San Clemente, Valdagno, Veneto",
+        "latitude": 45.6413213,
+        "longitude": 11.3040596
+      },
+      "start_date": "2025-08-28T17:28",
+      "end_date": "2025-08-29T00:28",
+      "url": "https://example.com/veneto-events/39"
+    },
+    {
+      "id": "40",
+      "title": "Verona Tour Event #40",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "A unique tour opportunity awaits you in Verona. Join us at the charming Juliet's House for an event designed to inspire and entertain.",
+      "city": "Verona",
+      "location": {
+        "venue": "Juliet's House",
+        "address": "Juliet's House, Verona, Veneto",
+        "latitude": 45.4384958,
+        "longitude": 10.9924122
+      },
+      "start_date": "2025-08-28T12:45",
+      "end_date": "2025-08-28T22:45",
+      "url": "https://example.com/veneto-events/40"
+    },
+    {
+      "id": "41",
+      "title": "Venice Exhibition Event #41",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Connect with fellow enthusiasts at this lively exhibition event in Venice, taking place at the welcoming Palazzo Ducale. Share your passion and make new friends.",
+      "city": "Venice",
+      "location": {
+        "venue": "Palazzo Ducale",
+        "address": "Palazzo Ducale, Venice, Veneto",
+        "latitude": 45.4371908,
+        "longitude": 12.3345898
+      },
+      "start_date": "2025-08-29T02:56",
+      "end_date": "2025-08-29T06:56",
+      "url": "https://example.com/veneto-events/41"
+    },
+    {
+      "id": "42",
+      "title": "Verona Theatre Event #42",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Explore the vibrant theatre scene in Verona with this special event at Chiesa di San Bernardino. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Verona",
+      "location": {
+        "venue": "Chiesa di San Bernardino",
+        "address": "Chiesa di San Bernardino, Verona, Veneto",
+        "latitude": 45.4384958,
+        "longitude": 10.9924122
+      },
+      "start_date": "2025-08-26T09:39",
+      "end_date": "2025-08-26T10:39",
+      "url": "https://example.com/veneto-events/42"
+    },
+    {
+      "id": "43",
+      "title": "Valdagno Festival Event #43",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Seeking adventure in Valdagno? Look no further than this captivating festival event at Church of San Clemente. Fun and excitement are guaranteed!",
+      "city": "Valdagno",
+      "location": {
+        "venue": "Church of San Clemente",
+        "address": "Church of San Clemente, Valdagno, Veneto",
+        "latitude": 45.6413213,
+        "longitude": 11.3040596
+      },
+      "start_date": "2025-08-27T19:36",
+      "end_date": "2025-08-28T01:36",
+      "url": "https://example.com/veneto-events/43"
+    },
+    {
+      "id": "44",
+      "title": "Venice Workshop Event #44",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Seeking adventure in Venice? Look no further than this captivating workshop event at Sant’Elena Park. Fun and excitement are guaranteed!",
+      "city": "Venice",
+      "location": {
+        "venue": "Sant’Elena Park",
+        "address": "Sant’Elena Park, Venice, Veneto",
+        "latitude": 45.4371908,
+        "longitude": 12.3345898
+      },
+      "start_date": "2025-08-19T03:34",
+      "end_date": "2025-08-19T10:34",
+      "url": "https://example.com/veneto-events/44"
+    },
+    {
+      "id": "45",
+      "title": "Treviso Conference Event #45",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Unwind and enjoy a delightful conference experience in Treviso at the picturesque Porta San Tommaso. Relax and take in the atmosphere.",
+      "city": "Treviso",
+      "location": {
+        "venue": "Porta San Tommaso",
+        "address": "Porta San Tommaso, Treviso, Veneto",
+        "latitude": 45.6658505,
+        "longitude": 12.2455414
+      },
+      "start_date": "2025-08-28T05:36",
+      "end_date": "2025-08-28T08:36",
+      "url": "https://example.com/veneto-events/45"
+    },
+    {
+      "id": "46",
+      "title": "Borghetto sul Mincio Tour Event #46",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "Seeking adventure in Borghetto sul Mincio? Look no further than this captivating tour event at Chiesa di San Marco. Fun and excitement are guaranteed!",
+      "city": "Borghetto sul Mincio",
+      "location": {
+        "venue": "Chiesa di San Marco",
+        "address": "Chiesa di San Marco, Borghetto sul Mincio, Veneto",
+        "latitude": 45.4352051,
+        "longitude": 12.3328984
+      },
+      "start_date": "2025-08-19T05:47",
+      "end_date": "2025-08-19T06:47",
+      "url": "https://example.com/veneto-events/46"
+    },
+    {
+      "id": "47",
+      "title": "Mestre Theatre Event #47",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Step into a world of wonder at this extraordinary theatre event in Mestre, held at the historic Parco Albanese. Prepare to be amazed!",
+      "city": "Mestre",
+      "location": {
+        "venue": "Parco Albanese",
+        "address": "Parco Albanese, Mestre, Veneto",
+        "latitude": 45.4943063,
+        "longitude": 12.2418053
+      },
+      "start_date": "2025-08-22T20:48",
+      "end_date": "2025-08-23T01:48",
+      "url": "https://example.com/veneto-events/47"
+    },
+    {
+      "id": "48",
+      "title": "Monselice Sport Event #48",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Expand your horizons with this insightful sport event in Monselice, hosted at the distinguished Santuario delle Sette Chiese. Learn something new and be inspired.",
+      "city": "Monselice",
+      "location": {
+        "venue": "Santuario delle Sette Chiese",
+        "address": "Santuario delle Sette Chiese, Monselice, Veneto",
+        "latitude": 45.2417684,
+        "longitude": 11.7508534
+      },
+      "start_date": "2025-08-29T20:22",
+      "end_date": "2025-08-30T00:00",
+      "url": "https://example.com/veneto-events/48"
+    },
+    {
+      "id": "49",
+      "title": "Asolo Workshop Event #49",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Explore the vibrant workshop scene in Asolo with this special event at Monte Grappa viewpoint. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Asolo",
+      "location": {
+        "venue": "Monte Grappa viewpoint",
+        "address": "Monte Grappa viewpoint, Asolo, Veneto",
+        "latitude": 45.8007265,
+        "longitude": 11.9142444
+      },
+      "start_date": "2025-08-25T23:03",
+      "end_date": "2025-08-26T00:03",
+      "url": "https://example.com/veneto-events/49"
+    },
+    {
+      "id": "50",
+      "title": "Pedavena Arts & Crafts Event #50",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "A unique arts & crafts opportunity awaits you in Pedavena. Join us at the charming Piazza Martiri for an event designed to inspire and entertain.",
+      "city": "Pedavena",
+      "location": {
+        "venue": "Piazza Martiri",
+        "address": "Piazza Martiri, Pedavena, Veneto",
+        "latitude": 46.0396242,
+        "longitude": 11.8804327
+      },
+      "start_date": "2025-08-28T03:32",
+      "end_date": "2025-08-28T05:32",
+      "url": "https://example.com/veneto-events/50"
+    },
+    {
+      "id": "51",
+      "title": "Dolo Arts & Crafts Event #51",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Connect with fellow enthusiasts at this lively arts & crafts event in Dolo, taking place at the welcoming Canale di Dolo. Share your passion and make new friends.",
+      "city": "Dolo",
+      "location": {
+        "venue": "Canale di Dolo",
+        "address": "Canale di Dolo, Dolo, Veneto",
+        "latitude": 45.4234356,
+        "longitude": 12.0743252
+      },
+      "start_date": "2025-08-22T05:53",
+      "end_date": "2025-08-22T14:53",
+      "url": "https://example.com/veneto-events/51"
+    },
+    {
+      "id": "52",
+      "title": "Riva del Garda Arts & Crafts Event #52",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Connect with fellow enthusiasts at this lively arts & crafts event in Riva del Garda, taking place at the welcoming Torre Apponale. Share your passion and make new friends.",
+      "city": "Riva del Garda",
+      "location": {
+        "venue": "Torre Apponale",
+        "address": "Torre Apponale, Riva del Garda, Veneto",
+        "latitude": 45.8847816,
+        "longitude": 10.8400649
+      },
+      "start_date": "2025-08-23T08:48",
+      "end_date": "2025-08-23T10:48",
+      "url": "https://example.com/veneto-events/52"
+    },
+    {
+      "id": "53",
+      "title": "Venice Music Event #53",
+      "type": "Music",
+      "category": "Music",
+      "description": "Prepare for an unforgettable music experience in the stunning city of Venice, held at the magnificent Lido di Venezia. This event promises to be a highlight of the season!",
+      "city": "Venice",
+      "location": {
+        "venue": "Lido di Venezia",
+        "address": "Lido di Venezia, Venice, Veneto",
+        "latitude": 45.4175761,
+        "longitude": 12.3683538
+      },
+      "start_date": "2025-08-27T22:12",
+      "end_date": "2025-08-27T23:12",
+      "url": "https://example.com/veneto-events/53"
+    },
+    {
+      "id": "54",
+      "title": "San Donà di Piave Festival Event #54",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Dive into the world of festival at this exciting gathering in San Donà di Piave. Located at the renowned Municipal Library, it's an event you won't want to miss.",
+      "city": "San Donà di Piave",
+      "location": {
+        "venue": "Municipal Library",
+        "address": "Municipal Library, San Donà di Piave, Veneto",
+        "latitude": 45.6294811,
+        "longitude": 12.5641057
+      },
+      "start_date": "2025-08-25T13:18",
+      "end_date": "2025-08-25T17:18",
+      "url": "https://example.com/veneto-events/54"
+    },
+    {
+      "id": "55",
+      "title": "Vicenza Theatre Event #55",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Explore the vibrant theatre scene in Vicenza with this special event at Ponte San Michele. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Vicenza",
+      "location": {
+        "venue": "Ponte San Michele",
+        "address": "Ponte San Michele, Vicenza, Veneto",
+        "latitude": 45.5460955,
+        "longitude": 11.5482654
+      },
+      "start_date": "2025-08-21T08:25",
+      "end_date": "2025-08-21T17:25",
+      "url": "https://example.com/veneto-events/55"
+    },
+    {
+      "id": "56",
+      "title": "Campolongo Tapogliano Festival Event #56",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Step into a world of wonder at this extraordinary festival event in Campolongo Tapogliano, held at the historic Parco delle Risorgive. Prepare to be amazed!",
+      "city": "Campolongo Tapogliano",
+      "location": {
+        "venue": "Parco delle Risorgive",
+        "address": "Parco delle Risorgive, Campolongo Tapogliano, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-29T17:39",
+      "end_date": "2025-08-29T21:39",
+      "url": "https://example.com/veneto-events/56"
+    },
+    {
+      "id": "57",
+      "title": "Valdagno Tour Event #57",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "Connect with fellow enthusiasts at this lively tour event in Valdagno, taking place at the welcoming Church of San Clemente. Share your passion and make new friends.",
+      "city": "Valdagno",
+      "location": {
+        "venue": "Church of San Clemente",
+        "address": "Church of San Clemente, Valdagno, Veneto",
+        "latitude": 45.6413213,
+        "longitude": 11.3040596
+      },
+      "start_date": "2025-08-22T16:33",
+      "end_date": "2025-08-22T23:33",
+      "url": "https://example.com/veneto-events/57"
+    },
+    {
+      "id": "58",
+      "title": "Borghetto sul Mincio Food & Drink Event #58",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Prepare for an unforgettable food & drink experience in the stunning city of Borghetto sul Mincio, held at the magnificent Medieval village center. This event promises to be a highlight of the season!",
+      "city": "Borghetto sul Mincio",
+      "location": {
+        "venue": "Medieval village center",
+        "address": "Medieval village center, Borghetto sul Mincio, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-23T22:21",
+      "end_date": "2025-08-24T05:21",
+      "url": "https://example.com/veneto-events/58"
+    },
+    {
+      "id": "59",
+      "title": "Feltre Conference Event #59",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Immerse yourself in the rich culture of Feltre with this engaging conference event at the iconic Castello di Feltre. It's the perfect way to spend your time.",
+      "city": "Feltre",
+      "location": {
+        "venue": "Castello di Feltre",
+        "address": "Castello di Feltre, Feltre, Veneto",
+        "latitude": 46.0163755,
+        "longitude": 11.9062541
+      },
+      "start_date": "2025-08-19T16:43",
+      "end_date": "2025-08-19T18:43",
+      "url": "https://example.com/veneto-events/59"
+    },
+    {
+      "id": "60",
+      "title": "Riva del Garda Arts & Crafts Event #60",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Seeking adventure in Riva del Garda? Look no further than this captivating arts & crafts event at Piazza III Novembre. Fun and excitement are guaranteed!",
+      "city": "Riva del Garda",
+      "location": {
+        "venue": "Piazza III Novembre",
+        "address": "Piazza III Novembre, Riva del Garda, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-29T20:22",
+      "end_date": "2025-08-29T23:22",
+      "url": "https://example.com/veneto-events/60"
+    },
+    {
+      "id": "61",
+      "title": "Valdagno Sport Event #61",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Immerse yourself in the rich culture of Valdagno with this engaging sport event at the iconic Parco delle Traine. It's the perfect way to spend your time.",
+      "city": "Valdagno",
+      "location": {
+        "venue": "Parco delle Traine",
+        "address": "Parco delle Traine, Valdagno, Veneto",
+        "latitude": 45.6413213,
+        "longitude": 11.3040596
+      },
+      "start_date": "2025-08-29T16:40",
+      "end_date": "2025-08-29T23:40",
+      "url": "https://example.com/veneto-events/61"
+    },
+    {
+      "id": "62",
+      "title": "Bardolino Conference Event #62",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Explore the vibrant conference scene in Bardolino with this special event at Parco Baia delle Sirene. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Bardolino",
+      "location": {
+        "venue": "Parco Baia delle Sirene",
+        "address": "Parco Baia delle Sirene, Bardolino, Veneto",
+        "latitude": 45.5475595,
+        "longitude": 10.7242145
+      },
+      "start_date": "2025-08-25T13:49",
+      "end_date": "2025-08-25T14:49",
+      "url": "https://example.com/veneto-events/62"
+    },
+    {
+      "id": "63",
+      "title": "Treviso Sport Event #63",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Prepare for an unforgettable sport experience in the stunning city of Treviso, held at the magnificent Parco degli Alberi Parlanti. This event promises to be a highlight of the season!",
+      "city": "Treviso",
+      "location": {
+        "venue": "Parco degli Alberi Parlanti",
+        "address": "Parco degli Alberi Parlanti, Treviso, Veneto",
+        "latitude": 45.6658505,
+        "longitude": 12.2455414
+      },
+      "start_date": "2025-08-23T03:23",
+      "end_date": "2025-08-23T06:23",
+      "url": "https://example.com/veneto-events/63"
+    },
+    {
+      "id": "64",
+      "title": "Verona Food & Drink Event #64",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "A unique food & drink opportunity awaits you in Verona. Join us at the charming Santa Anastasia Church for an event designed to inspire and entertain.",
+      "city": "Verona",
+      "location": {
+        "venue": "Santa Anastasia Church",
+        "address": "Santa Anastasia Church, Verona, Veneto",
+        "latitude": 45.4384958,
+        "longitude": 10.9924122
+      },
+      "start_date": "2025-08-27T16:52",
+      "end_date": "2025-08-27T21:52",
+      "url": "https://example.com/veneto-events/64"
+    },
+    {
+      "id": "65",
+      "title": "Portogruaro Music Event #65",
+      "type": "Music",
+      "category": "Music",
+      "description": "Immerse yourself in the rich culture of Portogruaro with this engaging music event at the iconic Chiesa di Sant'Andrea. It's the perfect way to spend your time.",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Chiesa di Sant'Andrea",
+        "address": "Chiesa di Sant'Andrea, Portogruaro, Veneto",
+        "latitude": 45.775598,
+        "longitude": 12.8374571
+      },
+      "start_date": "2025-08-27T19:44",
+      "end_date": "2025-08-27T23:44",
+      "url": "https://example.com/veneto-events/65"
+    },
+    {
+      "id": "66",
+      "title": "Montagnana Theatre Event #66",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Prepare for an unforgettable theatre experience in the stunning city of Montagnana, held at the magnificent Duomo di Santa Maria Assunta. This event promises to be a highlight of the season!",
+      "city": "Montagnana",
+      "location": {
+        "venue": "Duomo di Santa Maria Assunta",
+        "address": "Duomo di Santa Maria Assunta, Montagnana, Veneto",
+        "latitude": 45.2333207,
+        "longitude": 11.4657779
+      },
+      "start_date": "2025-08-24T19:29",
+      "end_date": "2025-08-24T23:29",
+      "url": "https://example.com/veneto-events/66"
+    },
+    {
+      "id": "67",
+      "title": "Pedavena Festival Event #67",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Dive into the world of festival at this exciting gathering in Pedavena. Located at the renowned Birrificio Pedavena, it's an event you won't want to miss.",
+      "city": "Pedavena",
+      "location": {
+        "venue": "Birrificio Pedavena",
+        "address": "Birrificio Pedavena, Pedavena, Veneto",
+        "latitude": 46.0396242,
+        "longitude": 11.8804327
+      },
+      "start_date": "2025-08-25T23:59",
+      "end_date": "2025-08-26T01:59",
+      "url": "https://example.com/veneto-events/67"
+    },
+    {
+      "id": "68",
+      "title": "Vittorio Veneto Exhibition Event #68",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Explore the vibrant exhibition scene in Vittorio Veneto with this special event at Museo della Battaglia. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Vittorio Veneto",
+      "location": {
+        "venue": "Museo della Battaglia",
+        "address": "Museo della Battaglia, Vittorio Veneto, Veneto",
+        "latitude": 45.9897826,
+        "longitude": 12.2957596
+      },
+      "start_date": "2025-08-28T14:15",
+      "end_date": "2025-08-28T18:15",
+      "url": "https://example.com/veneto-events/68"
+    },
+    {
+      "id": "69",
+      "title": "Vittorio Veneto Workshop Event #69",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Connect with fellow enthusiasts at this lively workshop event in Vittorio Veneto, taking place at the welcoming Museo della Battaglia. Share your passion and make new friends.",
+      "city": "Vittorio Veneto",
+      "location": {
+        "venue": "Museo della Battaglia",
+        "address": "Museo della Battaglia, Vittorio Veneto, Veneto",
+        "latitude": 45.9897826,
+        "longitude": 12.2957596
+      },
+      "start_date": "2025-08-24T17:07",
+      "end_date": "2025-08-24T22:07",
+      "url": "https://example.com/veneto-events/69"
+    },
+    {
+      "id": "70",
+      "title": "Jesolo Tour Event #70",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "Step into a world of wonder at this extraordinary tour event in Jesolo, held at the historic Aqualandia Waterpark. Prepare to be amazed!",
+      "city": "Jesolo",
+      "location": {
+        "venue": "Aqualandia Waterpark",
+        "address": "Aqualandia Waterpark, Jesolo, Veneto",
+        "latitude": 45.5367094,
+        "longitude": 12.6383337
+      },
+      "start_date": "2025-08-26T07:25",
+      "end_date": "2025-08-26T13:25",
+      "url": "https://example.com/veneto-events/70"
+    },
+    {
+      "id": "71",
+      "title": "Monselice Food & Drink Event #71",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Connect with fellow enthusiasts at this lively food & drink event in Monselice, taking place at the welcoming Villa Duodo. Share your passion and make new friends.",
+      "city": "Monselice",
+      "location": {
+        "venue": "Villa Duodo",
+        "address": "Villa Duodo, Monselice, Veneto",
+        "latitude": 45.2417684,
+        "longitude": 11.7508534
+      },
+      "start_date": "2025-08-28T03:46",
+      "end_date": "2025-08-28T04:46",
+      "url": "https://example.com/veneto-events/71"
+    },
+    {
+      "id": "72",
+      "title": "Padua Arts & Crafts Event #72",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Immerse yourself in the rich culture of Padua with this engaging arts & crafts event at the iconic Abbazia di Santa Giustina. It's the perfect way to spend your time.",
+      "city": "Padua",
+      "location": {
+        "venue": "Abbazia di Santa Giustina",
+        "address": "Abbazia di Santa Giustina, Padua, Veneto",
+        "latitude": 45.4077172,
+        "longitude": 11.8734455
+      },
+      "start_date": "2025-08-26T19:52",
+      "end_date": "2025-08-27T04:52",
+      "url": "https://example.com/veneto-events/72"
+    },
+    {
+      "id": "73",
+      "title": "Bardolino Exhibition Event #73",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Step into a world of wonder at this extraordinary exhibition event in Bardolino, held at the historic Lake Garda promenade. Prepare to be amazed!",
+      "city": "Bardolino",
+      "location": {
+        "venue": "Lake Garda promenade",
+        "address": "Lake Garda promenade, Bardolino, Veneto",
+        "latitude": 45.5475595,
+        "longitude": 10.7242145
+      },
+      "start_date": "2025-08-19T16:11",
+      "end_date": "2025-08-19T19:11",
+      "url": "https://example.com/veneto-events/73"
+    },
+    {
+      "id": "74",
+      "title": "Padua Festival Event #74",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Prepare for an unforgettable festival experience in the stunning city of Padua, held at the magnificent Piazza delle Erbe. This event promises to be a highlight of the season!",
+      "city": "Padua",
+      "location": {
+        "venue": "Piazza delle Erbe",
+        "address": "Piazza delle Erbe, Padua, Veneto",
+        "latitude": 45.4069322,
+        "longitude": 11.8752729
+      },
+      "start_date": "2025-08-21T01:03",
+      "end_date": "2025-08-21T03:03",
+      "url": "https://example.com/veneto-events/74"
+    },
+    {
+      "id": "75",
+      "title": "Dolo Festival Event #75",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Connect with fellow enthusiasts at this lively festival event in Dolo, taking place at the welcoming Villa Jacur. Share your passion and make new friends.",
+      "city": "Dolo",
+      "location": {
+        "venue": "Villa Jacur",
+        "address": "Villa Jacur, Dolo, Veneto",
+        "latitude": 45.4234356,
+        "longitude": 12.0743252
+      },
+      "start_date": "2025-08-21T10:01",
+      "end_date": "2025-08-21T15:01",
+      "url": "https://example.com/veneto-events/75"
+    },
+    {
+      "id": "76",
+      "title": "Portogruaro Conference Event #76",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Dive into the world of conference at this exciting gathering in Portogruaro. Located at the renowned Chiesa di Sant'Andrea, it's an event you won't want to miss.",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Chiesa di Sant'Andrea",
+        "address": "Chiesa di Sant'Andrea, Portogruaro, Veneto",
+        "latitude": 45.775598,
+        "longitude": 12.8374571
+      },
+      "start_date": "2025-08-20T22:21",
+      "end_date": "2025-08-21T03:21",
+      "url": "https://example.com/veneto-events/76"
+    },
+    {
+      "id": "77",
+      "title": "Valdagno Food & Drink Event #77",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "A unique food & drink opportunity awaits you in Valdagno. Join us at the charming Villa Valle for an event designed to inspire and entertain.",
+      "city": "Valdagno",
+      "location": {
+        "venue": "Villa Valle",
+        "address": "Villa Valle, Valdagno, Veneto",
+        "latitude": 45.6413213,
+        "longitude": 11.3040596
+      },
+      "start_date": "2025-08-26T15:08",
+      "end_date": "2025-08-26T21:08",
+      "url": "https://example.com/veneto-events/77"
+    },
+    {
+      "id": "78",
+      "title": "Vittorio Veneto Arts & Crafts Event #78",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Unwind and enjoy a delightful arts & crafts experience in Vittorio Veneto at the picturesque Parco della Vittoria. Relax and take in the atmosphere.",
+      "city": "Vittorio Veneto",
+      "location": {
+        "venue": "Parco della Vittoria",
+        "address": "Parco della Vittoria, Vittorio Veneto, Veneto",
+        "latitude": 45.9897826,
+        "longitude": 12.2957596
+      },
+      "start_date": "2025-08-23T09:46",
+      "end_date": "2025-08-23T12:46",
+      "url": "https://example.com/veneto-events/78"
+    },
+    {
+      "id": "79",
+      "title": "Portogruaro Arts & Crafts Event #79",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Seeking adventure in Portogruaro? Look no further than this captivating arts & crafts event at Palazzo degli Asburgo. Fun and excitement are guaranteed!",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Palazzo degli Asburgo",
+        "address": "Palazzo degli Asburgo, Portogruaro, Veneto",
+        "latitude": 45.775598,
+        "longitude": 12.8374571
+      },
+      "start_date": "2025-08-24T10:45",
+      "end_date": "2025-08-24T11:45",
+      "url": "https://example.com/veneto-events/79"
+    },
+    {
+      "id": "80",
+      "title": "Pedavena Theatre Event #80",
+      "type": "Theatre",
+      "category": "Theatre",
+      "description": "Prepare for an unforgettable theatre experience in the stunning city of Pedavena, held at the magnificent Piazza Martiri. This event promises to be a highlight of the season!",
+      "city": "Pedavena",
+      "location": {
+        "venue": "Piazza Martiri",
+        "address": "Piazza Martiri, Pedavena, Veneto",
+        "latitude": 46.0396242,
+        "longitude": 11.8804327
+      },
+      "start_date": "2025-08-24T16:26",
+      "end_date": "2025-08-24T21:26",
+      "url": "https://example.com/veneto-events/80"
+    },
+    {
+      "id": "81",
+      "title": "Soave Food & Drink Event #81",
+      "type": "Food & Drink",
+      "category": "Food & Drink",
+      "description": "Unwind and enjoy a delightful food & drink experience in Soave at the picturesque Wine Museum. Relax and take in the atmosphere.",
+      "city": "Soave",
+      "location": {
+        "venue": "Wine Museum",
+        "address": "Wine Museum, Soave, Veneto",
+        "latitude": 45.4202303,
+        "longitude": 11.247722
+      },
+      "start_date": "2025-08-28T15:06",
+      "end_date": "2025-08-28T23:06",
+      "url": "https://example.com/veneto-events/81"
+    },
+    {
+      "id": "82",
+      "title": "Borghetto sul Mincio Conference Event #82",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Expand your horizons with this insightful conference event in Borghetto sul Mincio, hosted at the distinguished Medieval village center. Learn something new and be inspired.",
+      "city": "Borghetto sul Mincio",
+      "location": {
+        "venue": "Medieval village center",
+        "address": "Medieval village center, Borghetto sul Mincio, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-26T09:36",
+      "end_date": "2025-08-26T15:36",
+      "url": "https://example.com/veneto-events/82"
+    },
+    {
+      "id": "83",
+      "title": "Campolongo Tapogliano Sport Event #83",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Explore the vibrant sport scene in Campolongo Tapogliano with this special event at Villa Venier Contarini. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Campolongo Tapogliano",
+      "location": {
+        "venue": "Villa Venier Contarini",
+        "address": "Villa Venier Contarini, Campolongo Tapogliano, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-29T08:52",
+      "end_date": "2025-08-29T14:52",
+      "url": "https://example.com/veneto-events/83"
+    },
+    {
+      "id": "84",
+      "title": "Jesolo Festival Event #84",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Seeking adventure in Jesolo? Look no further than this captivating festival event at Jesolo Beach. Fun and excitement are guaranteed!",
+      "city": "Jesolo",
+      "location": {
+        "venue": "Jesolo Beach",
+        "address": "Jesolo Beach, Jesolo, Veneto",
+        "latitude": 45.5367094,
+        "longitude": 12.6383337
+      },
+      "start_date": "2025-08-29T22:34",
+      "end_date": "2025-08-30T00:00",
+      "url": "https://example.com/veneto-events/84"
+    },
+    {
+      "id": "85",
+      "title": "Dolo Exhibition Event #85",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Step into a world of wonder at this extraordinary exhibition event in Dolo, held at the historic Canale di Dolo. Prepare to be amazed!",
+      "city": "Dolo",
+      "location": {
+        "venue": "Canale di Dolo",
+        "address": "Canale di Dolo, Dolo, Veneto",
+        "latitude": 45.4234356,
+        "longitude": 12.0743252
+      },
+      "start_date": "2025-08-25T09:14",
+      "end_date": "2025-08-25T17:14",
+      "url": "https://example.com/veneto-events/85"
+    },
+    {
+      "id": "86",
+      "title": "Montagnana Music Event #86",
+      "type": "Music",
+      "category": "Music",
+      "description": "Expand your horizons with this insightful music event in Montagnana, hosted at the distinguished Castle of San Zeno. Learn something new and be inspired.",
+      "city": "Montagnana",
+      "location": {
+        "venue": "Castle of San Zeno",
+        "address": "Castle of San Zeno, Montagnana, Veneto",
+        "latitude": 45.2333207,
+        "longitude": 11.4657779
+      },
+      "start_date": "2025-08-28T15:44",
+      "end_date": "2025-08-28T19:44",
+      "url": "https://example.com/veneto-events/86"
+    },
+    {
+      "id": "87",
+      "title": "Mestre Workshop Event #87",
+      "type": "Workshop",
+      "category": "Workshop",
+      "description": "Prepare for an unforgettable workshop experience in the stunning city of Mestre, held at the magnificent Villa Querini. This event promises to be a highlight of the season!",
+      "city": "Mestre",
+      "location": {
+        "venue": "Villa Querini",
+        "address": "Villa Querini, Mestre, Veneto",
+        "latitude": 45.4943063,
+        "longitude": 12.2418053
+      },
+      "start_date": "2025-08-24T23:01",
+      "end_date": "2025-08-25T08:01",
+      "url": "https://example.com/veneto-events/87"
+    },
+    {
+      "id": "88",
+      "title": "Monselice Exhibition Event #88",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Step into a world of wonder at this extraordinary exhibition event in Monselice, held at the historic Villa Duodo. Prepare to be amazed!",
+      "city": "Monselice",
+      "location": {
+        "venue": "Villa Duodo",
+        "address": "Villa Duodo, Monselice, Veneto",
+        "latitude": 45.2417684,
+        "longitude": 11.7508534
+      },
+      "start_date": "2025-08-25T23:28",
+      "end_date": "2025-08-26T01:28",
+      "url": "https://example.com/veneto-events/88"
+    },
+    {
+      "id": "89",
+      "title": "Verona Festival Event #89",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Immerse yourself in the rich culture of Verona with this engaging festival event at the iconic Museum of Castelvecchio. It's the perfect way to spend your time.",
+      "city": "Verona",
+      "location": {
+        "venue": "Museum of Castelvecchio",
+        "address": "Museum of Castelvecchio, Verona, Veneto",
+        "latitude": 45.4384958,
+        "longitude": 10.9924122
+      },
+      "start_date": "2025-08-29T07:57",
+      "end_date": "2025-08-29T10:57",
+      "url": "https://example.com/veneto-events/89"
+    },
+    {
+      "id": "90",
+      "title": "Este Festival Event #90",
+      "type": "Festival",
+      "category": "Festival",
+      "description": "Explore the vibrant festival scene in Este with this special event at Basilica di Sant'Andrea. Get ready for a day filled with discovery and enjoyment.",
+      "city": "Este",
+      "location": {
+        "venue": "Basilica di Sant'Andrea",
+        "address": "Basilica di Sant'Andrea, Este, Veneto",
+        "latitude": 45.2240069,
+        "longitude": 11.659796
+      },
+      "start_date": "2025-08-23T19:53",
+      "end_date": "2025-08-23T22:53",
+      "url": "https://example.com/veneto-events/90"
+    },
+    {
+      "id": "91",
+      "title": "Padua Arts & Crafts Event #91",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Expand your horizons with this insightful arts & crafts event in Padua, hosted at the distinguished Museo Antoniano. Learn something new and be inspired.",
+      "city": "Padua",
+      "location": {
+        "venue": "Museo Antoniano",
+        "address": "Museo Antoniano, Padua, Veneto",
+        "latitude": 45.4077172,
+        "longitude": 11.8734455
+      },
+      "start_date": "2025-08-19T15:27",
+      "end_date": "2025-08-19T18:27",
+      "url": "https://example.com/veneto-events/91"
+    },
+    {
+      "id": "92",
+      "title": "Padua Conference Event #92",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Connect with fellow enthusiasts at this lively conference event in Padua, taking place at the welcoming Stadio Euganeo. Share your passion and make new friends.",
+      "city": "Padua",
+      "location": {
+        "venue": "Stadio Euganeo",
+        "address": "Stadio Euganeo, Padua, Veneto",
+        "latitude": 45.4323821,
+        "longitude": 11.8582758
+      },
+      "start_date": "2025-08-23T15:45",
+      "end_date": "2025-08-23T16:45",
+      "url": "https://example.com/veneto-events/92"
+    },
+    {
+      "id": "93",
+      "title": "Soave Arts & Crafts Event #93",
+      "type": "Arts & Crafts",
+      "category": "Arts & Crafts",
+      "description": "Dive into the world of arts & crafts at this exciting gathering in Soave. Located at the renowned Palazzo Scaligero, it's an event you won't want to miss.",
+      "city": "Soave",
+      "location": {
+        "venue": "Palazzo Scaligero",
+        "address": "Palazzo Scaligero, Soave, Veneto",
+        "latitude": 45.4202303,
+        "longitude": 11.247722
+      },
+      "start_date": "2025-08-29T06:07",
+      "end_date": "2025-08-29T09:07",
+      "url": "https://example.com/veneto-events/93"
+    },
+    {
+      "id": "94",
+      "title": "San Vito di Cadore Exhibition Event #94",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "A unique exhibition opportunity awaits you in San Vito di Cadore. Join us at the charming Museo Ladino Cadorino for an event designed to inspire and entertain.",
+      "city": "San Vito di Cadore",
+      "location": {
+        "venue": "Museo Ladino Cadorino",
+        "address": "Museo Ladino Cadorino, San Vito di Cadore, Veneto",
+        "latitude": 46.458966,
+        "longitude": 12.2057415
+      },
+      "start_date": "2025-08-29T00:55",
+      "end_date": "2025-08-29T08:55",
+      "url": "https://example.com/veneto-events/94"
+    },
+    {
+      "id": "95",
+      "title": "Padua Conference Event #95",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Expand your horizons with this insightful conference event in Padua, hosted at the distinguished Church of the Eremitani. Learn something new and be inspired.",
+      "city": "Padua",
+      "location": {
+        "venue": "Church of the Eremitani",
+        "address": "Church of the Eremitani, Padua, Veneto",
+        "latitude": 45.4077172,
+        "longitude": 11.8734455
+      },
+      "start_date": "2025-08-22T00:05",
+      "end_date": "2025-08-22T02:05",
+      "url": "https://example.com/veneto-events/95"
+    },
+    {
+      "id": "96",
+      "title": "Padua Conference Event #96",
+      "type": "Conference",
+      "category": "Conference",
+      "description": "Immerse yourself in the rich culture of Padua with this engaging conference event at the iconic Orto Botanico. It's the perfect way to spend your time.",
+      "city": "Padua",
+      "location": {
+        "venue": "Orto Botanico",
+        "address": "Orto Botanico, Padua, Veneto",
+        "latitude": 45.3995319,
+        "longitude": 11.879673
+      },
+      "start_date": "2025-08-29T08:18",
+      "end_date": "2025-08-29T10:18",
+      "url": "https://example.com/veneto-events/96"
+    },
+    {
+      "id": "97",
+      "title": "Este Tour Event #97",
+      "type": "Tour",
+      "category": "Tour",
+      "description": "A unique tour opportunity awaits you in Este. Join us at the charming Duomo di Santa Tecla for an event designed to inspire and entertain.",
+      "city": "Este",
+      "location": {
+        "venue": "Duomo di Santa Tecla",
+        "address": "Duomo di Santa Tecla, Este, Veneto",
+        "latitude": 45.2299866,
+        "longitude": 11.6536381
+      },
+      "start_date": "2025-08-20T01:30",
+      "end_date": "2025-08-20T11:30",
+      "url": "https://example.com/veneto-events/97"
+    },
+    {
+      "id": "98",
+      "title": "Portogruaro Exhibition Event #98",
+      "type": "Exhibition",
+      "category": "Exhibition",
+      "description": "Step into a world of wonder at this extraordinary exhibition event in Portogruaro, held at the historic Piazza della Repubblica. Prepare to be amazed!",
+      "city": "Portogruaro",
+      "location": {
+        "venue": "Piazza della Repubblica",
+        "address": "Piazza della Repubblica, Portogruaro, Veneto",
+        "latitude": 45.7755764,
+        "longitude": 12.8376743
+      },
+      "start_date": "2025-08-28T02:23",
+      "end_date": "2025-08-28T12:23",
+      "url": "https://example.com/veneto-events/98"
+    },
+    {
+      "id": "99",
+      "title": "Borghetto sul Mincio Sport Event #99",
+      "type": "Sport",
+      "category": "Sport",
+      "description": "Seeking adventure in Borghetto sul Mincio? Look no further than this captivating sport event at Ponte Visconteo. Fun and excitement are guaranteed!",
+      "city": "Borghetto sul Mincio",
+      "location": {
+        "venue": "Ponte Visconteo",
+        "address": "Ponte Visconteo, Borghetto sul Mincio, Veneto",
+        "latitude": null,
+        "longitude": null
+      },
+      "start_date": "2025-08-20T23:39",
+      "end_date": "2025-08-21T03:39",
+      "url": "https://example.com/veneto-events/99"
+    }
+  ]
+}
