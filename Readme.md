@@ -41,6 +41,9 @@ This project allows you to list and visualize events that occur along a route be
 * ingesting type/category with vectors embedding so I can search for similarity
 * Choose a smooth interface
 * put credits to openroute it it isn't yet
+* insert multipoint on the route
+* query with date and category as well
+
 
 ## How to start uvicorn
 cd /event_map/eventmap-fastapi

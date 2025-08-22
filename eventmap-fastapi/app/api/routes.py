@@ -43,7 +43,7 @@ async def create_event_map(request: schemas.RouteRequest):
         df.sort_values('distance_along_route', inplace=True)
 
         map_center = [(origin_point[1] + destination_point[1]) / 2, (origin_point[0] + destination_point[0]) / 2]
-        m = folium.Map(location=map_center, zoom_start=9, zoom_control=False, scrollWheelZoom=False, dragging=False, height=450)
+        m = folium.Map(location=map_center, zoom_start=9, zoom_control=True, scrollWheelZoom=False, dragging=False, height="100%")#450)
         folium.PolyLine(locations=[(lat, lon) for lon, lat in route_coords], color='blue', weight=5).add_to(m)
         folium.GeoJson(buffer_polygon.__geo_interface__, style_function=lambda x: {'color': 'red', 'fillOpacity': 0.1}).add_to(m)
         folium.Marker(location=[origin_point[1], origin_point[0]], icon=folium.DivIcon(html='<div style="font-size: 16pt; color: #006400; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.5);">🚦 Start</div>')).add_to(m)
@@ -62,12 +62,35 @@ async def create_event_map(request: schemas.RouteRequest):
             event_list_html += f"<li style='margin-bottom: 10px;'><strong>{title}</strong><br>{address}</br><br>{description}</br></br></li>"
         event_list_html += "</ul></div>"
 
+        # combined_html = f"""
+        # <div style="display: flex; gap: 20px; align-items: flex-start;">
+        # <div style="flex: 1; min-width: 600px; height: 450px; overflow-x: scroll; overflow-y: scroll;">{map_html}</div>
+        # <div style="height: 450px;">{event_list_html}</div>
+        # </div>
+        # """
+                # ...existing code...
         combined_html = f"""
+        <style>
+            /* Adjust folium map container size */
+            .folium-map {{
+                width: 800px !important;
+                height: 450px !important;
+            }}
+            /* Scroll container for horizontal scrollbar */
+            .map-scroll-container {{
+                width: 650px;
+                height: 350px;
+                overflow-x: auto;
+                overflow-y: auto;
+                white-space: nowrap;
+            }}
+        </style>
         <div style="display: flex; gap: 20px; align-items: flex-start;">
-        <div style="flex: 1; min-width: 600px; height: 450px;">{map_html}</div>
-        <div style="height: 450px;">{event_list_html}</div>
+            <div class="map-scroll-container">{map_html}</div>
+            <div style="height: 450px;">{event_list_html}</div>
         </div>
         """
+
 
         return combined_html
 
