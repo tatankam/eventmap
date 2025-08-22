@@ -30,3 +30,22 @@ This project allows you to list and visualize events that occur along a route be
 
 ## Sample Usage
 
+## On Eventbrite.ipynb there is the model
+
+## See fastapi app
+
+## TO DO List
+* natural language to parameters (with Mistral)
+* CrewAI for sequential tools from the functions in the notebook
+
+* ingesting type/category with vectors embedding so I can search for similarity
+* Choose a smooth interface
+* put credits to openroute it it isn't yet
+
+## How to start uvicorn
+cd /event_map/eventmap-fastapi
+uvicorn app.main:app --reload
+
+To see the FastApi docs: http://127.0.0.1:8000/docs
+To test the fastapi app: http://127.0.0.1:8000/static/index.html
+

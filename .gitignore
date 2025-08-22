@@ -1,4 +1,23 @@
+# Python virtual environments
 .venv*
-superlinked_app/__pycache__
-superlinked_app/.env
-cache
+venv/
+env/
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment variables and secrets
+.env
+
+# OS files
+.DS_Store
+
+# FastAPI app cache and compiled files
+eventmap-fastapi/__pycache__/
+
+
+
+# Jupyter and notebook checkpoints
+.ipynb_checkpoints/

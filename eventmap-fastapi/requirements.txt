@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+openrouteservice
+qdrant-client
+geopandas
+pandas
+shapely
+folium
+jinja2
