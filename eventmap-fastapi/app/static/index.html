@@ -25,6 +25,14 @@
                 <option value="10">10</option>
             </select>
         </label>
+
+        <!-- New datetime input fields -->
+        <label for="startinputdate">Start Date and Time:</label>
+        <input type="datetime-local" id="startinputdate" name="startinputdate" required>
+
+        <label for="endinputdate">End Date and Time:</label>
+        <input type="datetime-local" id="endinputdate" name="endinputdate" required>
+
         <button type="submit">Create Map</button>
     </form>
     <div id="map-events"></div>
@@ -39,6 +47,8 @@
             const origin = document.getElementById('origin').value;
             const destination = document.getElementById('destination').value;
             const buffer = document.getElementById('buffer').value;
+            const startinputdate = document.getElementById('startinputdate').value;
+            const endinputdate = document.getElementById('endinputdate').value;
 
             mapEventsDiv.innerHTML = "Loading...";
 
@@ -50,6 +60,8 @@
                         origin_address: origin,
                         destination_address: destination,
                         buffer_distance: parseInt(buffer),
+                        startinputdate: startinputdate,
+                        endinputdate: endinputdate
                     }),
                 });
                 if (!response.ok) {

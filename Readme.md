@@ -52,3 +52,21 @@ uvicorn app.main:app --reload
 To see the FastApi docs: http://127.0.0.1:8000/docs
 To test the fastapi app: http://127.0.0.1:8000/static/index.html
 
+Per interrogare ovvero filtrare un singolo punto nella dashboard di Qdrant:
+GET collections
+
+// Get collection info
+GET collections/collection_name
+
+// List points in a collection, using filter
+POST /collections/veneto_events/points/scroll
+{
+  "filter": {
+    "must": [
+      {
+        "has_id": [425]
+      }
+    ]
+  },
+  "limit": 1
+}
