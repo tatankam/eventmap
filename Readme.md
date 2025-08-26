@@ -70,3 +70,15 @@ POST /collections/veneto_events/points/scroll
   },
   "limit": 1
 }
+
+I did sparse and dense I loaded, so I created frontend with all parmeters
+
+To Do: crewai for natural query to json for the fastapi
+Choose from manual parameter and natural query
+Create flow, draw the flow
+Document hot to install as docker
+1) fastapi container
+2) streamlit container
+3) crewai docker and use mistral as LLM local or openrouter in chatopenai format so it is agnostic
+Load fresh data in a extend region
+TO DO: route with byke or car ?

@@ -1,8 +1,10 @@
 from qdrant_client import QdrantClient
 from qdrant_client.http import models as qmodels
-from app.core.config import QDRANT_URL, QDRANT_API_KEY
+from app.core.config import QDRANT_SERVER, QDRANT_API_KEY
 
-qdrant_client = QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY, timeout=2000000)
+
+qdrant_client = QdrantClient(url=QDRANT_SERVER, api_key=QDRANT_API_KEY, timeout=2000000)
+
 
 def query_events(polygon_coords_qdrant, query_filter=None, collection_name="veneto_events", limit=100):
     if query_filter is None:
@@ -21,6 +23,32 @@ def query_events(polygon_coords_qdrant, query_filter=None, collection_name="vene
         collection_name=collection_name,
         limit=limit,
         query_filter=query_filter,
+        with_payload=True
+    )
+    return [p.payload for p in results.points]
+
+
+def query_events_hybrid(dense_vector, sparse_vector, query_filter, collection_name="veneto_events", limit=100):
+    results = qdrant_client.query_points(
+        collection_name=collection_name,
+        prefetch=[
+            qmodels.Prefetch(
+                query=qmodels.SparseVector(
+                    indices=list(sparse_vector.indices),
+                    values=list(sparse_vector.values)
+                ),
+                using="sparse_vector",
+                limit=50,
+            ),
+            qmodels.Prefetch(
+                query=dense_vector,
+                using="dense_vector",
+                limit=50,
+            ),
+        ],
+        query=qmodels.FusionQuery(fusion=qmodels.Fusion.RRF),
+        query_filter=query_filter,
+        limit=limit,
         with_payload=True
     )
     return [p.payload for p in results.points]

@@ -4,5 +4,9 @@ import os
 load_dotenv(dotenv_path="../.env")
 
 OPENROUTE_API_KEY = os.getenv("OPENROUTE_API_KEY")
-QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_SERVER = os.getenv("QDRANT_SERVER")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+
+# Add dense and sparse model names to config
+DENSE_MODEL_NAME = os.getenv("DENSE_MODEL_NAME")
+SPARSE_MODEL_NAME = os.getenv("SPARSE_MODEL_NAME")

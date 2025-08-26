@@ -1,7 +1,9 @@
 import openrouteservice
 from app.core.config import OPENROUTE_API_KEY
 
+
 ors_client = openrouteservice.Client(key=OPENROUTE_API_KEY)
+
 
 def geocode_address(address: str):
     geocode_result = ors_client.pelias_search(text=address)
@@ -11,5 +13,7 @@ def geocode_address(address: str):
     else:
         raise ValueError(f"Could not geocode address: {address}")
 
-def get_route(coords, radiuses=[1000, 1000]):
-    return ors_client.directions(coordinates=coords, profile='driving-car', radiuses=radiuses, format='geojson')
+
+
+def get_route(coords, profile, radiuses=[1000, 1000]):
+    return ors_client.directions(coordinates=coords, profile=profile, radiuses=radiuses, format='geojson')

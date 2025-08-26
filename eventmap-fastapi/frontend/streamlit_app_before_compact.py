@@ -8,7 +8,7 @@ API_URL = "http://localhost:8000/create_map"
 st.set_page_config(layout="wide")
 
 def main():
-    #st.title("Events Along Route Finder")
+    st.title("Events Along Route Finder")
     data = st.session_state.get("route_data")
 
     col1, col2, col3 = st.columns([1,2,2])
@@ -19,36 +19,26 @@ def main():
         origin_address = st.text_input("Origin Address", value="Padova")
         destination_address = st.text_input("Destination Address", value="Verona")
         buffer_distance = st.number_input("Buffer Distance (km)", min_value=0, value=5)
-
         query_text = st.text_input("Search Query Text", value="Music")
         numevents = st.number_input("Number of Events to Retrieve", min_value=1, value=10)
 
+        # Add profile choice selectbox with default 'driving-car'
         profile_choice = st.selectbox(
             "Transport Profile",
-            options=["driving-car", "cycling-regular", "cycling-road", "foot-walking"],
+            options=["driving-car", "cycling-regular"],
             index=0,
             help="Select the transport profile for routing"
         )
 
-        # Compact start datetime inputs side by side
-        #st.write("Start Date and Time")
-        start_col1, start_col2 = st.columns(2)
-        with start_col1:
-            start_date = st.date_input("Start Date", value=datetime.today())
-        with start_col2:
-            if 'start_time' not in st.session_state:
-                st.session_state.start_time = datetime.now().time()
-            start_time = st.time_input("Start Time", key='start_time')
+        start_date = st.date_input("Start Date", value=datetime.today())
+        if 'start_time' not in st.session_state:
+            st.session_state.start_time = datetime.now().time()
+        start_time = st.time_input("Start Time", key='start_time')
 
-        # Compact end datetime inputs side by side
-        #st.write("End Date and Time")
-        end_col1, end_col2 = st.columns(2)
-        with end_col1:
-            end_date = st.date_input("End Date", value=datetime.today() + timedelta(days=4))
-        with end_col2:
-            if 'end_time' not in st.session_state:
-                st.session_state.end_time = datetime.now().time()
-            end_time = st.time_input("End Time", key='end_time')
+        end_date = st.date_input("End Date", value=datetime.today() + timedelta(days=4))
+        if 'end_time' not in st.session_state:
+            st.session_state.end_time = datetime.now().time()
+        end_time = st.time_input("End Time", key='end_time')
 
         error_msgs = []
         if end_date < start_date:
@@ -74,7 +64,7 @@ def main():
                 "endinputdate": endinputdate,
                 "query_text": query_text,
                 "numevents": numevents,
-                "profile_choice": profile_choice,
+                "profile_choice": profile_choice,  # Add profile_choice here
             }
             with st.spinner("Querying events..."):
                 response = requests.post(API_URL, json=payload)
