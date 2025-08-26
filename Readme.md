@@ -1,84 +1,120 @@
-# Event on a Route
+# EventRouteFinder 🗺️🔍
 
-## Overview
+EventRouteFinder is a powerful and interactive event discovery platform designed to help users find relevant events along a custom travel route. By combining semantic similarity search on event descriptions with dynamic geospatial and temporal filtering, it provides personalized event recommendations visualized on an interactive map.
 
-This project allows you to list and visualize events that occur along a route between two or more points. The main features include:
+---
 
-- Define a multi-stop geographic route (e.g., from Point A to Point B, with optional waypoints).
-- Draw the route on a map.
-- Add a buffer zone (e.g., 1 km) around the route to represent the area of interest.
-- Store event data in [Qdrant](https://qdrant.tech/), a vector database that supports geo queries.
-- Query and list events located within the buffered area of the route.
+## Features
 
-## Technology Stack
+- Store events enriched with metadata such as title, description, venue, address, latitude, and longitude.
+- Leverage sparse and dense embeddings of event descriptions stored in the Qdrant vector database for advanced semantic similarity search.
+- Seamlessly merge similarity search results with multiple filters including:
+  - Geospatial filtering within a user-defined buffer distance (km) around a route.
+  - Temporal filtering through start and end date/time travel windows.
+  - Textual similarity based on user query inputs.
+  - Transport profile-based routing (e.g., driving, cycling, walking) via OpenRouteService.
+  - Limit results by number of events retrieved.
+- Calculate travel routes using OpenRouteService API, considering different travel modes.
+- Interactive frontend built with Streamlit and Folium for:
+  - Displaying the calculated route and buffer zone on an interactive map.
+  - Marking matched events with detailed popups along or nearby the route.
+  - Providing an expandable event list panel with full event details.
+- Validated input handling to avoid invalid date/time ranges and other errors.
 
-- **Python** for scripting and data handling.
-- **Geopandas** and **Shapely** for geographic calculations and buffering.
-- **Qdrant** for storing event data with geospatial payload and vector search capabilities.
-- **Qdrant Python client** to interact with the Qdrant database via API.
-- (Optional) **Folium/Leaflet** or other mapping libraries for route visualization.
+---
 
 ## How It Works
 
-1. Define the route as a list of longitude-latitude tuples covering start, optional waypoints, and end.
-2. Create a `LineString` object from the route points.
-3. Use `Geopandas` with a projected coordinate reference system (CRS) to create an accurate buffer polygon around the route.
-4. Convert the buffer polygon coordinates into a format accepted by Qdrant’s geo filtering.
-5. Insert your events into Qdrant with the location stored as latitude and longitude payload fields.
-6. Use Qdrant’s geo filtering capability to query all events falling within the buffered polygon around the route.
-7. Display or process the resulting events according to your application needs.
+1. User inputs:
+   - Origin and destination addresses plus transport profile (e.g., driving, cycling).
+   - Buffer distance defining how far from the route to search for events.
+   - Search query text enabling semantic similarity matching on event descriptions.
+   - Travel time window with start and end date/time.
+   - Number of events to retrieve.
+2. The backend calculates the optimized route based on input travel profile.
+3. It runs a merged query combining:
+   - Semantic similarity search over event embeddings.
+   - Geo-filtering to only include events within the buffer zone polygon around the route.
+   - Temporal filtering restricting events to specified travel windows.
+4. Frontend renders an interactive map showing the route, buffer polygon, and event markers.
+5. Event list panel provides detailed descriptions and timing info.
+6. Input errors or inconsistencies are clearly communicated on the frontend.
 
-## Sample Usage
+---
 
-## On Eventbrite.ipynb there is the model
+## Technology Stack
 
-## See fastapi app
+- [Qdrant](https://qdrant.tech/) vector database for storing event embeddings and enabling similarity search with geo-filters.
+- Sparse and dense embedding models encoding event descriptions for rich semantic queries.
+- [OpenRouteService](https://openrouteservice.org/) APIs for route calculation and transport profile support.
+- [Streamlit](https://streamlit.io/) for rapid frontend development.
+- [Folium](https://python-visualization.github.io/folium/) and [streamlit-folium](https://github.com/randyzwitch/streamlit-folium) for advanced interactive maps.
+- Python backend (FastAPI suggested) serving route computation and event querying APIs.
+- Geopandas and Shapely for geographic calculations and buffering routes.
 
-## TO DO List
-* natural language to parameters (with Mistral)
-* CrewAI for sequential tools from the functions in the notebook
+---
 
-* ingesting type/category with vectors embedding so I can search for similarity
-* Choose a smooth interface
-* put credits to openroute it it isn't yet
-* insert multipoint on the route
-* query with date and category as well
+## Installation
 
+1. Clone the repository:
+    ```
+    git clone https://github.com/tatankam/eventmap.git
+    cd eventmap/eventmap-fastapi
+    ```
+2. Install dependencies (preferably in a virtual environment):
+    ```
+    pip install -r requirements.txt
+    ```
+3. Start the backend API server:
+    ```
+    uvicorn app.main:app --reload
+    ```
+4. Launch the Streamlit frontend app (in root or appropriate folder):
+    ```
+    streamlit run streamlit_app.py
+    ```
 
-## How to start uvicorn
-cd /event_map/eventmap-fastapi
-uvicorn app.main:app --reload
+---
 
-To see the FastApi docs: http://127.0.0.1:8000/docs
-To test the fastapi app: http://127.0.0.1:8000/static/index.html
+## Usage
 
-Per interrogare ovvero filtrare un singolo punto nella dashboard di Qdrant:
-GET collections
+- Enter origin and destination addresses in the frontend.
+- Select your transport profile (driving, cycling, walking).
+- Specify the buffer distance in kilometers around the route.
+- Enter a text search query to find semantically relevant events.
+- Set the travel start and end date/time window.
+- Choose how many events to retrieve.
+- Click "Search Events" to generate and visualize the route plus event markers.
+- Explore matched events on the map and in the detailed event list.
 
-// Get collection info
-GET collections/collection_name
+---
 
-// List points in a collection, using filter
-POST /collections/veneto_events/points/scroll
-{
-  "filter": {
-    "must": [
-      {
-        "has_id": [425]
-      }
-    ]
-  },
-  "limit": 1
-}
+## Demo
 
-I did sparse and dense I loaded, so I created frontend with all parmeters
+[![Watch the Demo](https://raw.githubusercontent.com/tatankam/eventmap/main/video/thumbnail.jpg)](https://raw.githubusercontent.com/tatankam/eventmap/main/video/demo.mkv)
 
-To Do: crewai for natural query to json for the fastapi
-Choose from manual parameter and natural query
-Create flow, draw the flow
-Document hot to install as docker
-1) fastapi container
-2) streamlit container
-3) crewai docker and use mistral as LLM local or openrouter in chatopenai format so it is agnostic
-Load fresh data in a extend region
-TO DO: route with byke or car ?
+---
+
+## Roadmap & Future Improvements
+
+- Natural language input parsing for query parameters via an AI assistant (e.g., Mistral).
+- Multi-point and waypoint support in route planning.
+- Adding event type/category embeddings and filters for finer search control.
+- Dockerized deployment with separate containers for FastAPI, Streamlit, and AI assistant.
+- Enhanced UX with smoother interfaces and richer map interactions.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Contact
+
+For questions or suggestions, contact the project owner or open an issue on GitHub.
+
+---
+
+Discover events like never before — happy exploring! 🗺️🔍

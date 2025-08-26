@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from app.api import routes
+from fastapi.responses import ORJSONResponse
 
-app = FastAPI()
+app = FastAPI(default_response_class=ORJSONResponse) # Use ORJSON for faster JSON responses
 
 app.include_router(routes.router)
 

@@ -20,7 +20,7 @@ def main():
         destination_address = st.text_input("Destination Address", value="Verona")
         buffer_distance = st.number_input("Buffer Distance (km)", min_value=0, value=5)
 
-        query_text = st.text_input("Search Query Text", value="Music")
+        query_text = st.text_input("Search Query Text", value="Sport")
         numevents = st.number_input("Number of Events to Retrieve", min_value=1, value=10)
 
         profile_choice = st.selectbox(
