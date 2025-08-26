@@ -91,7 +91,7 @@ EventRouteFinder is a powerful and interactive event discovery platform designed
 
 ## Demo
 
-[![Watch the Demo](https://github.com/tatankam/eventmap/blob/main/video/thumbail.jpg)](https://github.com/tatankam/eventmap/blob/main/video/demo.mp4)
+[![Watch the Demo](https://github.com/tatankam/eventmap/blob/main/video/thumbail.jpg)](https://youtu.be/km9V8FNQIxc)
 
 ---
 
