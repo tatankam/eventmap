@@ -10,7 +10,7 @@ st.set_page_config(layout="wide")
 def main():
     data = st.session_state.get("route_data")
 
-    col1, col2, col3 = st.columns([1,2,2])
+    col1, col2, col3 = st.columns([1, 2, 2])
 
     with col1:
         st.subheader("Insert data")
@@ -29,7 +29,6 @@ def main():
             help="Select the transport profile for routing"
         )
 
-        # Compact start datetime inputs side by side
         start_col1, start_col2 = st.columns(2)
         with start_col1:
             start_date = st.date_input("Start Date", value=datetime.today())
@@ -38,7 +37,6 @@ def main():
                 st.session_state.start_time = datetime.now().time()
             start_time = st.time_input("Start Time", key='start_time')
 
-        # Compact end datetime inputs side by side
         end_col1, end_col2 = st.columns(2)
         with end_col1:
             end_date = st.date_input("End Date", value=datetime.today() + timedelta(days=4))
@@ -92,10 +90,10 @@ def main():
     with col2:
         if data:
             st.subheader("Route Map")
+
             center_lat = (data['origin']['lat'] + data['destination']['lat']) / 2
             center_lon = (data['origin']['lon'] + data['destination']['lon']) / 2
 
-            # Prepare GeoJSON for route polyline
             route_coords = [[lon, lat] for lat, lon in [(c[1], c[0]) for c in data['route_coords']]]
             route_geojson = {
                 "type": "Feature",
@@ -105,7 +103,6 @@ def main():
                 }
             }
 
-            # Prepare markers from events
             markers = []
             for event in data.get('events', []):
                 lat = event.get('lat') or event.get('latitude')
@@ -121,21 +118,17 @@ def main():
                     "coordinates": [lon, lat]
                 })
 
-            # Origin and destination markers
             origin_marker = [data['origin']['lon'], data['origin']['lat']]
             destination_marker = [data['destination']['lon'], data['destination']['lat']]
-
-            # Buffer polygon coordinates (list of [lon, lat])
             buffer_polygon_coords = data['buffer_polygon']
 
-            # Create OpenLayers map HTML with buffer polygon and markers
             openlayers_html = f"""
             <!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="utf-8" />
                 <title>OpenLayers in Streamlit</title>
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@7.3.0/ol.css" type="text/css">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@7.3.0/ol.css" type="text/css" />
                 <style>
                     #map {{
                         width: 100%;
@@ -179,18 +172,19 @@ def main():
             <body>
                 <div id="map"></div>
                 <script type="text/javascript">
+
                     const routeGeoJSON = {json.dumps(route_geojson)};
                     const markers = {json.dumps(markers)};
                     const origin = {json.dumps(origin_marker)};
                     const destination = {json.dumps(destination_marker)};
+                    const origin_address = {json.dumps(origin_address)};
+                    const destination_address = {json.dumps(destination_address)};
                     const bufferCoords = {json.dumps([buffer_polygon_coords])};
 
-                    // Route polyline
                     const routeFeature = new ol.format.GeoJSON().readFeature(routeGeoJSON, {{
                         featureProjection: "EPSG:3857"
                     }});
 
-                    // Buffer polygon feature
                     const bufferFeature = new ol.Feature({{
                         geometry: new ol.geom.Polygon(bufferCoords).transform('EPSG:4326', 'EPSG:3857')
                     }});
@@ -210,7 +204,6 @@ def main():
                         }})
                     }});
 
-                    // Route layer
                     const routeLayer = new ol.layer.Vector({{
                         source: new ol.source.Vector({{
                             features: [routeFeature]
@@ -223,7 +216,6 @@ def main():
                         }})
                     }});
 
-                    // Marker styles
                     const iconStyleOrigin = new ol.style.Style({{
                         image: new ol.style.Icon({{
                             anchor: [0.5, 1],
@@ -242,23 +234,24 @@ def main():
                         image: new ol.style.Icon({{
                             anchor: [0.5, 1],
                             src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/event.png',
-                            scale: 0.8
+                            scale: 1.4
                         }})
                     }});
 
-                    // Origin feature
                     const originFeature = new ol.Feature({{
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat(origin))
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat(origin)),
+                        name: "Origin",
+                        description: origin_address
                     }});
                     originFeature.setStyle(iconStyleOrigin);
 
-                    // Destination feature
                     const destinationFeature = new ol.Feature({{
-                        geometry: new ol.geom.Point(ol.proj.fromLonLat(destination))
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat(destination)),
+                        name: "Destination",
+                        description: destination_address
                     }});
                     destinationFeature.setStyle(iconStyleDestination);
 
-                    // Event features
                     const eventFeatures = markers.map(marker => {{
                         const feat = new ol.Feature({{
                             geometry: new ol.geom.Point(ol.proj.fromLonLat(marker.coordinates)),
@@ -278,7 +271,6 @@ def main():
                         }})
                     }});
 
-                    // Create map
                     const map = new ol.Map({{
                         target: 'map',
                         layers: [
@@ -295,12 +287,9 @@ def main():
                         }})
                     }});
 
-                    // Fit view to route after map and layers loaded
                     const extent = routeFeature.getGeometry().getExtent();
                     map.getView().fit(extent, {{ padding: [50, 50, 50, 50], maxZoom: 15 }});
 
-
-                    // Popup overlay
                     const container = document.createElement('div');
                     container.className = 'ol-popup';
                     container.style.display = 'none';
@@ -314,7 +303,6 @@ def main():
                     }});
                     map.addOverlay(popup);
 
-                    // Show popup on click
                     map.on('click', function(evt) {{
                         const feature = map.forEachFeatureAtPixel(evt.pixel, function(f) {{ return f; }});
                         if (feature && feature.get('name')) {{
@@ -322,10 +310,45 @@ def main():
                             const props = feature.getProperties();
                             popup.setPosition(coordinates);
                             container.style.display = 'block';
-                            container.innerHTML = `<b>${{props.name}}</b><br>
-                                                    <i>${{props.address}}</i><br>
-                                                    ${{props.description}}<br>
-                                                    <small>Start: ${{props.start_date}} | End: ${{props.end_date}}</small>`;
+
+                            if (props.name === "Origin" || props.name === "Destination") {{
+                                container.innerHTML = `<b>${{props.name}}</b><br>${{props.description}}`;
+                            }} else {{
+                                container.innerHTML = `<b>${{props.name}}</b><br>
+                                                       <i>${{props.address}}</i><br>
+                                                       ${{props.description}}<br>
+                                                       <small>Start: ${{props.start_date}} | End: ${{props.end_date}}</small>`;
+                            }}
+
+                            // Pan map to keep popup within viewport
+                            const mapSize = map.getSize();
+                            const pixel = map.getPixelFromCoordinate(coordinates);
+                            const popupWidth = container.offsetWidth;
+                            const popupHeight = container.offsetHeight;
+                            const margin = 20;
+
+                            let offsetX = 0;
+                            let offsetY = 0;
+
+                            if (pixel[0] + popupWidth / 2 > mapSize[0]) {{
+                                offsetX = pixel[0] + popupWidth / 2 - mapSize[0] + margin;
+                            }} else if (pixel[0] - popupWidth / 2 < 0) {{
+                                offsetX = pixel[0] - popupWidth / 2 - margin;
+                            }}
+
+                            if (pixel[1] - popupHeight < 0) {{
+                                offsetY = pixel[1] - popupHeight - margin;
+                            }}
+
+                            if (offsetX !== 0 || offsetY !== 0) {{
+                                const newCenterPixel = [
+                                    pixel[0] - offsetX,
+                                    pixel[1] - offsetY
+                                ];
+                                const newCenter = map.getCoordinateFromPixel(newCenterPixel);
+                                map.getView().animate({{center: newCenter, duration: 300}});
+                            }}
+
                         }} else {{
                             container.style.display = 'none';
                         }}
@@ -336,7 +359,6 @@ def main():
             """
 
             components.html(openlayers_html, height=720, scrolling=True)
-
         else:
             st.info("Enter details and click 'Search Events' to find events along the route.")
 
@@ -354,7 +376,6 @@ def main():
                             st.write(f"Start: {event.get('start_date', 'N/A')}  |  End: {event.get('end_date', 'N/A')}")
             else:
                 st.info("No events found for this route in the specified date range.")
-
 
 if __name__ == "__main__":
     main()
