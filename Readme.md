@@ -108,7 +108,9 @@ EventRouteFinder is a powerful and interactive event discovery platform designed
 
 See Dockerfile for streamlit and eventmap-fastapi
 docker compose 
-../event_map$ docker compose up --build --force-recreate
+../event_map$ docker compose up --build --force-recreate if you failed before
+Else docker compose up 
+docker compose down to close
 You have to execute from there because it finds app.main:app and it works and .env
 
 ---

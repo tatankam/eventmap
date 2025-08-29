@@ -10,3 +10,4 @@ Shapely==2.1.1
 tqdm==4.67.1
 uvicorn[standard]
 qdrant_client
+python-multipart
