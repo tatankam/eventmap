@@ -17,6 +17,7 @@ __pycache__/
 # FastAPI app cache and compiled files
 eventmap-fastapi/__pycache__/
 
+frontend/
 
 # Jupyter and notebook checkpoints
 .ipynb_checkpoints/
