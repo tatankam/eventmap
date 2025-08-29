@@ -104,6 +104,14 @@ EventRouteFinder is a powerful and interactive event discovery platform designed
 - Enhanced UX with smoother interfaces and richer map interactions.
 
 ---
+### Dockerize
+
+See Dockerfile for streamlit and eventmap-fastapi
+docker compose 
+../event_map$ docker compose up --build --force-recreate
+You have to execute from there because it finds app.main:app and it works and .env
+
+---
 
 ## License
 
