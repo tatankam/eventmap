@@ -219,14 +219,14 @@ def main():
                     const iconStyleOrigin = new ol.style.Style({{
                         image: new ol.style.Icon({{
                             anchor: [0.5, 1],
-                            src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+                            src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/start.png',
                             color: 'green'
                         }})
                     }});
                     const iconStyleDestination = new ol.style.Style({{
                         image: new ol.style.Icon({{
                             anchor: [0.5, 1],
-                            src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+                            src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/stop.png',
                             color: 'red'
                         }})
                     }});
