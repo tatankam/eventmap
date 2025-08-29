@@ -91,9 +91,6 @@ def main():
         if data:
             st.subheader("Route Map")
 
-            center_lat = (data['origin']['lat'] + data['destination']['lat']) / 2
-            center_lon = (data['origin']['lon'] + data['destination']['lon']) / 2
-
             route_coords = [[lon, lat] for lat, lon in [(c[1], c[0]) for c in data['route_coords']]]
             route_geojson = {
                 "type": "Feature",
@@ -299,7 +296,7 @@ def main():
                         element: container,
                         positioning: 'bottom-center',
                         stopEvent: false,
-                        offset: [0, -50],
+                        offset: [0, -20],
                     }});
                     map.addOverlay(popup);
 
@@ -320,7 +317,7 @@ def main():
                                                        <small>Start: ${{props.start_date}} | End: ${{props.end_date}}</small>`;
                             }}
 
-                            // Pan map to keep popup within viewport
+                            // Auto-pan popup into view
                             const mapSize = map.getSize();
                             const pixel = map.getPixelFromCoordinate(coordinates);
                             const popupWidth = container.offsetWidth;
@@ -348,10 +345,21 @@ def main():
                                 const newCenter = map.getCoordinateFromPixel(newCenterPixel);
                                 map.getView().animate({{center: newCenter, duration: 300}});
                             }}
-
                         }} else {{
                             container.style.display = 'none';
                         }}
+                    }});
+
+                    // Change cursor to pointer only on hover over origin, destination, or event features
+                    map.on('pointermove', function(evt) {{
+                        if (evt.dragging) {{
+                            return;
+                        }}
+                        const hit = map.forEachFeatureAtPixel(evt.pixel, function(feature) {{
+                            const name = feature.get('name');
+                            return name === 'Origin' || name === 'Destination' || (name && name !== '');
+                        }});
+                        map.getTargetElement().style.cursor = hit ? 'pointer' : '';
                     }});
                 </script>
             </body>
@@ -376,6 +384,7 @@ def main():
                             st.write(f"Start: {event.get('start_date', 'N/A')}  |  End: {event.get('end_date', 'N/A')}")
             else:
                 st.info("No events found for this route in the specified date range.")
+
 
 if __name__ == "__main__":
     main()
