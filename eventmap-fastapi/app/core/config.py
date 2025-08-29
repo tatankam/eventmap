@@ -10,3 +10,4 @@ QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 # Add dense and sparse model names to config
 DENSE_MODEL_NAME = os.getenv("DENSE_MODEL_NAME")
 SPARSE_MODEL_NAME = os.getenv("SPARSE_MODEL_NAME")
+COLLECTION_NAME = "veneto_events"

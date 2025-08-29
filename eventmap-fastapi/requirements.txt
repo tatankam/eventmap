@@ -8,3 +8,4 @@ pandas
 shapely
 folium
 jinja2
+python-multipart

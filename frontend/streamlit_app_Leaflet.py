@@ -98,6 +98,16 @@ def main():
             center_lat = (data['origin']['lat'] + data['destination']['lat']) / 2
             center_lon = (data['origin']['lon'] + data['destination']['lon']) / 2
             m = folium.Map(location=[center_lat, center_lon], zoom_start=9, disable_3d=True)
+            #m = folium.Map(location=[center_lat, center_lon], zoom_start=9, attributionControl=False, disable_3d=True)
+
+            # m = folium.Map(
+            #     location=[center_lat, center_lon],
+            #     zoom_start=9,
+            #     tiles='https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            #     attr='&copy; OpenStreetMap contributors &copy; CARTO',
+            #     disable_3d=True
+            # )
+
 
             try:
                 route_latlon = [(coord[1], coord[0]) for coord in data['route_coords']]
