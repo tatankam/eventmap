@@ -241,8 +241,8 @@ def main():
                     const iconStyleEvent = new ol.style.Style({{
                         image: new ol.style.Icon({{
                             anchor: [0.5, 1],
-                            src: './icons/event.png',
-                            scale: 1.8
+                            src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/event.png',
+                            scale: 0.8
                         }})
                     }});
 
