@@ -48,9 +48,10 @@ EventRouteFinder is a powerful and interactive event discovery platform designed
 - Sparse and dense embedding models encoding event descriptions for rich semantic queries.
 - [OpenRouteService](https://openrouteservice.org/) APIs for route calculation and transport profile support.
 - [Streamlit](https://streamlit.io/) for rapid frontend development.
-- [Folium](https://python-visualization.github.io/folium/) and [streamlit-folium](https://github.com/randyzwitch/streamlit-folium) for advanced interactive maps.
+- [Openstreetmap](https://www.openstreetmap.org/) for advanced interactive maps.
 - Python backend (FastAPI suggested) serving route computation and event querying APIs.
 - Geopandas and Shapely for geographic calculations and buffering routes.
+- Docker for containerization of the fastapi and streamlit
 
 ---
 
