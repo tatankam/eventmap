@@ -69,8 +69,9 @@ EventRouteFinder is a powerful and interactive event discovery platform designed
     ```
     uvicorn app.main:app --reload
     ```
-4. Launch the Streamlit frontend app (in root or appropriate folder):
+4. Launch the Streamlit frontend app :
     ```
+    cd /eventmap/frontend
     streamlit run streamlit_app.py
     ```
 
@@ -112,6 +113,30 @@ docker compose
 Else docker compose up 
 docker compose down to close
 You have to execute from there because it finds app.main:app and it works and .env
+The slow behavior observed when using docker compose down followed by docker compose up likely happens because docker compose down stops and removes the containers, which means that on the subsequent docker compose up, the containers and resources (including embedding models) are re-initialized or re-downloaded.
+
+To avoid this, consider these options:
+
+Use docker compose restart instead of down/up, which stops and starts the containers without removing them. This keeps the container state and cached data intact, greatly improving start-up speed.
+
+If you need to update containers but want to keep volumes and downloads persistent, avoid down or use volumes to persist data like models outside the container file system.
+
+Consider volume mounting or caching strategies for your models or data so they are not downloaded every time a container is recreated.
+
+This approach optimizes performance by preventing unnecessary re-downloads and reinitializations during restarts or redeployments with Docker Compose.
+
+The first time you have to:
+docker compose up -d
+
+Next you use (it is good even if yoi modify docker compose file)
+docker compose stop
+docker compose start
+or
+docker compose restart 
+
+
+this is if you don't modify code, because if you use docker compose down, it remove container so it is really slow to docker compose up
+
 
 ---
 

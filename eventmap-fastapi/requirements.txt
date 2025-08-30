@@ -11,3 +11,4 @@ tqdm==4.67.1
 uvicorn[standard]
 qdrant_client
 python-multipart
+orjson

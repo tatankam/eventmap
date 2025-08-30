@@ -8,10 +8,9 @@ app = FastAPI(default_response_class=ORJSONResponse)  # Use ORJSON for faster JS
 
 app.include_router(router)
 
-# app.mount("/static", StaticFiles(directory="app/static"), name="static")
-
+# CORS settings
 origins = [
-    "http://localhost:8501",  # Streamlit's default port
+    "*"  # "http://localhost:8501",  # you could set Streamlit's default port
 ]
 
 app.add_middleware(

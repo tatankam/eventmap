@@ -7,6 +7,8 @@ services:
     ports:
       - "8000:8000"
     container_name: eventmap-fastapi
+    networks:
+      - eventmap
 
   streamlit:
     build:
@@ -14,3 +16,11 @@ services:
     ports:
       - "8501:8501"
     container_name: eventmap-frontend
+    environment:
+      - API_URL=http://fastapi:8000/create_map
+    networks:
+      - eventmap
+
+networks:
+  eventmap:
+    driver: bridge

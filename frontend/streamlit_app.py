@@ -3,8 +3,11 @@ import streamlit.components.v1 as components
 import requests
 from datetime import datetime, timedelta
 import json
+import os
 
-API_URL = "http://localhost:8000/create_map"
+
+API_URL = os.getenv("API_URL", "http://localhost:8000/create_map")
+
 st.set_page_config(layout="wide")
 
 def main():
