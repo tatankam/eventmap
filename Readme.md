@@ -101,8 +101,10 @@ EventRouteFinder is a powerful and interactive event discovery platform designed
 - Natural language input parsing for query parameters via an AI assistant (e.g., Mistral).
 - Multi-point and waypoint support in route planning.
 - Adding event type/category embeddings and filters for finer search control.
-- Dockerized deployment with separate containers for FastAPI, Streamlit, and AI assistant.
 - Enhanced UX with smoother interfaces and richer map interactions.
+- create a UI to enter events
+- create random id instead of sequential and if the id is busy, regenerate the id
+- adjust documentation
 
 ---
 ### Dockerize

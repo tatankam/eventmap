@@ -297,8 +297,8 @@
       "location": {
         "venue": "Piazza Costituzione",
         "address": "Piazza Costituzione, San Bonifacio, Veneto",
-        "latitude": 45.3955369,
-        "longitude": 11.2695655
+        "latitude": 45.3953901,
+        "longitude": 11.2693904
       },
       "start_date": "2025-08-26T20:38:00Z",
       "end_date": "2025-08-27T06:38:00Z",
@@ -2377,8 +2377,8 @@
       "location": {
         "venue": "Ponte Vigo",
         "address": "Ponte Vigo, Chioggia, Veneto",
-        "latitude": 45.2231644,
-        "longitude": 12.2811481
+        "latitude": 45.2231851,
+        "longitude": 12.2810534
       },
       "start_date": "2025-08-29T07:34:00Z",
       "end_date": "2025-08-29T15:34:00Z",
@@ -2521,8 +2521,8 @@
       "location": {
         "venue": "Piazza Vittorio Emanuele II",
         "address": "Piazza Vittorio Emanuele II, Lazise, Veneto",
-        "latitude": 45.5053022,
-        "longitude": 10.7324805
+        "latitude": 45.505229,
+        "longitude": 10.7331108
       },
       "start_date": "2025-08-28T18:34:00Z",
       "end_date": "2025-08-28T23:34:00Z",
@@ -2681,8 +2681,8 @@
       "location": {
         "venue": "Piazza Petrarca",
         "address": "Piazza Petrarca, Arquà Petrarca, Veneto",
-        "latitude": 45.26913,
-        "longitude": 11.719406
+        "latitude": 45.269349,
+        "longitude": 11.7195604
       },
       "start_date": "2025-08-27T15:07:00Z",
       "end_date": "2025-08-28T01:07:00Z",
@@ -3049,8 +3049,8 @@
       "location": {
         "venue": "Piazza Martiri della Libertà",
         "address": "Piazza Martiri della Libertà, Mirano, Veneto",
-        "latitude": 45.4928792,
-        "longitude": 12.1095192
+        "latitude": 45.4931149,
+        "longitude": 12.1094823
       },
       "start_date": "2025-08-29T03:16:00Z",
       "end_date": "2025-08-29T11:16:00Z",
@@ -3065,8 +3065,8 @@
       "location": {
         "venue": "Piazza Costituzione",
         "address": "Piazza Costituzione, San Bonifacio, Veneto",
-        "latitude": 45.3953901,
-        "longitude": 11.2693904
+        "latitude": 45.3955369,
+        "longitude": 11.2695655
       },
       "start_date": "2025-08-28T09:23:00Z",
       "end_date": "2025-08-28T10:23:00Z",
@@ -3337,8 +3337,8 @@
       "location": {
         "venue": "Piazza Petrarca",
         "address": "Piazza Petrarca, Arquà Petrarca, Veneto",
-        "latitude": 45.26913,
-        "longitude": 11.719406
+        "latitude": 45.269349,
+        "longitude": 11.7195604
       },
       "start_date": "2025-08-27T13:22:00Z",
       "end_date": "2025-08-27T20:22:00Z",
@@ -4057,8 +4057,8 @@
       "location": {
         "venue": "Piazza Petrarca",
         "address": "Piazza Petrarca, Arquà Petrarca, Veneto",
-        "latitude": 45.26913,
-        "longitude": 11.719406
+        "latitude": 45.269349,
+        "longitude": 11.7195604
       },
       "start_date": "2025-08-27T15:15:00Z",
       "end_date": "2025-08-28T00:15:00Z",
@@ -4169,8 +4169,8 @@
       "location": {
         "venue": "Piazza Martiri della Libertà",
         "address": "Piazza Martiri della Libertà, Mirano, Veneto",
-        "latitude": 45.4928792,
-        "longitude": 12.1095192
+        "latitude": 45.4931149,
+        "longitude": 12.1094823
       },
       "start_date": "2025-08-26T00:44:00Z",
       "end_date": "2025-08-26T08:44:00Z",
@@ -4665,8 +4665,8 @@
       "location": {
         "venue": "Piazza Petrarca",
         "address": "Piazza Petrarca, Arquà Petrarca, Veneto",
-        "latitude": 45.26913,
-        "longitude": 11.719406
+        "latitude": 45.269349,
+        "longitude": 11.7195604
       },
       "start_date": "2025-08-27T17:45:00Z",
       "end_date": "2025-08-28T00:45:00Z",
@@ -4985,8 +4985,8 @@
       "location": {
         "venue": "Piazza Ferretto",
         "address": "Piazza Ferretto, Mestre, Veneto",
-        "latitude": 45.494974,
-        "longitude": 12.2426951
+        "latitude": 45.4936517,
+        "longitude": 12.2410779
       },
       "start_date": "2025-08-28T20:28:00Z",
       "end_date": "2025-08-28T21:28:00Z",
@@ -5001,8 +5001,8 @@
       "location": {
         "venue": "Rocca di Asolo",
         "address": "Rocca di Asolo, Asolo, Veneto",
-        "latitude": 45.8053196,
-        "longitude": 11.9176075
+        "latitude": 45.8046333,
+        "longitude": 11.9189322
       },
       "start_date": "2025-08-29T06:00:00Z",
       "end_date": "2025-08-29T16:00:00Z",
@@ -6201,8 +6201,8 @@
       "location": {
         "venue": "Orto Botanico",
         "address": "Orto Botanico, Padua, Veneto",
-        "latitude": 45.4004575,
-        "longitude": 11.8798246
+        "latitude": 45.3995319,
+        "longitude": 11.879673
       },
       "start_date": "2025-08-26T07:04:00Z",
       "end_date": "2025-08-26T09:04:00Z",
