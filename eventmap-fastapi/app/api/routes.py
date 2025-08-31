@@ -11,38 +11,38 @@ from fastembed import TextEmbedding, SparseTextEmbedding
 import os
 import shutil
 
+# Import the extraction function and Pydantic models
+from app.services.extraction_service import extract_payload
+from app.models.schemas import SentenceInput
+
 router = APIRouter()
 
 # Initialize embedding models once for reuse
 dense_embedding_model = TextEmbedding(DENSE_MODEL_NAME)
 sparse_embedding_model = SparseTextEmbedding(SPARSE_MODEL_NAME)
 
+
 @router.post("/create_map")
 async def create_event_map(request: schemas.RouteRequest):
     try:
-        # Geocode origin and destination addresses
         origin_point = openrouteservice_client.geocode_address(request.origin_address)
         destination_point = openrouteservice_client.geocode_address(request.destination_address)
         coords = [origin_point, destination_point]
 
-        # Get route geometry from openrouteservice with chosen profile
         routes = openrouteservice_client.get_route(coords, profile=request.profile_choice)
         route_geometry = routes['features'][0]['geometry']
         route_coords = route_geometry['coordinates']
         if len(route_coords) < 2:
             raise HTTPException(status_code=400, detail="Route must contain two different address for buffering.")
 
-
-        # Create a LineString and buffer polygon around it
         route_line = LineString(route_coords)
         route_gdf = gpd.GeoDataFrame([{'geometry': route_line}], crs='EPSG:4326')
-        # Convert to metric CRS for buffering, then back to lat/lon WGS84
+
         route_gdf_3857 = route_gdf.to_crs(epsg=3857)
         buffer_polygon = route_gdf_3857.buffer(request.buffer_distance * 1000).to_crs(epsg=4326).iloc[0]
         polygon_coords = np.array(buffer_polygon.exterior.coords).tolist()
         polygon_coords_qdrant = [{"lon": lon, "lat": lat} for lon, lat in polygon_coords]
 
-        # Build geographic filter for Qdrant search
         geo_filter = qmodels.Filter(
             must=[
                 qmodels.FieldCondition(
@@ -54,7 +54,6 @@ async def create_event_map(request: schemas.RouteRequest):
             ]
         )
 
-        # Build date range filter for event date intersection
         date_intersection_filter = qmodels.Filter(
             must=[
                 qmodels.FieldCondition(
@@ -68,14 +67,11 @@ async def create_event_map(request: schemas.RouteRequest):
             ]
         )
 
-        # Combine filters
         final_filter = qmodels.Filter(must=geo_filter.must + date_intersection_filter.must)
 
-        # Embed query text for hybrid vector search (dense + sparse)
         query_dense_vector = list(dense_embedding_model.passage_embed([request.query_text]))[0].tolist()
         query_sparse_embedding = list(sparse_embedding_model.passage_embed([request.query_text]))[0]
 
-        # Query events from Qdrant using hybrid search and filters
         payloads = qdrant_client.query_events_hybrid(
             dense_vector=query_dense_vector,
             sparse_vector=query_sparse_embedding,
@@ -87,21 +83,18 @@ async def create_event_map(request: schemas.RouteRequest):
         if not payloads:
             return {"message": "No events found in Qdrant for this route/buffer and date range."}
 
-        # Sort events by their projection distance along the route line
         def distance_along_route(event):
             point = Point(event['location']['lon'], event['location']['lat'])
             return route_line.project(point)
 
         sorted_events = sorted(payloads, key=distance_along_route)
 
-        # Add convenient top-level keys for frontend (lat/lon/address)
         for event in sorted_events:
             loc = event.get('location', {})
             event['address'] = loc.get('address')
             event['lat'] = loc.get('lat')
             event['lon'] = loc.get('lon')
 
-        # Build response JSON
         response = {
             "route_coords": route_coords,
             "buffer_polygon": polygon_coords,
@@ -118,10 +111,6 @@ async def create_event_map(request: schemas.RouteRequest):
 
 @router.post("/ingestevents")
 async def ingest_events_endpoint(file: UploadFile = File(...)):
-    """
-    Endpoint to upload a JSON file of events, which are then geocoded and ingested into Qdrant.
-    The ingestion function is async and awaited directly.
-    """
     if not file.filename.endswith(".json"):
         raise HTTPException(status_code=400, detail="Only .json files are accepted")
 
@@ -129,19 +118,15 @@ async def ingest_events_endpoint(file: UploadFile = File(...)):
     os.makedirs(save_dir, exist_ok=True)
     save_path = os.path.join(save_dir, file.filename)
 
-    # Save uploaded file to local temporary path
     with open(save_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
     try:
-        # Await the async ingestion function directly
         result = await ingest_events_from_file(save_path)
     finally:
-        # Cleanup uploaded file after ingestion
         if os.path.exists(save_path):
             os.remove(save_path)
 
-    # Return detailed ingestion stats and collection info
     return {
         "filename": file.filename,
         "inserted": result["inserted"],
@@ -149,3 +134,13 @@ async def ingest_events_endpoint(file: UploadFile = File(...)):
         "skipped_unchanged": result["skipped_unchanged"],
         "collection_info": str(result["collection_info"]),
     }
+
+
+@router.post("/sentencetopayload")
+async def sentence_to_payload(data: SentenceInput):
+    sentence = data.sentence
+    output = extract_payload(sentence)
+    if output:
+        return output.model_dump()
+    else:
+        raise HTTPException(status_code=400, detail="Failed to extract valid payload or validation error")

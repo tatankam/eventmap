@@ -12,3 +12,4 @@ uvicorn[standard]
 qdrant_client
 python-multipart
 orjson
+crewai[tools]
