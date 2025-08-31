@@ -131,6 +131,12 @@ This approach optimizes performance by preventing unnecessary re-downloads and r
 The first time you have to:
 docker compose up -d
 
+To be sure, if you did some build, do this:
+docker compose build --no-cache
+and after do this:
+docker compose up -d
+
+
 Next you use (it is good even if yoi modify docker compose file)
 docker compose stop
 docker compose start

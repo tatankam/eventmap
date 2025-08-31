@@ -1,16 +1,19 @@
 import json
 from typing import Optional, Literal
-from pydantic import BaseModel, ValidationError, model_validator
-from datetime import datetime
+from pydantic import BaseModel, ValidationError, model_validator, Field
+from datetime import datetime, timedelta
 from crewai import Agent, Task, Crew, Process, LLM
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv(dotenv_path="../../.env")
+
 
 OPEN_AI_BASE_URL = os.getenv("OPEN_AI_BASE_URL")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL")
+
 
 ollama_1b = LLM(
     model=OPENAI_MODEL,
@@ -19,16 +22,26 @@ ollama_1b = LLM(
     temperature=0.0,
 )
 
+
 ProfileChoice = Literal["driving-car", "cycling-regular", "foot-walking"]
+
+
+def default_start_date():
+    return datetime.now().isoformat()
+
+
+def default_end_date():
+    return (datetime.now() + timedelta(days=4)).isoformat()
+
 
 class Payload(BaseModel):
     origin_address: str
     destination_address: str
     buffer_distance: float
-    startinputdate: str
-    endinputdate: str
-    query_text: Optional[str] = "events"
-    numevents: int
+    startinputdate: Optional[str] = Field(default_factory=default_start_date)
+    endinputdate: Optional[str] = Field(default_factory=default_end_date)
+    query_text: Optional[str] = ""
+    numevents: Optional[int] = 10
     profile_choice: Optional[ProfileChoice] = "driving-car"
 
     @model_validator(mode="after")
@@ -38,6 +51,7 @@ class Payload(BaseModel):
         if start > end:
             raise ValueError("start date can't be later than end date")
         return model
+
 
 agent = Agent(
     role="Payload Extractor",
@@ -56,6 +70,7 @@ agent = Agent(
     verbose=True,
     allow_delegation=False,
 )
+
 
 task = Task(
     description=(
@@ -79,12 +94,14 @@ task = Task(
     output_json=Payload,
 )
 
+
 crew = Crew(
     agents=[agent],
     tasks=[task],
     verbose=True,
     process=Process.sequential,
 )
+
 
 def extract_payload(sentence: str):
     result = crew.kickoff(inputs={"input": sentence})
