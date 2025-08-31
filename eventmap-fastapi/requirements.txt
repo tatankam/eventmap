@@ -12,4 +12,4 @@ uvicorn[standard]
 qdrant_client
 python-multipart
 orjson
-crewai[tools]
+crewai==0.175.0
