@@ -2,7 +2,7 @@
   "events": [
     {
       "id": "1000",
-      "title": "Duran Duran in concerto #544",
+      "title": "Duran Duran in concerto",
       "category": "Music",
       "description": "Duran Duran in concerto presso la parrocchia",
       "city": "Milano",
@@ -16,7 +16,7 @@
     },
     {
       "id": "1001",
-      "title": "Caparezza in concerto #777",
+      "title": "Caparezza in concerto",
       "category": "Music",
       "description": "Concerto di Caparezza a Bolzano presso la parrocchia",
       "city": "Bolzano",
