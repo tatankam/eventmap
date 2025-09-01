@@ -145,9 +145,9 @@ def main():
                 "Enter your travel plan as a sentence",
                 height=200,
                 placeholder=(
-                    "Example(specify the year in the dates): I want to go from Vicenza to Trento and I will leave on "
+                    "Example(specify the year in the dates, transport by car, bike or foot): I want to go from Vicenza to Trento and I will leave on "
                     "2 September 2025 at 2 a.m. and arrive on 18 October 2025 at 5:00. "
-                    "Give me 10 events about music in a range of 6 km. Use cycling-regular transport."
+                    "Give me 10 events about music in a range of 6 km. Use bike as transport."
                 )
             )
 
