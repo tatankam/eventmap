@@ -45,9 +45,17 @@ def call_sentence_to_payload(sentence: str):
         return None
 
 
-def main():
-    mode = st.radio("Select input mode", ["Input manually", "Input natural language"])
+    mode = st.radio("Select input mode", ["Input manually", "Input natural language"], horizontal=True)
 
+def main():
+    mode = st.radio("Select input mode", ["Input manually", "Input natural language"], horizontal=True)
+
+    # Clear route data and extracted_payload if mode changes
+    previous_mode = st.session_state.get("input_mode")
+    if previous_mode != mode:
+        st.session_state.pop("route_data", None)
+        st.session_state.pop("extracted_payload", None)
+        st.session_state["input_mode"] = mode
 
     data = st.session_state.get("route_data")
 
@@ -63,7 +71,7 @@ def main():
         col1, col2, col3 = st.columns([1, 2, 2])
 
         with col1:
-            st.subheader("Insert data")
+            #st.subheader("Insert data")
 
             origin_address = st.text_input("Origin Address", value="Padova")
             destination_address = st.text_input("Destination Address", value="Verona")
@@ -110,6 +118,7 @@ def main():
 
             search_disabled = len(error_msgs) > 0
 
+
             if st.button("Search Events", disabled=search_disabled):
                 payload = {
                     "origin_address": origin_address,
@@ -131,7 +140,8 @@ def main():
         with col2:
             if data:
                 display_map_and_events(data, origin_address, destination_address)
-
+            else:
+                st.info("Compile the data and press 'Search Events' to display the route map and events.")
         with col3:
             display_events(data)
 
@@ -145,12 +155,13 @@ def main():
                 "Enter your travel plan as a sentence",
                 height=200,
                 placeholder=(
-                    "Example(specify the year in the dates, transport by car, bike or foot): I want to go from Vicenza to Trento and I will leave on "
-                    "2 September 2025 at 2 a.m. and arrive on 18 October 2025 at 5:00. "
-                    "Give me 10 events about music in a range of 6 km. Use bike as transport."
+                    "Always specify the year in the dates and the type of transport (car, bike, or foot).\n"
+                    "Example: I want to go from Vicenza to Trento "
+                    "and will leave on 2 September 2025 at 2 a.m., arriving on 18 October 2025 at 5:00 a.m."
+                    "Give me 10 events about music within a 6 km range. Use bike as transport."
                 )
             )
-
+            
             if st.button("Parse and Search"):
                 if not sentence_input.strip():
                     st.error("Please enter a sentence.")
@@ -175,6 +186,8 @@ def main():
                 origin_address = data['origin'].get('address') if 'origin' in data else "Origin"
                 destination_address = data['destination'].get('address') if 'destination' in data else "Destination"
                 display_map_and_events(data, origin_address, destination_address)
+            else:
+                st.info("Enter a sentence and press 'Parse and Search' to display the route map and events.")
 
         with col3:
             display_events(data)
@@ -469,7 +482,7 @@ def display_events(data):
                     score = event.get('score')  # Adjust the key if needed
                     title = event.get('title', 'No Title')
                     if score is not None:
-                        title = f"{title} (Score: {score:.2f})"
+                        title = f"{title} (Score Fusion RRF: {score:.2f})"
                     with st.expander(title):
                         st.write(event.get('address', ''))
                         st.write(event.get('description', ''))

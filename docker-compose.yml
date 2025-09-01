@@ -1,23 +1,23 @@
 services:
-  fastapi:
+  eventmap-fastapi:
     build:
-      context: ./eventmap-fastapi
+      context: ./backend
     env_file:
       - .env
     ports:
       - "8000:8000"
-    container_name: eventmap-fastapi
+    container_name: backend
     networks:
       - eventmap
 
-  streamlit:
+  eventmap-frontend:
     build:
       context: ./frontend
     ports:
       - "8501:8501"
-    container_name: eventmap-frontend
+    container_name: frontend
     environment:
-      - API_URL=http://fastapi:8000/
+      - API_URL=http://backend:8000/
     networks:
       - eventmap
 
