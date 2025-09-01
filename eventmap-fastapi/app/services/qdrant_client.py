@@ -28,7 +28,7 @@ def query_events(polygon_coords_qdrant, query_filter=None, collection_name=COLLE
     return [p.payload for p in results.points]
 
 
-def query_events_hybrid(dense_vector, sparse_vector, query_filter, collection_name=COLLECTION_NAME, limit=100):
+def query_events_hybrid(dense_vector, sparse_vector, query_filter, collection_name=COLLECTION_NAME, limit=100, score_threshold=0.0):
     results = qdrant_client.query_points(
         collection_name=collection_name,
         prefetch=[
@@ -39,16 +39,30 @@ def query_events_hybrid(dense_vector, sparse_vector, query_filter, collection_na
                 ),
                 using="sparse_vector",
                 limit=50,
+                # score_threshold=score_threshold,  # Optional: filter out low-score results but I don't need for sparse
             ),
             qmodels.Prefetch(
                 query=dense_vector,
                 using="dense_vector",
                 limit=50,
+                score_threshold=score_threshold,  # Optional: filter out low-score results
             ),
         ],
         query=qmodels.FusionQuery(fusion=qmodels.Fusion.RRF),
         query_filter=query_filter,
         limit=limit,
-        with_payload=True
+        with_payload=True,
+        # score_threshold=score_threshold,  # Optional: filter out low-score results
     )
-    return [p.payload for p in results.points]
+
+    # Process results into dataframe
+    records = []
+    for point in results.points:
+        entry = dict(point.payload)
+        entry["score"] = point.score
+        records.append(entry)
+    
+    #return [p.payload for p in results.points]
+    return records
+#    return [{"payload": p.payload, "score": p.score} for p in results.points]
+

@@ -5,10 +5,13 @@ from datetime import datetime, timedelta
 import json
 import os
 
+
 API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
+
 
 CREATE_MAP_URL = f"{API_BASE_URL}/create_map"
 SENTENCE_TO_PAYLOAD_URL = f"{API_BASE_URL}/sentencetopayload"
+
 
 st.set_page_config(layout="wide")
 
@@ -45,7 +48,16 @@ def call_sentence_to_payload(sentence: str):
 def main():
     mode = st.radio("Select input mode", ["Input manually", "Input natural language"])
 
+
     data = st.session_state.get("route_data")
+
+    # Mapping from user-friendly profile choice to Qdrant profile codes
+    profile_map = {
+        "car": "driving-car",
+        "bike": "cycling-regular",
+        "walking": "foot-walking"
+    }
+
 
     if mode == "Input manually":
         col1, col2, col3 = st.columns([1, 2, 2])
@@ -60,9 +72,9 @@ def main():
             query_text = st.text_input("Search Query Text", value="Sport")
             numevents = st.number_input("Number of Events to Retrieve", min_value=1, value=10)
 
-            profile_choice = st.selectbox(
+            profile_choice_user = st.selectbox(
                 "Transport Profile",
-                options=["driving-car", "cycling-regular", "foot-walking"],
+                options=["car", "bike", "walking"],
                 index=0,
                 help="Select the transport profile for routing"
             )
@@ -107,13 +119,14 @@ def main():
                     "endinputdate": endinputdate,
                     "query_text": query_text,
                     "numevents": numevents,
-                    "profile_choice": profile_choice,
+                    "profile_choice": profile_map.get(profile_choice_user, "driving-car"),
                 }
 
                 data = call_create_map(payload)
 
                 if data:
                     st.session_state["route_data"] = data
+
 
         with col2:
             if data:
@@ -132,8 +145,8 @@ def main():
                 "Enter your travel plan as a sentence",
                 height=200,
                 placeholder=(
-                    "Example: I want to go from Vicenza to Trento and I will leave on "
-                    "2 September 2025 at 2 a.m. and arrive on 18 October at 5:00. "
+                    "Example(specify the year in the dates): I want to go from Vicenza to Trento and I will leave on "
+                    "2 September 2025 at 2 a.m. and arrive on 18 October 2025 at 5:00. "
                     "Give me 10 events about music in a range of 6 km. Use cycling-regular transport."
                 )
             )
@@ -453,7 +466,11 @@ def display_events(data):
             container = st.container()
             with container:
                 for event in events:
-                    with st.expander(event.get('title', 'No Title')):
+                    score = event.get('score')  # Adjust the key if needed
+                    title = event.get('title', 'No Title')
+                    if score is not None:
+                        title = f"{title} (Score: {score:.2f})"
+                    with st.expander(title):
                         st.write(event.get('address', ''))
                         st.write(event.get('description', ''))
                         st.write(f"Start: {event.get('start_date', 'N/A')}  |  End: {event.get('end_date', 'N/A')}")

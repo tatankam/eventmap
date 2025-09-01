@@ -69,6 +69,12 @@ async def create_event_map(request: schemas.RouteRequest):
 
         final_filter = qmodels.Filter(must=geo_filter.must + date_intersection_filter.must)
 
+        score_treshold = 0.0
+        if request.query_text.strip() == "":
+            score_treshold = 0.0  # No text query, so no score threshold
+        else:
+            score_treshold = 0.34  # Adjust based on desired relevance I found 0.34 to be a good balance
+
         query_dense_vector = list(dense_embedding_model.passage_embed([request.query_text]))[0].tolist()
         query_sparse_embedding = list(sparse_embedding_model.passage_embed([request.query_text]))[0]
 
@@ -78,6 +84,7 @@ async def create_event_map(request: schemas.RouteRequest):
             query_filter=final_filter,
             collection_name=COLLECTION_NAME,
             limit=request.numevents,
+            score_threshold=score_treshold  # Optional: filter out low-score results
         )
 
         if not payloads:
