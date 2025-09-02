@@ -87,7 +87,6 @@ Ensure these keys are securely stored and accessible to both backend and fronten
 
 - Access the frontend UI at: [http://localhost:8501](http://localhost:8501)  
 
-  ![Manual Input UI](./images/manualinput.png "Manual Input Interface")
 
 - Access the backend API documentation at: [http://localhost:8000/docs](http://localhost:8000/docs)  
 
@@ -100,16 +99,29 @@ Ensure these keys are securely stored and accessible to both backend and fronten
 ### User Interface Overview
 
 - Input addresses and travel profile manually or input natural language travel plans.
-  ![API Documentation](./images/manualinput.png "FastAPI Docs Interface")
+#### Manual input
 
-  ![Natural Language Input](./images/naturallanguageinput.png "Natural Language Input Mode")
+![Input manually](./images/manualinput.png "Enter the input data")
+
+
 
 - Specify buffer distance, date ranges, and query text to filter events.
 
 - Events are displayed interactively on the map along the travel route.
- ![Natural Language Output](./images/manualoutput.png "Events Displayed on Map")
+
+![Manual Output](./images/manualoutput.png "Events Displayed on Map")
+
+
+
+ #### Natural Language Input
+
+   ![Natural Language Input](./images/naturallanguageinput.png "Natural Language Input Mode")
+
+  - Specify buffer distance, date ranges, and query text as natural language sentence
+
 
   ![Natural Language Output](./images/naturallanguageoutput.png "Events Displayed on Map")
+
 
 ## Core Features Usage
 
