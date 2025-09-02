@@ -69,7 +69,7 @@ For system architecture, backend design, and API endpoint details, refer to the 
 
 This project is an independent, open-source effort and is not affiliated with any other applications, websites, or organizations that may share similar names or concepts. Its purpose is to explore and demonstrate advanced event discovery along routes using technologies such as the Qdrant vector database, CrewAI, and Mistral LLM. It is not currently a commercial product or service.
 
-The events are fictional and generated through a random process. They are located in the Veneto region, which is in northeastern Italy along the Adriatic Sea. The events are limited to the period from September 1, 2025, to September 30, 2025, solely for testing purposes.
+The events are fictional and generated through a random process. They are located in the Veneto region, which is in northeastern Italy along the Adriatic Sea. The events are limited to the period from September 1, 2025, to October 31, 2025, solely for testing purposes.
 
 Any liability related to the accuracy or authenticity of the events is disclaimed; these are not real or verified events.
 
