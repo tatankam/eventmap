@@ -15,7 +15,7 @@ __pycache__/
 .DS_Store
 
 # FastAPI app cache and compiled files
-eventmap-fastapi/__pycache__/
+backend/__pycache__/
 
 
 
@@ -25,3 +25,6 @@ eventmap-fastapi/__pycache__/
 # datasets file too big
 dataset/veneto_events.json
 dataset/veneto_events_geocoded_structured.json
+
+# docs
+docs/old/
