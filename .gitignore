@@ -21,3 +21,7 @@ eventmap-fastapi/__pycache__/
 
 # Jupyter and notebook checkpoints
 .ipynb_checkpoints/
+
+# datasets file too big
+datasets/veneto_events.json
+datasets/veneto_events_geocoded_structured.json

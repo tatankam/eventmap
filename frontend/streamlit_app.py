@@ -1,9 +1,10 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import json
 import os
+
 
 
 API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
@@ -89,7 +90,9 @@ def main():
 
             start_col1, start_col2 = st.columns(2)
             with start_col1:
-                start_date = st.date_input("Start Date", value=datetime.today())
+                # start_date = st.date_input("Start Date", value=datetime.today())
+                start_date = st.date_input("Start Date", value=date(2025, 9, 1))
+
             with start_col2:
                 if 'start_time' not in st.session_state:
                     st.session_state.start_time = datetime.now().time()

@@ -1,159 +1,181 @@
 # Architecture and API Reference
 
-## Overview
+## Overview 🌐
 
-The ReMap project consists of three main components:
+The **ReMap** project consists of three main components:
 
 1. **Fake Event Creation and Geolocalization**  
-   Events are generated and geolocated using Jupyter notebooks (`notebooks/01_eda_events.ipynb`).
-   
+   📍 Events are generated and geolocated using Jupyter notebooks (`notebooks/01_eda_events.ipynb`).
+
 2. **Backend with FastAPI**  
-   Provides API endpoints for event ingestion, route-based event querying, and natural language payload extraction. The backend integrates with Qdrant vector database for storing and querying event vectors.
-   
+   ⚙️ Provides API endpoints for event ingestion, route-based event querying, and natural language payload extraction. Integrates with **Qdrant** vector database for semantic and geospatial querying.
+
 3. **Frontend with Streamlit**  
-   Interactive UI allowing users to input travel routes manually or via natural language. It connects to the backend APIs for route creation and event retrieval.
+   🖥️ Interactive UI enabling manual or natural language-based route inputs. Communicates with backend APIs to create routes and retrieve relevant events.
 
 ---
 
-## Backend Architecture
+## Backend Architecture ⚙️
 
-### Core Modules
+### Core Modules 🧱
 
-- `app/api` — FastAPI router modules handling HTTP endpoints.
-- `app/services` — Service layer implementing logic such as event ingestion, geocoding, embeddings, and Qdrant query handling.
+- `app/api` — FastAPI routers managing HTTP endpoints.
+- `app/services` — Business logic layer (event ingestion, embeddings, geocoding, Qdrant querying).
 - `app/models` — Pydantic schemas for data validation and serialization.
-- `app/core/config.py` — Configuration constants and environment variables.
+- `app/core/config.py` — Configuration (constants and environment variables).
 
-### Key Backend Components
+### Key Backend Components 🧩
 
-- **Embedding Models:**  
-  Uses FastEmbed's dense and sparse text embedding models (`DENSE_MODEL_NAME`, `SPARSE_MODEL_NAME`) for semantic search.
+- **Embedding Models**  
+  🧠 Uses FastEmbed's **dense** and **sparse** models for semantic text embedding (`DENSE_MODEL_NAME`, `SPARSE_MODEL_NAME`).
 
-- **Qdrant Client:**  
-  Interface with Qdrant vector database supporting hybrid search with dense and sparse embeddings.
+- **Qdrant Client**  
+  📊 Connects to Qdrant vector DB, supporting hybrid (vector + keyword) search with geo-filtering.
 
-- **Endpoints:**
+- **API Endpoints**:
 
-  - `POST /create_map`  
-    Creates a route map from origin and destination addresses, buffers events along the route in Qdrant filtered by geography and date, and returns sorted events.
+  - `POST /create_map` — Generate route, search nearby events, return sorted list and geometry.  
+  - `POST /ingestevents` — Upload and ingest JSON event files to Qdrant with deduplication.  
+  - `POST /sentencetopayload` — Convert natural language into structured query parameters.
 
-  - `POST /ingestevents`  
-    Accepts JSON event files, ingests events into Qdrant with batching and deduplication.
+### Data Flow 🔄
 
-  - `POST /sentencetopayload`  
-    Parses natural language input and extracts structured event query parameters.
-
-### Data Flow
-
-1. User request triggers map creation or ingestion.
-2. Backend geocodes addresses using OpenRouteService.
-3. Queries or ingest data into Qdrant using vector and filters like geospatial and date/time.
-4. Returns JSON responses with event lists and route geometry.
+1. User request triggers map creation or event ingestion.
+2. Backend geocodes addresses using **OpenRouteService**.
+3. Events are retrieved or stored in **Qdrant** using vector search and geospatial/date filters.
+4. JSON responses return event lists, route coordinates, and buffer polygons.
 
 ---
 
-## Frontend Architecture
+## Frontend Architecture 🖼️
 
-### Technologies
+### Technologies 🛠️
 
-- Streamlit for reactive, single-page frontend.
-- Uses OpenLayers for map visualization embedded through HTML component.
-- Connects to backend API via environment variable `API_URL`depending from manual or natural language data input.
+- **Streamlit** for reactive frontend UI.  
+- **OpenLayers** for map rendering, embedded using HTML components.  
+- Connects to backend via `API_URL` environment variable, switching between manual and natural language modes.
 
-### Main Components
+### Main Components 🔧
 
-- `streamlit_app.py` — Main entry point and UI logic.
-- User modes: manual input or natural language input.
-- Calls backend APIs for route creation and parameter extraction.
-- Displays events and routes on interactive map with popups, styled markers, and filters.
-- Supports date and time range, transport profile, query text, and number of events parameters.
-
----
-
-## Dataset
-
-Events datasets reside in `dataset/`, containing geolocated and structured event files in JSON format, ingested into Qdrant for searching.
-!!! They are fake events, only for testing the power of qdrant as search similarity and filter retriever.
-
----
-
-## API Reference
-
-### POST /create_map
-
-Creates a route-based event map.
-
-**Request Body Schema:** (`schemas.RouteRequest`)
-
-- `origin_address`: string
-- `destination_address`: string
-- `buffer_distance`: float (km)
-- `startinputdate`: ISO8601 datetime string
-- `endinputdate`: ISO8601 datetime string
-- `query_text`: string
-- `numevents`: integer
-- `profile_choice`: string (e.g., "car", "bike", "walking")
-
-**Response:**
-
-- `route_coords`: list of coordinates forming the route
-- `buffer_polygon`: list of buffer polygon coordinates
-- `origin`: lat/lon origin point
-- `destination`: lat/lon destination point
-- `events`: list of event objects along route, sorted by position on route
-
-### POST /ingestevents
-
-Ingests events from a JSON file upload into Qdrant.
-
-**Request:** Multipart/form-data with `.json` file.
-
-**Response:** Ingestion summary and collection info.
-
-### POST /sentencetopayload
-
-Parses a natural language sentence into a structured event query payload.
-
-**Request:**
-
-- `sentence`: string
-
-**Response:**
-
-- Extracted fields matching event query parameters.
+- `streamlit_app.py` — Entry point and UI logic.  
+- Supports:
+  - Manual form input
+  - Natural language input (e.g., “Find events between Paris and Berlin this weekend”)
+- Interacts with backend for:
+  - Route generation
+  - Payload extraction from user queries
+- Displays:
+  - Interactive route map
+  - Events as styled markers
+  - Filters for date, transport profile, keywords, and number of events
 
 ---
 
-## Notes
+## Dataset 📂
 
-- The backend heavily relies on Qdrant's geo and hybrid vector filtering for efficient event retrieval.
-- The frontend relies on Streamlit’s session state and reactive components for seamless user experience.
-- This architecture supports easy extension with additional endpoints and frontend features.
+Event datasets reside in the `dataset/` directory as geolocated, structured `.json` files.  
+⚠️ These are **fake events**, used for **testing Qdrant's vector and geo-query capabilities**.
 
+---
 
-## Integration with CrewAI and Mistral LLM for Natural Language Extraction
+## API Reference 📡
 
-The ReMap backend leverages CrewAI and the Mistral LLM, accessed via a custom wrapper around OpenAI-compatible APIs, to dynamically extract structured event query parameters from natural language input.
+### `POST /create_map` — Route-Based Event Map
 
-### Key Components
+Generates route and fetches relevant events from origin to destination.
 
-- **LLM Configuration:**  
-  A custom LLM instance (`customllm`) is initialized using environment variables for model name, base URL, and API key, set with zero temperature for deterministic extraction results.
+#### 🔸 Request Body Schema (`schemas.RouteRequest`):
 
-- **Agent Definition:**  
-  A specialized CrewAI `Agent` is configured with the role "Payload Extractor" and a precise goal to parse input sentences and extract only the required fields as a JSON object matching the payload schema. The fields extracted include origin and destination addresses, buffer distance, start and end date-times, query text (search keywords), number of events, and travel profile choice.
+- `origin_address`: *string*  
+- `destination_address`: *string*  
+- `buffer_distance`: *float* (in km)  
+- `startinputdate`: *ISO8601 datetime string*  
+- `endinputdate`: *ISO8601 datetime string*  
+- `query_text`: *string*  
+- `numevents`: *integer*  
+- `profile_choice`: *string* ("car", "bike", "walking")
 
-- **Task and Crew Setup:**  
-  The agent is encapsulated in a `Task` that describes the extraction objective and expected JSON output, with a `Crew` managing the sequential execution process to ensure reliable extraction.
+#### 🔹 Response:
 
-### Extraction Service Functionality
+- `route_coords`: List of coordinates forming the route  
+- `buffer_polygon`: Buffer polygon around the route  
+- `origin`: Latitude/longitude of origin  
+- `destination`: Latitude/longitude of destination  
+- `events`: List of sorted event objects near the route
 
-- The core function `extract_payload(sentence: str)` invokes the CrewAI `crew.kickoff` method with the user sentence as input.
-- The extracted JSON is validated and parsed into the `Payload` Pydantic model, enforcing correct field types and date consistency.
-- Errors during validation return `None`, providing robust error handling for input processing.
+---
 
-### Benefits and Role in Backend
+### `POST /ingestevents` — Upload & Ingest Events 📥
 
-- This integration complements the `/sentencetopayload` API endpoint, enabling natural language requests to be converted into structured payloads for route creation and event querying.
-- Utilizes state-of-the-art LLM semantic understanding to enhance user experience by allowing flexible, unstructured travel and event queries.
-- Ensures consistent, validated query parameter extraction using strong schema validation combined with advanced AI parsing.
+Ingest a batch of events from a `.json` file into Qdrant.
+
+#### 🔸 Request:
+
+- `multipart/form-data` with attached `.json` file.
+
+#### 🔹 Response:
+
+- Summary of ingestion (number of events, deduplicated entries)  
+- Qdrant collection info
+
+---
+
+### `POST /sentencetopayload` — NLP to Query Payload 📝
+
+Parses user’s natural language sentence into structured query format.
+
+#### 🔸 Request:
+
+- `sentence`: *string*
+
+#### 🔹 Response:
+
+- Extracted fields: origin, destination, buffer distance, dates, keywords, number of events, profile choice (as JSON payload)
+
+---
+
+## Natural Language Extraction via LLM & CrewAI 🧠
+
+The backend integrates **CrewAI** and **Mistral LLM** to enable intelligent extraction of query parameters from natural language.
+
+### Core Components:
+
+- **LLM Setup**  
+  🤖 Configured via environment variables (`MODEL_NAME`, `BASE_URL`, `API_KEY`), using **zero temperature** for deterministic responses.
+
+- **Agent**  
+  🎯 CrewAI `Agent` with the role: `"Payload Extractor"`, designed to return a strict JSON payload schema containing:
+
+  - `origin_address`  
+  - `destination_address`  
+  - `buffer_distance`  
+  - `startinputdate`  
+  - `endinputdate`  
+  - `query_text`  
+  - `numevents`  
+  - `profile_choice`
+
+- **Task + Crew**  
+  🧩 Task wraps the extraction objective with schema constraints.  
+  👥 Crew ensures the task runs to completion with structured output.
+
+### Service Function: `extract_payload(sentence: str)` 📤
+
+- Invokes `crew.kickoff()` with the sentence.
+- Validates output against `Payload` Pydantic schema.
+- Returns valid JSON or `None` on failure.
+
+### Benefits 💡
+
+- Enhances `/sentencetopayload` endpoint to support **flexible, unstructured user queries**.
+- Converts user-friendly input (e.g., "Find me concerts along my trip from Berlin to Munich next weekend") into strict backend-compatible parameters.
+- Ensures **schema validation** and consistent user experience powered by **AI and vector search**.
+
+---
+
+## Notes 🗒️
+
+- ⚡ The backend uses Qdrant's hybrid search (dense + sparse) and geo-filtering to efficiently fetch relevant events.
+- 🧩 Frontend leverages **Streamlit's session state** for reactive, smooth user experience.
+- 🧱 Designed for extensibility — new endpoints, models, and UI features can be added easily.
+

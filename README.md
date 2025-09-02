@@ -1,8 +1,6 @@
 ![ReMap Logo](./docs/images/logoReMap.png)
 
-
 # ReMap 🗺️🔍
-
 
 ReMap (Route Event Map) is a powerful platform that helps users discover relevant events along custom travel routes by combining semantic similarity search with dynamic geospatial and temporal filtering. Events are visualized on an interactive map powered by OpenStreetMap, providing a rich and seamless user experience.
 
@@ -10,13 +8,13 @@ Currently, ReMap uses synthetically generated event data for demonstration and t
 
 ---
 
-## Watch the Demo
+## ▶️ Watch the Demo
 
-https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460
+[https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460](https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460)
 
 ---
 
-## Features
+## ✨ Features
 
 - Store detailed event metadata including title, description, venue, address, latitude, and longitude.
 - Perform advanced semantic search using sparse and dense embeddings of event descriptions stored in the powerful Qdrant vector database.
@@ -28,17 +26,15 @@ https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460
 
 ---
 
-## Technology Highlights
+## 🛠️ Technology Highlights
 
 At the core of ReMap is **Qdrant**, a cutting-edge vector database designed for scalable, high-performance similarity search with integrated geospatial and temporal payload filtering. Leveraging Qdrant’s hybrid search capabilities, ReMap indexes both sparse and dense embeddings to provide accurate, context-aware event recommendations aligned with user travel routes.
 
 To enhance user experience and input flexibility, ReMap employs **CrewAI** combined with the **Mistral large language model (LLM)** for sophisticated natural language understanding. This setup enables users to describe their travel plans and search queries naturally, which are then precisely parsed into structured query parameters executed efficiently by the backend. This natural language integration bridges the gap between human intent and technical search operations, making ReMap intuitive and powerful.
 
-
-
 ---
 
-## How It Works
+## ⚙️ How It Works
 
 1. User provides origin, destination, travel buffer, transport mode, text query, travel time window, and number of desired event results.
 2. Backend generates an optimized travel route and constructs a buffered polygon around it.
@@ -49,7 +45,7 @@ To enhance user experience and input flexibility, ReMap employs **CrewAI** combi
 
 ---
 
-## Technology Stack
+## 🧰 Technology Stack
 
 - [Qdrant](https://qdrant.tech/) vector database for semantic search and multi-dimensional filtering.
 - Sparse and dense embedding models for rich semantic representation of event descriptions.
@@ -61,29 +57,45 @@ To enhance user experience and input flexibility, ReMap employs **CrewAI** combi
 
 ---
 
-## Installation & Usage
+## 📦 Installation & Usage
 
 For detailed installation instructions and user guidance, see the [User Guide](./docs/USER_GUIDE.md).
 
-For system architecture, backend design, and API endpoint details, refer to the [Architecture & API Reference](./docs/ArchitectureAPIReference\(shortversion\).md).
+For system architecture, backend design, and API endpoint details, refer to the [Architecture & API Reference](./docs/ArchitectureAPIReference.md).
 
 ---
 
 ## ⚠️ Disclaimer
 
-This project is an independent, open-source effort and is not affiliated with any other applications, websites, or organizations that may share similar names or concepts.  
-Its purpose is to explore and demonstrate advanced event discovery along routes using technologies such as Qdrant vector database, CrewAI, and Mistral LLM.  
-It is intended for learning, experimentation, and development, and is not currently a commercial product or service.
+This project is an independent, open-source effort and is not affiliated with any other applications, websites, or organizations that may share similar names or concepts. Its purpose is to explore and demonstrate advanced event discovery along routes using technologies such as the Qdrant vector database, CrewAI, and Mistral LLM. It is not currently a commercial product or service.
+
+The events are fictional and generated through a random process. They are located in the Veneto region, which is in northeastern Italy along the Adriatic Sea. The events are limited to the period from September 1, 2025, to September 30, 2025, solely for testing purposes.
+
+Any liability related to the accuracy or authenticity of the events is disclaimed; these are not real or verified events.
 
 ---
 
-## License
+## 🚀 Next Steps & Future Work
+
+To expand ReMap’s scope and real-world applicability, a key future development is creating a dedicated platform for ingesting and managing authentic event data on a global scale. This includes:
+
+- Building a scalable ingestion pipeline to insert real events into the system via APIs, user submissions, or automated data feeds.  
+- Implementing web scraping and integration with popular event platforms worldwide to fetch live event data continuously.  
+- Enhancing backend capabilities to handle diverse data formats and ensure data quality and consistency.  
+- Introducing robust monitoring of retrieval quality, including evaluation of parameters such as `score_threshold` and Reciprocal Rank Fusion (RRF), to continuously optimize search relevance and result accuracy.  
+- Transitioning from the current Streamlit frontend to a production-ready user interface with enhanced performance, responsiveness, and user experience suitable for real-world deployment.
+
+These steps will transform ReMap into a comprehensive, real-time event discovery platform, offering reliable and scalable solutions to meet diverse user needs worldwide.
+
+---
+
+## 📄 License
 
 This project is licensed under the MIT License.
 
 ---
 
-## Contact
+## 📬 Contact
 
 Questions or feedback? Please open an issue on the GitHub repository.
 
