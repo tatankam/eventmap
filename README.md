@@ -12,7 +12,7 @@ Currently, ReMap uses synthetically generated event data for demonstration and t
 
 ## Watch the Demo
 
-[![Watch the Demo](https://github.com/tatankam/eventmap/blob/main/video/thumbail.jpg)](https://youtu.be/BiKDhHpg0BQ)
+[![Watch the Demo](./docs/images/thumbail.png)](./docs/videos/ReMap.mp4)
 
 ---
 
