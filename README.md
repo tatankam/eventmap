@@ -1,4 +1,4 @@
-![ReMap Logo](./docs/images/logoReMap.png)
+![ReMap Logo](./docs/images/logo2ReMap.png)
 
 
 # ReMap 🗺️🔍
