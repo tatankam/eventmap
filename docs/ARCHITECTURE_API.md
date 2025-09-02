@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Event Map project consists of three main components:
+The ReMap project consists of three main components:
 
 1. **Fake Event Creation and Geolocalization**  
    Events are generated and geolocated using Jupyter notebooks (`notebooks/01_eda_events.ipynb`).
@@ -47,7 +47,7 @@ The Event Map project consists of three main components:
 
 1. User request triggers map creation or ingestion.
 2. Backend geocodes addresses using OpenRouteService.
-3. Queries or ingest data into Qdrant using vector and geospatial filters.
+3. Queries or ingest data into Qdrant using vector and filters like geospatial and date/time.
 4. Returns JSON responses with event lists and route geometry.
 
 ---
@@ -58,7 +58,7 @@ The Event Map project consists of three main components:
 
 - Streamlit for reactive, single-page frontend.
 - Uses OpenLayers for map visualization embedded through HTML component.
-- Connects to backend API via environment variable `API_URL`.
+- Connects to backend API via environment variable `API_URL`depending from manual or natural language data input.
 
 ### Main Components
 
@@ -73,6 +73,7 @@ The Event Map project consists of three main components:
 ## Dataset
 
 Events datasets reside in `dataset/`, containing geolocated and structured event files in JSON format, ingested into Qdrant for searching.
+!!! They are fake events, only for testing the power of qdrant as search similarity and filter retriever.
 
 ---
 
@@ -129,3 +130,30 @@ Parses a natural language sentence into a structured event query payload.
 - The frontend relies on Streamlit’s session state and reactive components for seamless user experience.
 - This architecture supports easy extension with additional endpoints and frontend features.
 
+
+## Integration with CrewAI and Mistral LLM for Natural Language Extraction
+
+The ReMap backend leverages CrewAI and the Mistral LLM, accessed via a custom wrapper around OpenAI-compatible APIs, to dynamically extract structured event query parameters from natural language input.
+
+### Key Components
+
+- **LLM Configuration:**  
+  A custom LLM instance (`customllm`) is initialized using environment variables for model name, base URL, and API key, set with zero temperature for deterministic extraction results.
+
+- **Agent Definition:**  
+  A specialized CrewAI `Agent` is configured with the role "Payload Extractor" and a precise goal to parse input sentences and extract only the required fields as a JSON object matching the payload schema. The fields extracted include origin and destination addresses, buffer distance, start and end date-times, query text (search keywords), number of events, and travel profile choice.
+
+- **Task and Crew Setup:**  
+  The agent is encapsulated in a `Task` that describes the extraction objective and expected JSON output, with a `Crew` managing the sequential execution process to ensure reliable extraction.
+
+### Extraction Service Functionality
+
+- The core function `extract_payload(sentence: str)` invokes the CrewAI `crew.kickoff` method with the user sentence as input.
+- The extracted JSON is validated and parsed into the `Payload` Pydantic model, enforcing correct field types and date consistency.
+- Errors during validation return `None`, providing robust error handling for input processing.
+
+### Benefits and Role in Backend
+
+- This integration complements the `/sentencetopayload` API endpoint, enabling natural language requests to be converted into structured payloads for route creation and event querying.
+- Utilizes state-of-the-art LLM semantic understanding to enhance user experience by allowing flexible, unstructured travel and event queries.
+- Ensures consistent, validated query parameter extraction using strong schema validation combined with advanced AI parsing.
