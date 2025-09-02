@@ -61,7 +61,7 @@ To enhance user experience and input flexibility, ReMap employs **CrewAI** combi
 
 For detailed installation instructions and user guidance, see the [User Guide](./docs/USER_GUIDE.md).
 
-For system architecture, backend design, and API endpoint details, refer to the [Architecture & API Reference](./docs/ArchitectureAPIReference.md).
+For system architecture, backend design, and API endpoint details, refer to the [Architecture & API Reference](./docs/ARCHITECTURE_API.md).
 
 ---
 
