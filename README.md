@@ -1,6 +1,6 @@
-# EventRouteFinder 🗺️🔍
+# ReMap 🗺️🔍
 
-EventRouteFinder is a powerful and interactive event discovery platform designed to help users find relevant events along a custom travel route. By combining semantic similarity search on event descriptions with dynamic geospatial and temporal filtering, it provides personalized event recommendations visualized on an interactive map.
+Route Event Map, aka ReMap is a powerful and interactive event discovery platform designed to help users find relevant events along a custom travel route. By combining semantic similarity search on event descriptions with dynamic geospatial and temporal filtering, it pro,vides personalized event recommendations visualized on an interactive map.
 
 ---
 
