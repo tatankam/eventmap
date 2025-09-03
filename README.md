@@ -10,7 +10,7 @@ Currently, ReMap uses synthetically generated event data for demonstration and t
 
 ## ▶️ Watch the Demo
 
-[https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460](https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460)
+[\[https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460](https://github.com/user-attachments/assets/31c777d7-d2b8-4937-b0cb-f314b50333c7)
 
 ---
 
