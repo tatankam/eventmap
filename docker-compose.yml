@@ -1,5 +1,5 @@
 services:
-  eventmap-fastapi:
+  remap-backend:
     build:
       context: ./backend
     env_file:
@@ -8,9 +8,9 @@ services:
       - "8000:8000"
     container_name: backend
     networks:
-      - eventmap
+      - remap
 
-  eventmap-frontend:
+  remap-frontend:
     build:
       context: ./frontend
     ports:
@@ -19,8 +19,8 @@ services:
     environment:
       - API_URL=http://backend:8000/
     networks:
-      - eventmap
+      - remap
 
 networks:
-  eventmap:
+  remap:
     driver: bridge
