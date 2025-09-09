@@ -7,6 +7,11 @@ OPENROUTE_API_KEY = os.getenv("OPENROUTE_API_KEY")
 QDRANT_SERVER = os.getenv("QDRANT_SERVER")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
 
+
+OPENROUTE_API_KEY = os.getenv("OPENROUTE_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPEN_AI_BASE_URL = os.getenv("OPEN_AI_BASE_URL")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 # Add dense and sparse model names to config
 DENSE_MODEL_NAME = os.getenv("DENSE_MODEL_NAME")
 SPARSE_MODEL_NAME = os.getenv("SPARSE_MODEL_NAME")

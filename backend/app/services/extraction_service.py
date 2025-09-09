@@ -3,16 +3,10 @@ from typing import Optional, Literal
 from pydantic import BaseModel, ValidationError, model_validator, Field, field_validator
 from datetime import datetime, timedelta
 from crewai import Agent, Task, Crew, Process, LLM
-import os
-from dotenv import load_dotenv
+from app.core.config import OPENAI_API_KEY, OPEN_AI_BASE_URL, OPENAI_MODEL
 
 
-load_dotenv(dotenv_path="../../.env")
 
-
-OPEN_AI_BASE_URL = os.getenv("OPEN_AI_BASE_URL")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 
 
 customllm = LLM(

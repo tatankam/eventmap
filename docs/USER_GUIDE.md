@@ -28,6 +28,8 @@ To run **ReMap** successfully, the following API keys and endpoints must be conf
 
 Ensure these keys are securely stored and accessible to both backend and frontend services during deployment.
 
+
+
 ## ⚙️ Installation and Setup
 
 ### 📥 Clone Repository (for all setups)
@@ -40,6 +42,18 @@ Ensure these keys are securely stored and accessible to both backend and fronten
     ```
 
 ---
+### 📝 Environment Configuration
+
+Before running the application, copy the example environment file and fill in your own credentials:
+
+```
+cp .env.example .env
+```
+
+Open `.env` in a text editor and provide the required API keys and endpoints as described above.
+
+---
+
 
 ### 🐳 Docker Setup
 

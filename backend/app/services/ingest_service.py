@@ -11,17 +11,14 @@ from dotenv import load_dotenv
 from tqdm import tqdm
 from fastembed import TextEmbedding, SparseTextEmbedding
 from qdrant_client import QdrantClient, models
+from app.core.config import QDRANT_SERVER, QDRANT_API_KEY, DENSE_MODEL_NAME, SPARSE_MODEL_NAME
+
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Load environment variables once at module load
-load_dotenv(dotenv_path="../.env")
-QDRANT_SERVER = os.getenv("QDRANT_SERVER")
-QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-DENSE_MODEL_NAME = os.getenv("DENSE_MODEL_NAME")
-SPARSE_MODEL_NAME = os.getenv("SPARSE_MODEL_NAME")
+
 
 if not QDRANT_SERVER or not QDRANT_API_KEY:
     raise EnvironmentError("QDRANT_SERVER or QDRANT_API_KEY not defined in .env file")
