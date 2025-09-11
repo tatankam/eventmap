@@ -168,7 +168,7 @@ The backend integrates **CrewAI** and **Mistral LLM** to enable intelligent extr
 ### Benefits 💡
 
 - Enhances `/sentencetopayload` endpoint to support **flexible, unstructured user queries**.  
-- Converts user-friendly input (e.g., "Find me concerts along my trip from Berlin to Munich next weekend") into strict backend-compatible parameters.  
+- Converts user-friendly input (e.g., if I have events in Germany instead of only in the demo Veneto region, Italy, "Find me concerts along my trip from Berlin to Munich next weekend") into strict backend-compatible parameters.  
 - Ensures **schema validation** and consistent user experience powered by **AI and vector search**.
 
 ---
