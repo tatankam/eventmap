@@ -12,22 +12,41 @@ Welcome to the **ReMap** project! This application allows you to visualize event
 
 ## 🔐 Required API Keys and Service Endpoints
 
-To run **ReMap** successfully, the following API keys and endpoints must be configured as environment variables:
+To run **ReMap** successfully, the following API keys and endpoints must be configured as environment variables and used accordingly:
+
+### API Keys
 
 - **Qdrant Vector Database:**  
-  - `QDRANT_SERVER`: The URL of the Qdrant server (can be self-hosted or cloud-based)  
-  - `QDRANT_API_KEY`: API key for authenticating with Qdrant
+  - `QDRANT_SERVER`: The URL of the Qdrant server (can be self-hosted or cloud-based).  
+  - `QDRANT_API_KEY`: API key for authenticating with Qdrant.
 
 - **OpenRouteService API:**  
-  - `OPENROUTE_API_KEY`: Key for accessing OpenRouteService APIs used for geocoding and routing
+  - `OPENROUTE_API_KEY`: Key for accessing OpenRouteService APIs used for geocoding and routing.
 
 - **OpenAI-Compatible LLM (Mistral via CrewAI):**  
-  - `OPENAI_API_KEY`: API key for the large language model service  
-  - `OPEN_AI_BASE_URL`: Base URL endpoint for the LLM (can be public OpenAI or a private deployment)  
-  - `OPENAI_MODEL`: Model name used for natural language parsing
+  - `OPENAI_API_KEY`: API key for the large language model service.  
+  - `OPEN_AI_BASE_URL`: Base URL endpoint for the LLM (can be public OpenAI or a private deployment).  
+  - `OPENAI_MODEL`: Model name used for natural language parsing.
 
-Ensure these keys are securely stored and accessible to both backend and frontend services during deployment.
+### Backend Service Endpoints
 
+These are the key API endpoints the backend exposes:
+
+- `POST /createmap`  
+  Generate an event map based on inputs like origin, destination, buffer distance, travel time window, query text, number of events, and transport profile.
+
+- `POST /ingestevents`  
+  Upload and ingest new event data provided as JSON files into the system for indexing and querying.
+
+- `POST /sentencetopayload`  
+  Convert natural language travel plan sentences into structured query parameters to drive event searches.
+
+- `GET /docs`  
+  Access API documentation and interactive schema exploration.
+
+---
+
+Ensure these keys and endpoints are securely stored and accessible to both backend and frontend services during deployment. Correct configuration and usage of these elements are essential for ReMap to function properly.
 
 
 ## ⚙️ Installation and Setup

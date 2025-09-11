@@ -1,0 +1,2890 @@
+Folder: /home/biso/development/my_projects/remap
+  File: docker-compose.yml
+  File: .env.example
+  File: .gitignore
+  File: .env
+  File: README.md
+  Content:
+    ![ReMap Logo](./docs/images/logoReMap.png)
+    
+    # ReMap 🗺️🔍
+    
+    ReMap (Route Event Map) is a powerful platform that helps users discover relevant events along custom travel routes by combining semantic similarity search with dynamic geospatial and temporal filtering. Events are visualized on an interactive map powered by OpenStreetMap, providing a rich and seamless user experience.
+    
+    Currently, ReMap uses synthetically generated event data for demonstration and testing purposes. Developing a dedicated platform for ingesting, managing, and utilizing real-world event data is planned as a crucial next step to expand the platform’s practical usage and customization.
+    
+    ---
+    
+    ## ▶️ Watch the Demo
+    
+    [\[https://github.com/user-attachments/assets/ad2392c9-855b-4d18-b539-81ab7e23e460](https://github.com/user-attachments/assets/31c777d7-d2b8-4937-b0cb-f314b50333c7)
+    
+    ---
+    
+    ## ✨ Features
+    
+    - Store detailed event metadata including title, description, venue, address, latitude, and longitude.
+    - Perform advanced semantic search using sparse and dense embeddings of event descriptions stored in the powerful Qdrant vector database.
+    - Combine search with robust geospatial filtering within buffer zones along routes and temporal filtering by travel windows.
+    - Support multiple transport profiles (driving, cycling, walking) with routing via OpenRouteService API.
+    - Limit the number of returned events for tailored results.
+    - Interactive frontend built with Streamlit and OpenStreetMap for route visualization, buffered search areas, event markers, and detailed information panels.
+    - Input validation to ensure consistent date/time windows and query parameters.
+    
+    ---
+    
+    ## 🛠️ Technology Highlights
+    
+    At the core of ReMap is **Qdrant**, a cutting-edge vector database designed for scalable, high-performance similarity search with integrated geospatial and temporal payload filtering. Leveraging Qdrant’s hybrid search capabilities, ReMap indexes both sparse and dense embeddings to provide accurate, context-aware event recommendations aligned with user travel routes.
+    
+    To enhance user experience and input flexibility, ReMap employs **CrewAI** combined with the **Mistral large language model (LLM)** for sophisticated natural language understanding. This setup enables users to describe their travel plans and search queries naturally, which are then precisely parsed into structured query parameters executed efficiently by the backend. This natural language integration bridges the gap between human intent and technical search operations, making ReMap intuitive and powerful.
+    
+    ---
+    
+    ## ⚙️ How It Works
+    
+    1. User provides origin, destination, travel buffer, transport mode, text query, travel time window, and number of desired event results.
+    2. Backend generates an optimized travel route and constructs a buffered polygon around it.
+    3. Qdrant executes a hybrid semantic similarity search combined with geo-filtering and temporal constraints.
+    4. Frontend displays the route, buffered search area, and relevant events interactively on an OpenStreetMap base.
+    5. Event details are accessible through map popups and a detailed event list.
+    6. Invalid input cases are gracefully handled and communicated.
+    
+    ---
+    
+    ## 🧰 Technology Stack
+    
+    - [Qdrant](https://qdrant.tech/) vector database for semantic search and multi-dimensional filtering.
+    - Sparse and dense embedding models for rich semantic representation of event descriptions.
+    - Natural language input parsing powered by [crewai](https://www.crewai.com/) and [Mistral](https://mistral.ai/) as LLM.
+    - [OpenRouteService](https://openrouteservice.org/) for route computation supporting various travel profiles.
+    - Streamlit frontend with [OpenStreetMap](https://www.openstreetmap.org/) for map visualization.
+    - FastAPI backend serving APIs with complex routing and spatial operations using Geopandas and Shapely.
+    - Docker for containerized deployment ensuring portability and easy setup.
+    
+    ---
+    
+    ## 📦 Installation & Usage
+    
+    For detailed installation instructions and user guidance, see the [User Guide](./docs/USER_GUIDE.md).
+    
+    For system architecture, backend design, and API endpoint details, refer to the [Architecture & API Reference](./docs/ARCHITECTURE_API.md).
+    
+    ---
+    
+    ## ⚠️ Disclaimer
+    
+    This project is an independent, open-source effort and is not affiliated with any other applications, websites, or organizations that may share similar names or concepts. Its purpose is to explore and demonstrate advanced event discovery along routes using technologies such as the Qdrant vector database, CrewAI, and Mistral LLM. It is not currently a commercial product or service.
+    
+    The events are fictional and generated through a random process. They are located in the Veneto region, which is in northeastern Italy along the Adriatic Sea. The events are limited to the period from September 1, 2025, to October 31, 2025, solely for testing purposes.
+    
+    Any liability related to the accuracy or authenticity of the events is disclaimed; these are not real or verified events.
+    
+    ---
+    
+    ## 🚀 Next Steps & Future Work
+    
+    To expand ReMap’s scope and real-world applicability, a key future development is creating a dedicated platform for ingesting and managing authentic event data on a global scale. This includes:
+    
+    - Building a scalable ingestion pipeline to insert real events into the system via APIs, user submissions, or automated data feeds.  
+    - Implementing web scraping and integration with popular event platforms worldwide to fetch live event data continuously.  
+    - Enhancing backend capabilities to handle diverse data formats and ensure data quality and consistency.  
+    - Introducing robust monitoring of retrieval quality, including evaluation of parameters such as `score_threshold` and Reciprocal Rank Fusion (RRF), to continuously optimize search relevance and result accuracy.  
+    - Transitioning from the current Streamlit frontend to a production-ready user interface with enhanced performance, responsiveness, and user experience suitable for real-world deployment.
+    
+    These steps will transform ReMap into a comprehensive, real-time event discovery platform, offering reliable and scalable solutions to meet diverse user needs worldwide.
+    
+    ---
+    
+    ## 📄 License
+    
+    This project is licensed under the MIT License.
+    
+    ---
+    
+    ## 📬 Contact
+    
+    Questions or feedback? Please open an issue on the GitHub repository.
+    
+    ---
+    
+    Discover events like never before — happy exploring with ReMap! 🗺️🔍
+Folder: frontend
+  File: Dockerfile
+  File: streamlit_app.py
+  Content:
+    import streamlit as st
+    import streamlit.components.v1 as components
+    import requests
+    from datetime import datetime, timedelta, date
+    import json
+    import os
+    
+    
+    
+    API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
+    
+    
+    CREATE_MAP_URL = f"{API_BASE_URL}/create_map"
+    SENTENCE_TO_PAYLOAD_URL = f"{API_BASE_URL}/sentencetopayload"
+    
+    
+    st.set_page_config(layout="wide")
+    
+    
+    def call_create_map(payload):
+        with st.spinner("Querying events..."):
+            response = requests.post(CREATE_MAP_URL, json=payload)
+        if response.status_code == 200:
+            data = response.json()
+            if "message" in data:
+                st.warning(data["message"])
+                return None
+            required_keys = ("origin", "destination", "route_coords", "buffer_polygon")
+            if not all(k in data for k in required_keys):
+                st.error("Incomplete route data received from backend.")
+                return None
+            return data
+        else:
+            st.error(f"API call failed with status {response.status_code}: {response.text}")
+            return None
+    
+    
+    def call_sentence_to_payload(sentence: str):
+        with st.spinner("Extracting parameters from natural language input..."):
+            response = requests.post(SENTENCE_TO_PAYLOAD_URL, json={"sentence": sentence})
+        if response.status_code == 200:
+            payload = response.json()
+            return payload
+        else:
+            st.error(f"Failed to extract parameters: {response.text}")
+            return None
+    
+    
+        mode = st.radio("Select input mode", ["Input manually", "Input natural language"], horizontal=True)
+    
+    def main():
+        mode = st.radio("Select input mode", ["Input manually", "Input natural language"], horizontal=True)
+    
+        # Clear route data and extracted_payload if mode changes
+        previous_mode = st.session_state.get("input_mode")
+        if previous_mode != mode:
+            st.session_state.pop("route_data", None)
+            st.session_state.pop("extracted_payload", None)
+            st.session_state["input_mode"] = mode
+    
+        data = st.session_state.get("route_data")
+    
+        # Mapping from user-friendly profile choice to Qdrant profile codes
+        profile_map = {
+            "car": "driving-car",
+            "bike": "cycling-regular",
+            "walking": "foot-walking"
+        }
+    
+    
+        if mode == "Input manually":
+            col1, col2, col3 = st.columns([1, 2, 2])
+    
+            with col1:
+                #st.subheader("Insert data")
+    
+                origin_address = st.text_input("Origin Address", value="Padova")
+                destination_address = st.text_input("Destination Address", value="Verona")
+                buffer_distance = st.number_input("Buffer Distance (km)", min_value=0, value=5)
+    
+                query_text = st.text_input("Search Query Text", value="Sport")
+                numevents = st.number_input("Number of Events to Retrieve", min_value=1, value=10)
+    
+                profile_choice_user = st.selectbox(
+                    "Transport Profile",
+                    options=["car", "bike", "walking"],
+                    index=0,
+                    help="Select the transport profile for routing"
+                )
+    
+                start_col1, start_col2 = st.columns(2)
+                with start_col1:
+                    # start_date = st.date_input("Start Date", value=datetime.today())
+                    start_date = st.date_input("Start Date", value=date(2025, 9, 1))
+    
+                with start_col2:
+                    if 'start_time' not in st.session_state:
+                        st.session_state.start_time = datetime.now().time()
+                    start_time = st.time_input("Start Time", key='start_time')
+    
+                end_col1, end_col2 = st.columns(2)
+                with end_col1:
+                    end_date = st.date_input("End Date", value=datetime.today() + timedelta(days=4))
+                with end_col2:
+                    if 'end_time' not in st.session_state:
+                        st.session_state.end_time = datetime.now().time()
+                    end_time = st.time_input("End Time", key='end_time')
+    
+                error_msgs = []
+                if end_date < start_date:
+                    error_msgs.append("End Date cannot be earlier than Start Date.")
+                if end_date == start_date and end_time < start_time:
+                    error_msgs.append("If Start Date and End Date are the same, End Time cannot be earlier than Start Time.")
+    
+                if error_msgs:
+                    for msg in error_msgs:
+                        st.error(msg)
+                else:
+                    startinputdate = datetime.combine(start_date, start_time).isoformat()
+                    endinputdate = datetime.combine(end_date, end_time).isoformat()
+    
+                search_disabled = len(error_msgs) > 0
+    
+    
+                if st.button("Search Events", disabled=search_disabled):
+                    payload = {
+                        "origin_address": origin_address,
+                        "destination_address": destination_address,
+                        "buffer_distance": buffer_distance,
+                        "startinputdate": startinputdate,
+                        "endinputdate": endinputdate,
+                        "query_text": query_text,
+                        "numevents": numevents,
+                        "profile_choice": profile_map.get(profile_choice_user, "driving-car"),
+                    }
+    
+                    data = call_create_map(payload)
+    
+                    if data:
+                        st.session_state["route_data"] = data
+    
+    
+            with col2:
+                if data:
+                    display_map_and_events(data, origin_address, destination_address)
+                else:
+                    st.info("Compile the data and press 'Search Events' to display the route map and events.")
+            with col3:
+                display_events(data)
+    
+        else:  # Input natural language mode
+            col1, col2, col3 = st.columns([1, 2, 2])
+    
+            with col1:
+                st.subheader("Natural Language Input")
+    
+                sentence_input = st.text_area(
+                    "Enter your travel plan as a sentence",
+                    height=200,
+                    placeholder=(
+                        "Always specify the year in the dates and the type of transport (car, bike, or foot).\n"
+                        "Example: I want to go from Vicenza to Trento "
+                        "and will leave on 2 September 2025 at 2 a.m., arriving on 18 October 2025 at 5:00 a.m."
+                        "Give me 10 events about music within a 6 km range. Use bike as transport."
+                    )
+                )
+                
+                if st.button("Parse and Search"):
+                    if not sentence_input.strip():
+                        st.error("Please enter a sentence.")
+                        st.session_state['extracted_payload'] = None
+                    else:
+                        extracted_payload = call_sentence_to_payload(sentence_input)
+                        if extracted_payload:
+                            st.session_state['extracted_payload'] = extracted_payload
+                            data = call_create_map(extracted_payload)
+                            if data:
+                                st.session_state["route_data"] = data
+                        else:
+                            st.session_state['extracted_payload'] = None
+    
+                # Display extracted JSON below the button
+                if 'extracted_payload' in st.session_state and st.session_state['extracted_payload'] is not None:
+                    st.subheader("Extracted Parameters from Sentence")
+                    st.json(st.session_state['extracted_payload'])
+    
+            with col2:
+                if data:
+                    origin_address = data['origin'].get('address') if 'origin' in data else "Origin"
+                    destination_address = data['destination'].get('address') if 'destination' in data else "Destination"
+                    display_map_and_events(data, origin_address, destination_address)
+                else:
+                    st.info("Enter a sentence and press 'Parse and Search' to display the route map and events.")
+    
+            with col3:
+                display_events(data)
+    
+    
+    def display_map_and_events(data, origin_address, destination_address):
+        st.subheader("Route Map")
+    
+        route_coords = [[lon, lat] for lat, lon in [(c[1], c[0]) for c in data['route_coords']]]
+        route_geojson = {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": route_coords
+            }
+        }
+    
+        markers = []
+        for event in data.get('events', []):
+            lat = event.get('lat') or event.get('latitude')
+            lon = event.get('lon') or event.get('longitude')
+            if lat is None or lon is None:
+                continue
+            markers.append({
+                "title": event.get("title", "No Title"),
+                "address": event.get("address", ""),
+                "description": event.get("description", ""),
+                "start_date": event.get("start_date", "N/A"),
+                "end_date": event.get("end_date", "N/A"),
+                "coordinates": [lon, lat]
+            })
+    
+        origin_marker = [data['origin']['lon'], data['origin']['lat']]
+        destination_marker = [data['destination']['lon'], data['destination']['lat']]
+        buffer_polygon_coords = data['buffer_polygon']
+    
+        openlayers_html = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8" />
+            <title>OpenLayers in Streamlit</title>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@7.3.0/ol.css" type="text/css" />
+            <style>
+                #map {{
+                    width: 100%;
+                    height: 700px;
+                }}
+                .ol-popup {{
+                    position: absolute;
+                    background-color: white;
+                    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+                    padding: 15px;
+                    border-radius: 10px;
+                    border: 1px solid #cccccc;
+                    bottom: 12px;
+                    left: -50px;
+                    min-width: 280px;
+                }}
+                .ol-popup:after, .ol-popup:before {{
+                    top: 100%;
+                    border: solid transparent;
+                    content: " ";
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    pointer-events: none;
+                }}
+                .ol-popup:after {{
+                    border-top-color: white;
+                    border-width: 10px;
+                    left: 48px;
+                    margin-left: -10px;
+                }}
+                .ol-popup:before {{
+                    border-top-color: #cccccc;
+                    border-width: 11px;
+                    left: 48px;
+                    margin-left: -11px;
+                }}
+            </style>
+            <script src="https://cdn.jsdelivr.net/npm/ol@7.3.0/dist/ol.js"></script>
+        </head>
+        <body>
+            <div id="map"></div>
+            <script type="text/javascript">
+                const routeGeoJSON = {json.dumps(route_geojson)};
+                const markers = {json.dumps(markers)};
+                const origin = {json.dumps(origin_marker)};
+                const destination = {json.dumps(destination_marker)};
+                const origin_address = {json.dumps(origin_address)};
+                const destination_address = {json.dumps(destination_address)};
+                const bufferCoords = {json.dumps([buffer_polygon_coords])};
+    
+                const routeFeature = new ol.format.GeoJSON().readFeature(routeGeoJSON, {{
+                    featureProjection: "EPSG:3857"
+                }});
+    
+                const bufferFeature = new ol.Feature({{
+                    geometry: new ol.geom.Polygon(bufferCoords).transform('EPSG:4326', 'EPSG:3857')
+                }});
+    
+                const bufferLayer = new ol.layer.Vector({{
+                    source: new ol.source.Vector({{
+                        features: [bufferFeature]
+                    }}),
+                    style: new ol.style.Style({{
+                        stroke: new ol.style.Stroke({{
+                            color: 'red',
+                            width: 2
+                        }}),
+                        fill: new ol.style.Fill({{
+                            color: 'rgba(255, 0, 0, 0.1)'
+                        }})
+                    }})
+                }});
+    
+                const routeLayer = new ol.layer.Vector({{
+                    source: new ol.source.Vector({{
+                        features: [routeFeature]
+                    }}),
+                    style: new ol.style.Style({{
+                        stroke: new ol.style.Stroke({{
+                            color: 'blue',
+                            width: 4
+                        }})
+                    }})
+                }});
+    
+                const iconStyleOrigin = new ol.style.Style({{
+                    image: new ol.style.Icon({{
+                        anchor: [0.5, 1],
+                        src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/start.png',
+                        color: 'green'
+                    }})
+                }});
+                const iconStyleDestination = new ol.style.Style({{
+                    image: new ol.style.Icon({{
+                        anchor: [0.5, 1],
+                        src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/stop.png',
+                        color: 'red'
+                    }})
+                }});
+                const iconStyleEvent = new ol.style.Style({{
+                    image: new ol.style.Icon({{
+                        anchor: [0.5, 1],
+                        src: 'https://raw.githubusercontent.com/tatankam/eventmap/refs/heads/main/frontend/icons/event.png',
+                        scale: 1.4
+                    }})
+                }});
+    
+                const originFeature = new ol.Feature({{
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat(origin)),
+                    name: "Origin",
+                    description: origin_address
+                }});
+                originFeature.setStyle(iconStyleOrigin);
+    
+                const destinationFeature = new ol.Feature({{
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat(destination)),
+                    name: "Destination",
+                    description: destination_address
+                }});
+                destinationFeature.setStyle(iconStyleDestination);
+    
+                const eventFeatures = markers.map(marker => {{
+                    const feat = new ol.Feature({{
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat(marker.coordinates)),
+                        name: marker.title,
+                        description: marker.description,
+                        address: marker.address,
+                        start_date: marker.start_date,
+                        end_date: marker.end_date
+                    }});
+                    feat.setStyle(iconStyleEvent);
+                    return feat;
+                }});
+    
+                const markersLayer = new ol.layer.Vector({{
+                    source: new ol.source.Vector({{
+                        features: [originFeature, destinationFeature, ...eventFeatures]
+                    }})
+                }});
+    
+                const map = new ol.Map({{
+                    target: 'map',
+                    layers: [
+                        new ol.layer.Tile({{
+                            source: new ol.source.OSM()
+                        }}),
+                        bufferLayer,
+                        routeLayer,
+                        markersLayer
+                    ],
+                    view: new ol.View({{
+                        center: ol.proj.fromLonLat([0, 0]),
+                        zoom: 2
+                    }})
+                }});
+    
+                const extent = routeFeature.getGeometry().getExtent();
+                map.getView().fit(extent, {{ padding: [50, 50, 50, 50], maxZoom: 15 }});
+    
+                const container = document.createElement('div');
+                container.className = 'ol-popup';
+                container.style.display = 'none';
+                document.body.appendChild(container);
+    
+                const popup = new ol.Overlay({{
+                    element: container,
+                    positioning: 'bottom-center',
+                    stopEvent: false,
+                    offset: [0, -20],
+                }});
+                map.addOverlay(popup);
+    
+                map.on('click', function(evt) {{
+                    const feature = map.forEachFeatureAtPixel(evt.pixel, function(f) {{ return f; }});
+                    if (feature && feature.get('name')) {{
+                        const coordinates = feature.getGeometry().getCoordinates();
+                        const props = feature.getProperties();
+                        popup.setPosition(coordinates);
+                        container.style.display = 'block';
+    
+                        if (props.name === "Origin" || props.name === "Destination") {{
+                            container.innerHTML = `<b>${{props.name}}</b><br>${{props.description}}`;
+                        }} else {{
+                            container.innerHTML = `<b>${{props.name}}</b><br>
+                                                   <i>${{props.address}}</i><br>
+                                                   ${{props.description}}<br>
+                                                   <small>Start: ${{props.start_date}} | End: ${{props.end_date}}</small>`;
+                        }}
+    
+                        const mapSize = map.getSize();
+                        const pixel = map.getPixelFromCoordinate(coordinates);
+                        const popupWidth = container.offsetWidth;
+                        const popupHeight = container.offsetHeight;
+                        const margin = 20;
+    
+                        let offsetX = 0;
+                        let offsetY = 0;
+    
+                        if (pixel[0] + popupWidth / 2 > mapSize[0]) {{
+                            offsetX = pixel[0] + popupWidth / 2 - mapSize[0] + margin;
+                        }} else if (pixel[0] - popupWidth / 2 < 0) {{
+                            offsetX = pixel[0] - popupWidth / 2 - margin;
+                        }}
+    
+                        if (pixel[1] - popupHeight < 0) {{
+                            offsetY = pixel[1] - popupHeight - margin;
+                        }}
+    
+                        if (offsetX !== 0 || offsetY !== 0) {{
+                            const newCenterPixel = [
+                                pixel[0] - offsetX,
+                                pixel[1] - offsetY
+                            ];
+                            const newCenter = map.getCoordinateFromPixel(newCenterPixel);
+                            map.getView().animate({{center: newCenter, duration: 300}});
+                        }}
+                    }} else {{
+                        container.style.display = 'none';
+                    }}
+                }});
+    
+                map.on('pointermove', function(evt) {{
+                    if (evt.dragging) {{
+                        return;
+                    }}
+                    const hit = map.forEachFeatureAtPixel(evt.pixel, function(feature) {{
+                        const name = feature.get('name');
+                        return name === 'Origin' || name === 'Destination' || (name && name !== '');
+                    }});
+                    map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+                }});
+            </script>
+        </body>
+        </html>
+        """
+    
+        components.html(openlayers_html, height=720, scrolling=True)
+    
+    
+    def display_events(data):
+        if data:
+            st.subheader("Events Along Route")
+            events = data.get('events', [])
+            if events:
+                container = st.container()
+                with container:
+                    for event in events:
+                        score = event.get('score')  # Adjust the key if needed
+                        title = event.get('title', 'No Title')
+                        if score is not None:
+                            title = f"{title} (Score Fusion RRF: {score:.2f})"
+                        with st.expander(title):
+                            st.write(event.get('address', ''))
+                            st.write(event.get('description', ''))
+                            st.write(f"Start: {event.get('start_date', 'N/A')}  |  End: {event.get('end_date', 'N/A')}")
+            else:
+                st.info("No events found for this route in the specified date range.")
+    
+    
+    if __name__ == "__main__":
+        main()
+  File: requirements.txt
+  File: .dockerignore
+Folder: frontend/.streamlit
+  File: config.toml
+Folder: frontend/icons
+  File: event.png
+  File: stop.png
+  File: start.png
+Folder: docs
+  File: USER_GUIDE.md
+  Content:
+    # 🗺️ User Guide
+    
+    ## 📘 Introduction
+    
+    Welcome to the **ReMap** project! This application allows you to visualize events along a route using a combined backend and frontend system. The backend provides API services, and the frontend offers an interactive UI built with Streamlit.
+    
+    ## 💻 System Requirements
+    
+    - Docker and Docker Compose installed (for easy deployment)
+    - Python 3.13+ if running locally without Docker
+    - Required API keys and configured endpoints as environment variables (see below)
+    
+    ## 🔐 Required API Keys and Service Endpoints
+    
+    To run **ReMap** successfully, the following API keys and endpoints must be configured as environment variables:
+    
+    - **Qdrant Vector Database:**  
+      - `QDRANT_SERVER`: The URL of the Qdrant server (can be self-hosted or cloud-based)  
+      - `QDRANT_API_KEY`: API key for authenticating with Qdrant
+    
+    - **OpenRouteService API:**  
+      - `OPENROUTE_API_KEY`: Key for accessing OpenRouteService APIs used for geocoding and routing
+    
+    - **OpenAI-Compatible LLM (Mistral via CrewAI):**  
+      - `OPENAI_API_KEY`: API key for the large language model service  
+      - `OPEN_AI_BASE_URL`: Base URL endpoint for the LLM (can be public OpenAI or a private deployment)  
+      - `OPENAI_MODEL`: Model name used for natural language parsing
+    
+    Ensure these keys are securely stored and accessible to both backend and frontend services during deployment.
+    
+    
+    
+    ## ⚙️ Installation and Setup
+    
+    ### 📥 Clone Repository (for all setups)
+    
+    1. Clone the repository:
+    
+        ```
+        git clone <repo-url>
+        cd <repo-folder>
+        ```
+    
+    ---
+    ### 📝 Environment Configuration
+    
+    Before running the application, copy the example environment file and fill in your own credentials:
+    
+    ```
+    cp .env.example .env
+    ```
+    
+    Open `.env` in a text editor and provide the required API keys and endpoints as described above.
+    
+    ---
+    
+    
+    ### 🐳 Docker Setup
+    
+    1. Build and run all services:
+    
+        ```
+        docker compose up --build
+        ```
+    
+    ---
+    
+    ### 🖥️ Local Setup
+    
+    1. Create and activate a Python virtual environment.
+    
+    2. Install backend dependencies:
+    
+        ```
+        pip install -r backend/requirements.txt
+        ```
+    
+    3. Install frontend dependencies:
+    
+        ```
+        pip install -r frontend/requirements.txt
+        ```
+    
+    4. Start services separately from their folders:
+    
+        - Backend (from `remap/backend`):
+    
+          ```
+          uvicorn app.main:app --reload
+          ```
+    
+        - Frontend (from `remap/frontend`):
+    
+          ```
+          streamlit run streamlit_app.py
+          ```
+    
+    ---
+    
+    ### 🌐 Accessing the Application
+    
+    - Access the frontend UI at: [http://localhost:8501](http://localhost:8501)  
+    
+    - Access the backend API documentation at: [http://localhost:8000/docs](http://localhost:8000/docs)  
+    
+    ---
+    
+    ## 🚀 Getting Started
+    
+    ### 🧭 User Interface Overview
+    
+    - Input addresses and travel profile manually or input natural language travel plans.
+    
+    #### ✍️ Manual Input
+    
+    ![Input manually](./images/manualinput.png "Enter the input data")
+    
+    - Specify buffer distance, date ranges, and query text to filter events.
+    
+    - Events are displayed interactively on the map along the travel route.
+    
+    ![Manual Output](./images/manualoutput.png "Events Displayed on Map")
+    
+    #### 💬 Natural Language Input
+    
+    ![Natural Language Input](./images/naturallanguageinput.png "Natural Language Input Mode")
+    
+    - Specify buffer distance, date ranges, and query text as natural language sentence.
+    
+    ![Natural Language Output](./images/naturallanguageoutput.png "Events Displayed on Map")
+    
+    ---
+    
+    ## 🔧 Core Features Usage
+    
+    ### 🗺️ Creating an Event Map
+    
+    1. Enter origin and destination addresses or write a natural language sentence describing your route.
+    2. Set buffer radius (in km) to specify the event search area.
+    3. Choose transport profile (car, bike, walking).
+    4. Set date and time ranges to filter event schedules.
+    5. Submit and explore generated events on the interactive map.
+    
+    ### 🧠 Natural Language Query
+    
+    Use the frontend's natural language input mode to describe travel plans naturally, like:
+    
+    > "I want to go from Vicenza to Trento leaving 2 September 2025 at 2 a.m., arriving 18 October 2025 at 5 a.m., and show me 10 music events within 6 km using bike."
+    
+    ### 📂 Uploading and Managing Event Data
+    
+    All event datasets are maintained in the `dataset/` directory and initially prepared using the Jupyter notebooks located in the `notebooks/` folder. To add new events, create JSON files that adhere to the structure defined in the provided template: `dataset/veneto_events_template.json`. 
+    
+    These JSON files can then be uploaded to the system via the backend `/ingestevents` API endpoint. Upon upload, events are processed and indexed in the Qdrant vector database, enabling efficient and fast retrieval during route-based searches and queries.
+    
+    ---
+    
+    ## 🛠️ Troubleshooting
+    
+    - Ensure Docker is running and ports 8000 and 8501 are free.
+    - Verify that required API keys and endpoints are properly configured in your environment.
+    - Check backend logs for errors during event ingestion or route creation.
+    - Clear browser cache if frontend UI behaves unexpectedly.
+    
+    ---
+    
+    ## ❓ FAQs
+    
+    **Q:** Can I use the backend API independently?  
+    **A:** Yes, the API is fully accessible via HTTP endpoints documented and available at `/docs` on the backend server (e.g., `http://localhost:8000/docs`).
+    
+    ---
+    
+    ## 📬 Contact and Support
+    
+    For issues or questions, please open an issue on the GitHub repository.
+    
+    ---
+    
+    Thank you for using **ReMap**!  
+    Happy mapping and discovery!
+  File: ARCHITECTURE_API.md
+  Content:
+    # Architecture and API Reference
+    
+    ## Overview 🌐
+    
+    The **ReMap** project consists of three main components:
+    
+    1. **Fake Event Creation and Geolocalization**  
+       📍 Events are generated and geolocated using Jupyter notebooks (`notebooks/01_eda_events.ipynb`).
+    
+    2. **Backend with FastAPI**  
+       ⚙️ Provides API endpoints for event ingestion, route-based event querying, and natural language payload extraction. Integrates with **Qdrant** vector database for semantic and geospatial querying.
+    
+    3. **Frontend with Streamlit**  
+       🖥️ Interactive UI enabling manual or natural language-based route inputs. Communicates with backend APIs to create routes and retrieve relevant events.
+    
+    ---
+    
+    ## Backend Architecture ⚙️
+    
+    ### Core Modules 🧱
+    
+    - `app/api` — FastAPI routers managing HTTP endpoints.
+    - `app/services` — Business logic layer (event ingestion, embeddings, geocoding, Qdrant querying).
+    - `app/models` — Pydantic schemas for data validation and serialization.
+    - `app/core/config.py` — Configuration (constants and environment variables).
+    
+    ### Key Backend Components 🧩
+    
+    - **Embedding Models**  
+      🧠 Uses FastEmbed's **dense** and **sparse** models for semantic text embedding (`DENSE_MODEL_NAME`, `SPARSE_MODEL_NAME`).
+    
+    - **Qdrant Client**  
+      📊 Connects to Qdrant vector DB, supporting hybrid (vector + keyword) search with geo-filtering.
+    
+    - **API Endpoints**:
+    
+      - `POST /create_map` — Generate route, search nearby events, return sorted list and geometry.  
+      - `POST /ingestevents` — Upload and ingest JSON event files to Qdrant with deduplication.  
+      - `POST /sentencetopayload` — Convert natural language into structured query parameters.
+    
+    ### Data Flow 🔄
+    
+    1. User request triggers map creation or event ingestion.
+    2. Backend geocodes addresses using **OpenRouteService**.
+    3. Events are retrieved or stored in **Qdrant** using vector search and geospatial/date filters.
+    4. JSON responses return event lists, route coordinates, and buffer polygons.
+    
+    ---
+    
+    ## Frontend Architecture 🖼️
+    
+    ### Technologies 🛠️
+    
+    - **Streamlit** for reactive frontend UI.  
+    - **OpenLayers** for map rendering, embedded using HTML components.  
+    - Connects to backend via `API_URL` environment variable, switching between manual and natural language modes.
+    
+    ### Main Components 🔧
+    
+    - `streamlit_app.py` — Entry point and UI logic.  
+    - Supports:
+      - Manual form input
+      - Natural language input (e.g., “Find events between Paris and Berlin this weekend”)
+    - Interacts with backend for:
+      - Route generation
+      - Payload extraction from user queries
+    - Displays:
+      - Interactive route map
+      - Events as styled markers
+      - Filters for date, transport profile, keywords, and number of events
+    
+    ---
+    
+    ## Dataset 📂
+    
+    Event datasets reside in the `dataset/` directory as geolocated, structured `.json` files.  
+    ⚠️ These are **fake events**, used for **testing Qdrant's vector and geo-query capabilities**.
+    
+    ---
+    
+    ## API Reference 📡
+    
+    ### `POST /create_map` — Route-Based Event Map
+    
+    Generates route and fetches relevant events from origin to destination.
+    
+    #### 🔸 Request Body Schema (`schemas.RouteRequest`):
+    
+    - `origin_address`: *string*  
+    - `destination_address`: *string*  
+    - `buffer_distance`: *float* (in km)  
+    - `startinputdate`: *ISO8601 datetime string*  
+    - `endinputdate`: *ISO8601 datetime string*  
+    - `query_text`: *string*  
+    - `numevents`: *integer*  
+    - `profile_choice`: *string* ("car", "bike", "walking")
+    
+    #### 🔹 Response:
+    
+    - `route_coords`: List of coordinates forming the route  
+    - `buffer_polygon`: Buffer polygon around the route  
+    - `origin`: Latitude/longitude of origin  
+    - `destination`: Latitude/longitude of destination  
+    - `events`: List of sorted event objects near the route
+    
+    ---
+    
+    ### `POST /ingestevents` — Upload & Ingest Events 📥
+    
+    Ingest a batch of events from a `.json` file into Qdrant.
+    
+    #### 🔸 Request:
+    
+    - `multipart/form-data` with attached `.json` file.
+    
+    #### 🔹 Response:
+    
+    - Summary of ingestion (number of events, deduplicated entries)  
+    - Qdrant collection info
+    
+    ---
+    
+    ### `POST /sentencetopayload` — NLP to Query Payload 📝
+    
+    Parses user’s natural language sentence into structured query format.
+    
+    #### 🔸 Request:
+    
+    - `sentence`: *string*
+    
+    #### 🔹 Response:
+    
+    - Extracted fields: origin, destination, buffer distance, dates, keywords, number of events, profile choice (as JSON payload)
+    
+    ---
+    
+    ## Natural Language Extraction via LLM & CrewAI 🧠
+    
+    The backend integrates **CrewAI** and **Mistral LLM** to enable intelligent extraction of query parameters from natural language.
+    
+    ### Core Components:
+    
+    - **LLM Setup**  
+      🤖 Configured via environment variables (`MODEL_NAME`, `BASE_URL`, `API_KEY`), using **zero temperature** for deterministic responses.
+    
+    - **Agent**  
+      🎯 CrewAI `Agent` with the role: `"Payload Extractor"`, designed to return a strict JSON payload schema containing:
+    
+      - `origin_address`  
+      - `destination_address`  
+      - `buffer_distance`  
+      - `startinputdate`  
+      - `endinputdate`  
+      - `query_text`  
+      - `numevents`  
+      - `profile_choice`
+    
+    - **Task + Crew**  
+      🧩 Task wraps the extraction objective with schema constraints.  
+      👥 Crew ensures the task runs to completion with structured output.
+    
+    ### Service Function: `extract_payload(sentence: str)` 📤
+    
+    - Invokes `crew.kickoff()` with the sentence.
+    - Validates output against `Payload` Pydantic schema.
+    - Returns valid JSON or `None` on failure.
+    
+    ### Benefits 💡
+    
+    - Enhances `/sentencetopayload` endpoint to support **flexible, unstructured user queries**.
+    - Converts user-friendly input (e.g., "Find me concerts along my trip from Berlin to Munich next weekend") into strict backend-compatible parameters.
+    - Ensures **schema validation** and consistent user experience powered by **AI and vector search**.
+    
+    ---
+    
+    ## Notes 🗒️
+    
+    - ⚡ The backend uses Qdrant's hybrid search (dense + sparse) and geo-filtering to efficiently fetch relevant events.
+    - 🧩 Frontend leverages **Streamlit's session state** for reactive, smooth user experience.
+    - 🧱 Designed for extensibility — new endpoints, models, and UI features can be added easily.
+    
+Folder: docs/images
+  File: manualinput.png
+  File: thumbail.png
+  File: manualoutput.png
+  File: logoReMap.png
+  File: logo2ReMap.png
+  File: naturallanguageoutput.png
+  File: naturallanguageinput.png
+Folder: docs/videos
+  File: ReMap.mp4
+Folder: docs/old
+  File: README_OLD.md
+  Content:
+    # ReMap 🗺️🔍
+    
+    Route Event Map, aka ReMap, is a powerful and interactive event discovery platform designed to help users find relevant events along a custom travel route. By combining semantic similarity search on event descriptions with dynamic geospatial and temporal filtering, it pro,vides personalized event recommendations visualized on an interactive map.
+    
+    ---
+    
+    ## Features
+    
+    - Store events enriched with metadata such as title, description, venue, address, latitude, and longitude.
+    - Leverage sparse and dense embeddings of event descriptions stored in the Qdrant vector database for advanced semantic similarity search.
+    - Seamlessly merge similarity search results with multiple filters including:
+      - Geospatial filtering within a user-defined buffer distance (km) around a route.
+      - Temporal filtering through start and end date/time travel windows.
+      - Textual similarity based on user query inputs.
+      - Transport profile-based routing (e.g., driving, cycling, walking) via OpenRouteService.
+      - Limit results by number of events retrieved.
+    - Calculate travel routes using OpenRouteService API, considering different travel modes.
+    - Interactive frontend demo, built with Streamlit for:
+      - Displaying the calculated route and buffer zone on an interactive map.
+      - Marking matched events with detailed popups along or nearby the route.
+      - Providing an expandable event list panel with full event details.
+    - Validated input handling to avoid invalid date/time ranges and other errors.
+    
+    ---
+    
+    ## How It Works
+    
+    1. User inputs:
+       - Origin and destination addresses plus transport profile (e.g., driving, cycling).
+       - Buffer distance defining how far from the route to search for events.
+       - Search query text enabling semantic similarity matching on event descriptions.
+       - Travel time window with start and end date/time.
+       - Number of events to retrieve.
+    2. The backend calculates the optimized route based on input travel profile.
+    3. It runs a merged query combining:
+       - Semantic similarity search over event embeddings.
+       - Geo-filtering to only include events within the buffer zone polygon around the route.
+       - Temporal filtering restricting events to specified travel windows.
+    4. Frontend renders an interactive map showing the route, buffer polygon, and event markers.
+    5. Event list panel provides detailed descriptions and timing info.
+    6. Input errors or inconsistencies are clearly communicated on the frontend.
+    
+    ---
+    
+    ## Technology Stack
+    
+    - [Qdrant](https://qdrant.tech/) vector database for storing event embeddings and enabling similarity search with geo-filters.
+    - Sparse and dense embedding models encoding event descriptions for rich semantic queries.
+    - [OpenRouteService](https://openrouteservice.org/) APIs for route calculation and transport profile support.
+    - [Streamlit](https://streamlit.io/) for rapid frontend development.
+    - [Openstreetmap](https://www.openstreetmap.org/) for advanced interactive maps.
+    - Python backend (FastAPI suggested) serving route computation and event querying APIs.
+    - Geopandas and Shapely for geographic calculations and buffering routes.
+    - Docker for containerization of the fastapi and streamlit
+    
+    ---
+    
+    ## Installation
+    
+    1. Clone the repository:
+        ```
+        git clone https://github.com/tatankam/eventmap.git
+        cd eventmap/eventmap-fastapi
+        ```
+    2. Install dependencies (preferably in a virtual environment):
+        ```
+        pip install -r requirements.txt
+        ```
+    3. Start the backend API server:
+        ```
+        uvicorn app.main:app --reload
+        ```
+    4. Launch the Streamlit frontend app :
+        ```
+        cd /eventmap/frontend
+        streamlit run streamlit_app.py
+        ```
+    
+    ---
+    
+    ## Usage
+    
+    - Enter origin and destination addresses in the frontend.
+    - Select your transport profile (driving, cycling, walking).
+    - Specify the buffer distance in kilometers around the route.
+    - Enter a text search query to find semantically relevant events.
+    - Set the travel start and end date/time window.
+    - Choose how many events to retrieve.
+    - Click "Search Events" to generate and visualize the route plus event markers.
+    - Explore matched events on the map and in the detailed event list.
+    
+    ---
+    
+    ## Demo
+    
+    [![Watch the Demo](https://github.com/tatankam/eventmap/blob/main/video/thumbail.jpg)](https://youtu.be/BiKDhHpg0BQ)
+    
+    ---
+    
+    ## Roadmap & Future Improvements
+    
+    - Natural language input parsing for query parameters via an AI assistant (e.g., Mistral).
+    - Multi-point and waypoint support in route planning.
+    - Adding event type/category embeddings and filters for finer search control.
+    - Enhanced UX with smoother interfaces and richer map interactions.
+    - create a UI to enter events
+    - create random id instead of sequential and if the id is busy, regenerate the id
+    - adjust documentation
+    
+    ---
+    ### Dockerize
+    
+    See Dockerfile for streamlit and eventmap-fastapi
+    docker compose 
+    ../event_map$ docker compose up --build --force-recreate if you failed before
+    Else docker compose up 
+    docker compose down to close
+    You have to execute from there because it finds app.main:app and it works and .env
+    The slow behavior observed when using docker compose down followed by docker compose up likely happens because docker compose down stops and removes the containers, which means that on the subsequent docker compose up, the containers and resources (including embedding models) are re-initialized or re-downloaded.
+    
+    To avoid this, consider these options:
+    
+    Use docker compose restart instead of down/up, which stops and starts the containers without removing them. This keeps the container state and cached data intact, greatly improving start-up speed.
+    
+    If you need to update containers but want to keep volumes and downloads persistent, avoid down or use volumes to persist data like models outside the container file system.
+    
+    Consider volume mounting or caching strategies for your models or data so they are not downloaded every time a container is recreated.
+    
+    This approach optimizes performance by preventing unnecessary re-downloads and reinitializations during restarts or redeployments with Docker Compose.
+    
+    The first time you have to:
+    docker compose up -d
+    
+    To be sure, if you did some build, do this:
+    docker compose build --no-cache
+    and after do this:
+    docker compose up -d
+    
+    
+    Next you use (it is good even if yoi modify docker compose file)
+    docker compose stop
+    docker compose start
+    or
+    docker compose restart 
+    
+    
+    this is if you don't modify code, because if you use docker compose down, it remove container so it is really slow to docker compose up
+    
+    
+    ---
+    
+    ## License
+    
+    This project is licensed under the MIT License.
+    
+    ---
+    
+    ## Contact
+    
+    For questions or suggestions, contact the project owner or open an issue on GitHub.
+    
+    ---
+    
+    Discover events like never before — happy exploring! 🗺️🔍
+  File: ArchitectureAPIReference_detailed.md
+  Content:
+    # ReMap Architecture and API Reference
+    
+    ## Overview
+    
+    ReMap is a location-based event retrieval project consisting of three main components:
+    
+    1. **Fake Event Creation and Geolocalization**  
+       Synthetic events are created and geolocated using Jupyter notebooks (`notebooks/01_eda_events.ipynb`) to test vector search capabilities.
+    
+    2. **Backend with FastAPI**  
+       Exposes REST API endpoints for event ingestion, querying events along routes, and converting natural language input into structured search payloads. Integrates with Qdrant vector database supporting hybrid dense and sparse vector search with geographic and time filtering.
+    
+    3. **Frontend with Streamlit**  
+       Provides a reactive single-page app where users enter routes manually or via natural language, interacting seamlessly with the backend to visualize routes and events on an interactive map.
+    
+    ---
+    
+    ## Fake Event Creation and Geolocalization Dataset
+    
+    The event datasets reside in the `dataset/` folder, containing geolocated, structured fake events in JSON format. They facilitate testing Qdrant’s search similarity and complex filtering features along travel routes.
+    
+    ---
+    
+    ## Backend Architecture
+    
+    ### Core Modules
+    
+    - `app/api`: FastAPI router modules managing HTTP endpoints.
+    - `app/services`: Implements ingestion, geocoding, embedding, natural language extraction, and Qdrant querying logic.
+    - `app/models`: Pydantic data validation and serialization schemas.
+    - `app/core/config.py`: Configuration constants and environment variables.
+    
+    ### Key Backend Components
+    
+    - **Embedding Models:** Utilizes FastEmbed’s dense and sparse embedding models to build semantic representations of event descriptions for hybrid vector search.
+    
+    - **Qdrant Vector Database:** Maintains event collections with vector and payload indexing that supports efficient geo, datetime, and semantic filtering.
+    
+    - **OpenRouteService Client:** Provides address geocoding and route retrieval according to user-selected transport profiles.
+    
+    - **CrewAI and Mistral LLM Integration:**  
+      Integrates the Mistral large language model via CrewAI to parse unstructured natural language input into structured event query payloads. This involves:
+    
+      - Loading model and API keys from environment variables.
+      - A CrewAI agent specifically designed to extract fields such as origin/destination addresses, buffer distances, start/end date-times, query keywords, event counts, and profile choices.
+      - Validation of these extracted fields using Pydantic models, enforcing default values and ensuring logical date sequences.
+      - Definition of extraction tasks and sequential execution managed by Crew for reliable parsing.
+      - The `extract_payload(sentence: str)` function interfaces with this pipeline, producing validated query payloads or handling errors gracefully.
+    
+    ### Main Backend Services
+    
+    #### Event Ingestion Service
+    
+    - Loads events from JSON files.
+    - Asynchronously geocodes venue locations using OpenStreetMap’s Nominatim.
+    - Generates dense and sparse embeddings for event text.
+    - Uses content hashing to avoid redundant upserts and performs batch insertion into Qdrant.
+    - Ensures required Qdrant collections and payload indexes exist prior to ingestion.
+    
+    #### Qdrant Query Client
+    
+    - Executes geo-filtered queries within route buffer polygons.
+    - Performs hybrid dense and sparse vector search with optional relevance score thresholds.
+    - Applies date/time range filters to retrieve events active during the requested period.
+    - Returns enriched payloads with relevance scoring.
+    
+    #### OpenRouteService Client
+    
+    - Translates addresses into geographic coordinates.
+    - Requests optimized routes with user-defined profile settings (e.g., driving, cycling, walking).
+    - Supports generating buffer polygons around route lines.
+    
+    #### Extraction Service
+    
+    - Utilizes CrewAI and the Mistral LLM to transform natural language inputs into structured query objects.
+    - Ensures extracted payloads conform to strict schema validations.
+    - Safely manages parsing errors and returns usable query parameters for API consumption.
+    
+    ### Data Flow Summary
+    
+    1. User provides route and query details or natural language input.
+    2. Backend geocodes addresses and generates travel route with buffer.
+    3. Natural language sentences are parsed into detailed query payloads by CrewAI + Mistral LLM.
+    4. Qdrant is queried for events matching geographic, temporal, and semantic criteria.
+    5. API returns route geometries and sorted, filtered event data.
+    
+    ---
+    
+    ## API Reference
+    
+    ### POST /create_map
+    
+    Generates a route-based event map with filtered events.
+    
+    **Request (schemas.RouteRequest):**
+    - `origin_address`: string
+    - `destination_address`: string
+    - `buffer_distance`: float (km)
+    - `startinputdate`: ISO8601 datetime string
+    - `endinputdate`: ISO8601 datetime string
+    - `query_text`: string
+    - `numevents`: integer
+    - `profile_choice`: string (e.g., "car", "bike", "walking")
+    
+    **Response:**
+    - `route_coords`: list of route coordinate pairs
+    - `buffer_polygon`: coordinates defining the buffered area
+    - `origin` and `destination`: lat/lon with provided addresses
+    - `events`: list of events sorted by their position along the route, each including location and address details
+    
+    ### POST /ingestevents
+    
+    Uploads and ingests event data from JSON files.
+    
+    **Request:** Multipart/form-data file upload with `.json`.
+    
+    **Response:** Provides ingestion statistics including inserted, updated, skipped counts, and current collection information.
+    
+    ### POST /sentencetopayload
+    
+    Parses natural language query sentences into structured event query payloads.
+    
+    **Request:** JSON containing a `sentence` string.
+    
+    **Response:** JSON object with extracted payload fields or HTTP 400 on extraction/validation failure.
+    
+    ---
+    
+    ## Frontend Architecture
+    
+    - Uses Streamlit for a responsive interface and OpenLayers for map rendering.
+    - Supports manual and natural language travel route input.
+    - Dynamically displays routes and events with filtering controls.
+    - Communicates with backend via configurable API endpoints.
+    
+    ---
+    
+    ## Notes
+    
+    - Combines geographic, temporal, and hybrid vector filtering in Qdrant for scalable, accurate event retrieval.
+    - Modular design supports easy extension and robust backend/frontend integration.
+  File: ArchitectureAPIReference.md
+  Content:
+    # ReMap Architecture and API Reference
+    
+    ## Overview
+    
+    ReMap is a location-based event retrieval system with three core parts:
+    
+    1. **Fake Event Creation and Geolocalization**  
+       Events are synthetically generated and geolocated using Jupyter notebooks for testing vector search.
+    
+    2. **Backend with FastAPI**  
+       Provides APIs for event ingestion, route-based querying, and natural language parsing. Integrates with Qdrant for hybrid dense/sparse vector search with geo and datetime filtering.
+    
+    3. **Frontend with Streamlit**  
+       Offers an interactive UI for manual or natural language route input, displaying routes and events on maps.
+    
+    ---
+    
+    ## Dataset
+    
+    Fake geolocated event datasets are stored in `dataset/` as JSON files, used for testing Qdrant's similarity and filtering capabilities.
+    
+    ---
+    
+    ## Backend Architecture
+    
+    ### Core Modules
+    
+    - API routing (`app/api`), service logic (`app/services`), data models (`app/models`), and configuration (`app/core/config.py`).
+    
+    ### Key Components
+    
+    - **Embeddings:** FastEmbed dense and sparse models for event text.
+    - **Qdrant Client:** Vector DB with geo and datetime filters.
+    - **OpenRouteService:** Geocoding and route fetching.
+    - **CrewAI & Mistral LLM:** Natural language to structured query extraction.
+    
+    ### Services
+    
+    - **Event Ingestion:** Async geocoding, embedding, deduplication, batch upserts.
+    - **Qdrant Queries:** Geo-filtering coupled with hybrid vector search and date constraints.
+    - **Route Service:** Geocodes and buffers routes.
+    - **Extraction Service:** CrewAI agent extracts structured payloads from sentences with strict validation.
+    
+    ### Data Flow
+    
+    1. User inputs route or NL query.  
+    2. Backend geocodes and buffers route.  
+    3. NL input is parsed into a payload.  
+    4. Qdrant queried for matching events.  
+    5. Route and filtered events returned.
+    
+    ---
+    
+    ## API Reference
+    
+    ### POST /create_map
+    
+    Create route-based event map.
+    
+    **Request:**  
+    - origin_address, destination_address  
+    - buffer_distance (km), startinputdate, endinputdate  
+    - query_text, numevents, profile_choice
+    
+    **Response:**  
+    - route_coords, buffer_polygon  
+    - origin and destination coords + address  
+    - sorted nearby events with geo and address info
+    
+    ### POST /ingestevents
+    
+    Upload JSON event file for ingestion.
+    
+    **Request:**  
+    - Multipart/form-data `.json`
+    
+    **Response:**  
+    - Ingestion counts and collection info
+    
+    ### POST /sentencetopayload
+    
+    Parse natural language sentence to event query payload.
+    
+    **Request:**  
+    - JSON with `sentence`
+    
+    **Response:**  
+    - Extracted structured fields or error if invalid
+    
+    ---
+    
+    ## Frontend Architecture
+    
+    - Streamlit UI, OpenLayers map, connects to backend APIs for routes and extraction.
+    - Supports manual and natural language input modes with filtering options.
+    
+    ---
+    
+    ## Notes
+    
+    - Efficient event retrieval via geo, datetime, and hybrid vector filtering in Qdrant.
+    - Modular backend services and reactive frontend support extensibility.
+  File: veneto_events-1654924720803990-2025-09-02-22-03-55.snapshot
+  File: 03_querying copy.ipynb
+Folder: dataset
+  File: veneto_events.json
+  File: villages_places.json
+  File: veneto_events_template.json
+  File: veneto_events_geocoded_structured_example.json
+  File: veneto_events_geocoded_structured.json
+Folder: backend
+  File: Dockerfile
+  File: requirements.txt
+  File: .dockerignore
+Folder: backend/app
+  File: __init__.py
+  Content:
+  File: main.py
+  Content:
+    from fastapi import FastAPI
+    from fastapi.responses import ORJSONResponse
+    from app.api.routes import router  # Import your routes module here
+    
+    from fastapi.middleware.cors import CORSMiddleware
+    
+    app = FastAPI(default_response_class=ORJSONResponse)  # Use ORJSON for faster JSON responses
+    
+    
+    # Include your API routes
+    app.include_router(router)
+    
+    
+    # CORS configuration
+    origins = [
+        "*"  # You can specify frontend origins here if needed
+    ]
+    
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+Folder: backend/app/__pycache__
+  File: __init__.cpython-312.pyc
+  File: main.cpython-312.pyc
+Folder: backend/app/api
+  File: __init__.py
+  Content:
+  File: routes.py
+  Content:
+    from fastapi import APIRouter, HTTPException, UploadFile, File
+    from app.services.ingest_service import ingest_events_from_file
+    from app.services import openrouteservice_client, qdrant_client
+    from app.models import schemas
+    from shapely.geometry import LineString, Point
+    import geopandas as gpd
+    import numpy as np
+    from qdrant_client.http import models as qmodels
+    from app.core.config import DENSE_MODEL_NAME, SPARSE_MODEL_NAME, COLLECTION_NAME
+    from fastembed import TextEmbedding, SparseTextEmbedding
+    import os
+    import shutil
+    
+    # Import the extraction function and Pydantic models
+    from app.services.extraction_service import extract_payload
+    from app.models.schemas import SentenceInput
+    
+    router = APIRouter()
+    
+    # Initialize embedding models once for reuse
+    dense_embedding_model = TextEmbedding(DENSE_MODEL_NAME)
+    sparse_embedding_model = SparseTextEmbedding(SPARSE_MODEL_NAME)
+    
+    
+    @router.post("/create_map")
+    async def create_event_map(request: schemas.RouteRequest):
+        try:
+            origin_point = openrouteservice_client.geocode_address(request.origin_address)
+            destination_point = openrouteservice_client.geocode_address(request.destination_address)
+            coords = [origin_point, destination_point]
+    
+            routes = openrouteservice_client.get_route(coords, profile=request.profile_choice)
+            route_geometry = routes['features'][0]['geometry']
+            route_coords = route_geometry['coordinates']
+            if len(route_coords) < 2:
+                raise HTTPException(status_code=400, detail="Route must contain two different address for buffering.")
+    
+            route_line = LineString(route_coords)
+            route_gdf = gpd.GeoDataFrame([{'geometry': route_line}], crs='EPSG:4326')
+    
+            route_gdf_3857 = route_gdf.to_crs(epsg=3857)
+            buffer_polygon = route_gdf_3857.buffer(request.buffer_distance * 1000).to_crs(epsg=4326).iloc[0]
+            polygon_coords = np.array(buffer_polygon.exterior.coords).tolist()
+            polygon_coords_qdrant = [{"lon": lon, "lat": lat} for lon, lat in polygon_coords]
+    
+            geo_filter = qmodels.Filter(
+                must=[
+                    qmodels.FieldCondition(
+                        key="location",
+                        geo_polygon=qmodels.GeoPolygon(
+                            exterior=qmodels.GeoLineString(points=polygon_coords_qdrant)
+                        )
+                    )
+                ]
+            )
+    
+            date_intersection_filter = qmodels.Filter(
+                must=[
+                    qmodels.FieldCondition(
+                        key="start_date",
+                        range=qmodels.DatetimeRange(lte=request.endinputdate)
+                    ),
+                    qmodels.FieldCondition(
+                        key="end_date",
+                        range=qmodels.DatetimeRange(gte=request.startinputdate)
+                    )
+                ]
+            )
+    
+            final_filter = qmodels.Filter(must=geo_filter.must + date_intersection_filter.must)
+    
+            score_treshold = 0.0
+            if request.query_text.strip() == "":
+                score_treshold = 0.0  # No text query, so no score threshold
+            else:
+                score_treshold = 0.34  # Adjust based on desired relevance I found 0.34 to be a good balance
+    
+            query_dense_vector = list(dense_embedding_model.passage_embed([request.query_text]))[0].tolist()
+            query_sparse_embedding = list(sparse_embedding_model.passage_embed([request.query_text]))[0]
+    
+            payloads = qdrant_client.query_events_hybrid(
+                dense_vector=query_dense_vector,
+                sparse_vector=query_sparse_embedding,
+                query_filter=final_filter,
+                collection_name=COLLECTION_NAME,
+                limit=request.numevents,
+                score_threshold=score_treshold  # Optional: filter out low-score results
+            )
+    
+            if not payloads:
+                return {"message": "No events found in Qdrant for this route/buffer and date range."}
+    
+            def distance_along_route(event):
+                point = Point(event['location']['lon'], event['location']['lat'])
+                return route_line.project(point)
+    
+            sorted_events = sorted(payloads, key=distance_along_route)
+    
+            for event in sorted_events:
+                loc = event.get('location', {})
+                event['address'] = loc.get('address')
+                event['lat'] = loc.get('lat')
+                event['lon'] = loc.get('lon')
+    
+    
+            response = {
+                "route_coords": route_coords,
+                "buffer_polygon": polygon_coords,
+                "origin": {"lat": origin_point[1], "lon": origin_point[0], "address": request.origin_address},
+                "destination": {"lat": destination_point[1], "lon": destination_point[0], "address": request.destination_address},
+                "events": sorted_events
+            }
+    
+    
+    
+            return response
+    
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+    
+    
+    @router.post("/ingestevents")
+    async def ingest_events_endpoint(file: UploadFile = File(...)):
+        if not file.filename.endswith(".json"):
+            raise HTTPException(status_code=400, detail="Only .json files are accepted")
+    
+        save_dir = "/tmp"
+        os.makedirs(save_dir, exist_ok=True)
+        save_path = os.path.join(save_dir, file.filename)
+    
+        with open(save_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+    
+        try:
+            result = await ingest_events_from_file(save_path)
+        finally:
+            if os.path.exists(save_path):
+                os.remove(save_path)
+    
+        return {
+            "filename": file.filename,
+            "inserted": result["inserted"],
+            "updated": result["updated"],
+            "skipped_unchanged": result["skipped_unchanged"],
+            "collection_info": str(result["collection_info"]),
+        }
+    
+    
+    @router.post("/sentencetopayload")
+    async def sentence_to_payload(data: SentenceInput):
+        sentence = data.sentence
+        output = extract_payload(sentence)
+        if output:
+            return output.model_dump()
+        else:
+            raise HTTPException(status_code=400, detail="Failed to extract valid payload or validation error")
+Folder: backend/app/api/__pycache__
+  File: __init__.cpython-312.pyc
+  File: routes.cpython-312.pyc
+Folder: backend/app/models
+  File: __init__.py
+  Content:
+  File: schemas.py
+  Content:
+    from pydantic import BaseModel, Field
+    from datetime import datetime
+    from typing import Optional, Literal
+    
+    ProfileChoice = Literal["driving-car", "cycling-regular", "foot-walking"]
+    
+    
+    class RouteRequest(BaseModel):
+        origin_address: str = Field(..., example="Padova")
+        destination_address: str = Field(..., example="Verona")
+        buffer_distance: Optional[float] = Field(default=5.0, example=5.0)  # Optional float with default
+        #buffer_distance: int = Field(default=5, example=5)  # default value 5
+        startinputdate: datetime = Field(..., example="2025-08-23T13:28:39Z")
+        endinputdate: datetime = Field(..., example="2025-08-27T13:28:39Z")
+        query_text: Optional[str] = Field(default="", example="Music")
+        numevents: Optional[int] = Field(default=100, example=100, description="Number of events to retrieve")  # default 100
+        profile_choice: Optional[ProfileChoice] = Field(default="driving-car", example="cycling-regular", description="Transport profile for routing, e.g. 'driving-car', 'cycling-regular'") # default 'driving-car'
+    
+    
+    
+    class SentenceInput(BaseModel):
+        sentence: str = Field(
+            ..., 
+            example="I want to go from Vicenza to Trento and I will leave 14 September 2025 at 2 a.m. and I will arrive on 11 October at 5:00. Give me 11 events about workshop in a range of 6 km. Use cycling-regular transport."
+        )
+Folder: backend/app/models/__pycache__
+  File: __init__.cpython-312.pyc
+  File: schemas.cpython-312.pyc
+Folder: backend/app/static
+Folder: backend/app/services
+  File: __init__.py
+  Content:
+  File: extraction_service.py
+  Content:
+    import json
+    from typing import Optional, Literal
+    from pydantic import BaseModel, ValidationError, model_validator, Field, field_validator
+    from datetime import datetime, timedelta
+    from crewai import Agent, Task, Crew, Process, LLM
+    from app.core.config import OPENAI_API_KEY, OPEN_AI_BASE_URL, OPENAI_MODEL
+    
+    
+    
+    
+    
+    customllm = LLM(
+        model=OPENAI_MODEL,
+        base_url=OPEN_AI_BASE_URL,
+        api_key=OPENAI_API_KEY,
+        temperature=0.0,
+    )
+    
+    
+    ProfileChoice = Literal["driving-car", "cycling-regular", "foot-walking"]
+    
+    
+    def default_start_date():
+        return datetime.now().isoformat()
+    
+    
+    def default_end_date():
+        return (datetime.now() + timedelta(days=4)).isoformat()
+    
+    
+    class Payload(BaseModel):
+        origin_address: str
+        destination_address: str
+        buffer_distance: Optional[float] = 5.0
+        startinputdate: Optional[str] = Field(default_factory=default_start_date)
+        endinputdate: Optional[str] = Field(default_factory=default_end_date)
+        query_text: Optional[str] = ""
+        numevents: Optional[int] = 10
+        profile_choice: Optional[ProfileChoice] = "driving-car"
+    
+        @field_validator('buffer_distance', mode='before')
+        def set_buffer_distance_default(cls, v):
+            if v is None:
+                return 5.0
+            return v
+    
+        @field_validator('numevents', mode='before')
+        def set_numevents_default(cls, v):
+            if v is None:
+                return 10
+            return v
+    
+        @model_validator(mode="after")
+        def check_date_order(cls, model):
+            start = datetime.fromisoformat(model.startinputdate)
+            end = datetime.fromisoformat(model.endinputdate)
+            if start > end:
+                raise ValueError("start date can't be later than end date")
+            return model
+    
+    
+    agent = Agent(
+        role="Payload Extractor",
+        goal=(
+            "Given an input sentence, extract ONLY the following fields as JSON: "
+            "origin_address, destination_address, buffer_distance (in km), startinputdate (ISO 8601 date-time string for departure), "
+            "endinputdate (ISO 8601 date-time string for arrival), query_text (search keywords found after phrases like 'about', 'on', or 'for', else default ''), "
+            "numevents (integer), profile_choice (one of 'driving-car', 'cycling-regular', 'foot-walking'; default 'driving-car'). "
+            "You must parse these fields dynamically from the input sentence provided via 'input' variable. "
+            "Do not return default or example values unless they appear explicitly in the input sentence. "
+            "Output ONLY the JSON object, no additional commentary."
+        ),
+        backstory="Expert at precise structured extraction from unstructured text sentences.",
+        tools=[],
+        llm=customllm,
+        verbose=True,
+        allow_delegation=False,
+    )
+    
+    
+    task = Task(
+        description=(
+            "Extract the payload data from this input sentence dynamically:\n"
+            "{input}\n\n"
+            "Return ONLY a JSON object matching the following format (with profile_choice restricted to specific values):\n"
+            '{\n'
+            '  "origin_address": "Padova",\n'
+            '  "destination_address": "Venice",\n'
+            '  "buffer_distance": 6.0,\n'
+            '  "startinputdate": "2025-09-03T06:00:00",\n'
+            '  "endinputdate": "2025-09-07T15:00:00",\n'
+            '  "query_text": "",\n'  # empty string default here
+            '  "numevents": 13,\n'
+            '  "profile_choice": "driving-car"\n'
+            '}\n'
+            "Use the values from the input sentence above, not the example values here. Extract query_text from phrases like 'about music', 'on theater', 'for workshop', etc. If no such keywords found, set query_text to an empty string."
+        ),
+        expected_output="A JSON object matching the Payload pydantic model with profile_choice and dynamic query_text.",
+        agent=agent,
+        output_json=Payload,
+    )
+    
+    
+    crew = Crew(
+        agents=[agent],
+        tasks=[task],
+        verbose=True,
+        process=Process.sequential,
+    )
+    
+    
+    def extract_payload(sentence: str):
+        result = crew.kickoff(inputs={"input": sentence})
+        try:
+            payload = Payload.model_validate(result.to_dict())
+            return payload
+        except ValidationError as e:
+            print("Validation failed:", e)
+            return None
+  File: qdrant_client.py
+  Content:
+    from qdrant_client import QdrantClient
+    from qdrant_client.http import models as qmodels
+    from app.core.config import QDRANT_SERVER, QDRANT_API_KEY, COLLECTION_NAME
+    
+    
+    qdrant_client = QdrantClient(url=QDRANT_SERVER, api_key=QDRANT_API_KEY, timeout=2000000)
+    
+    
+    def query_events(polygon_coords_qdrant, query_filter=None, collection_name=COLLECTION_NAME, limit=100):
+        if query_filter is None:
+            # default geo filter only
+            query_filter = qmodels.Filter(
+                must=[
+                    qmodels.FieldCondition(
+                        key="location",
+                        geo_polygon=qmodels.GeoPolygon(
+                            exterior=qmodels.GeoLineString(points=polygon_coords_qdrant)
+                        )
+                    )
+                ]
+            )
+        results = qdrant_client.query_points(
+            collection_name=collection_name,
+            limit=limit,
+            query_filter=query_filter,
+            with_payload=True
+        )
+        return [p.payload for p in results.points]
+    
+    
+    def query_events_hybrid(dense_vector, sparse_vector, query_filter, collection_name=COLLECTION_NAME, limit=100, score_threshold=0.0):
+        results = qdrant_client.query_points(
+            collection_name=collection_name,
+            prefetch=[
+                qmodels.Prefetch(
+                    query=qmodels.SparseVector(
+                        indices=list(sparse_vector.indices),
+                        values=list(sparse_vector.values)
+                    ),
+                    using="sparse_vector",
+                    limit=50,
+                    # score_threshold=score_threshold,  # Optional: filter out low-score results but I don't need for sparse
+                ),
+                qmodels.Prefetch(
+                    query=dense_vector,
+                    using="dense_vector",
+                    limit=50,
+                    score_threshold=score_threshold,  # Optional: filter out low-score results
+                ),
+            ],
+            query=qmodels.FusionQuery(fusion=qmodels.Fusion.RRF),
+            query_filter=query_filter,
+            limit=limit,
+            with_payload=True,
+            # score_threshold=score_threshold,  # Optional: filter out low-score results
+        )
+    
+        # Process results into dataframe
+        records = []
+        for point in results.points:
+            entry = dict(point.payload)
+            entry["score"] = point.score
+            records.append(entry)
+        
+        #return [p.payload for p in results.points]
+        return records
+    #    return [{"payload": p.payload, "score": p.score} for p in results.points]
+    
+  File: openrouteservice_client.py
+  Content:
+    import openrouteservice
+    from app.core.config import OPENROUTE_API_KEY
+    
+    
+    ors_client = openrouteservice.Client(key=OPENROUTE_API_KEY)
+    
+    
+    def geocode_address(address: str):
+        geocode_result = ors_client.pelias_search(text=address)
+        if geocode_result and 'features' in geocode_result and len(geocode_result['features']) > 0:
+            coords = geocode_result['features'][0]['geometry']['coordinates']
+            return tuple(coords)
+        else:
+            raise ValueError(f"Could not geocode address: {address}")
+    
+    
+    
+    def get_route(coords, profile, radiuses=[1000, 1000]):
+        return ors_client.directions(coordinates=coords, profile=profile, radiuses=radiuses, format='geojson')
+  File: ingest_service.py
+  Content:
+    import os
+    import json
+    import asyncio
+    import hashlib
+    import logging
+    from uuid import uuid4
+    from typing import Optional, Dict, Any
+    
+    import httpx
+    from dotenv import load_dotenv
+    from tqdm import tqdm
+    from fastembed import TextEmbedding, SparseTextEmbedding
+    from qdrant_client import QdrantClient, models
+    from app.core.config import QDRANT_SERVER, QDRANT_API_KEY, DENSE_MODEL_NAME, SPARSE_MODEL_NAME
+    
+    
+    # Initialize logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    
+    
+    if not QDRANT_SERVER or not QDRANT_API_KEY:
+        raise EnvironmentError("QDRANT_SERVER or QDRANT_API_KEY not defined in .env file")
+    
+    # Initialize embedding models once
+    dense_embedding_model = TextEmbedding(DENSE_MODEL_NAME)
+    sparse_embedding_model = SparseTextEmbedding(SPARSE_MODEL_NAME)
+    client = QdrantClient(url=QDRANT_SERVER, api_key=QDRANT_API_KEY, timeout=200000)
+    
+    COLLECTION_NAME = "veneto_events"
+    DENSE_VECTOR_NAME = "dense_vector"
+    SPARSE_VECTOR_NAME = "sparse_vector"
+    
+    
+    async def async_geocode_structured(
+        venue: str, city: str, region: str = "Veneto", country: str = "Italy"
+    ) -> Optional[Dict[str, float]]:
+        base_url = "https://nominatim.openstreetmap.org/search"
+        headers = {"User-Agent": "convert_to_geo/1.0"}
+        params_list = [
+            {"street": venue, "city": city, "state": region, "country": country, "format": "json", "limit": 1},
+            {"city": city, "state": region, "country": country, "format": "json", "limit": 1},
+            {"street": venue, "city": city, "country": country, "format": "json", "limit": 1},
+            {"street": venue, "state": region, "country": country, "format": "json", "limit": 1},
+        ]
+        async with httpx.AsyncClient() as client_http:
+            for params in params_list:
+                try:
+                    response = await client_http.get(base_url, params=params, headers=headers, timeout=10)
+                    response.raise_for_status()
+                    data = response.json()
+                    if data:
+                        return {"lat": float(data[0]["lat"]), "lon": float(data[0]["lon"])}
+                except (httpx.HTTPError, ValueError) as e:
+                    logger.warning(f"Geocoding error with params {params}: {e}")
+                await asyncio.sleep(1)  # Respect Nominatim usage policy
+        return None
+    
+    
+    def calculate_hash(text: str) -> str:
+        return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    
+    
+    def ensure_collection_exists():
+        # Create collection if it does not exist
+        example_text = "Test for embedding dimension calculation."
+        dense_emb = list(dense_embedding_model.passage_embed([example_text]))[0]
+        dense_dim = len(dense_emb)
+        if not client.collection_exists(COLLECTION_NAME):
+            logger.info(f"Creating collection {COLLECTION_NAME} with dimension {dense_dim}")
+            client.create_collection(
+                collection_name=COLLECTION_NAME,
+                vectors_config={
+                    DENSE_VECTOR_NAME: models.VectorParams(size=dense_dim, distance=models.Distance.COSINE),
+                },
+                sparse_vectors_config={
+                    SPARSE_VECTOR_NAME: models.SparseVectorParams(),
+                }
+            )
+        # Create payload indexes if they don't exist (safe to call repeatedly)
+        payload_indices = {
+            "id": "keyword",
+            "location": "geo",
+            "start_date": "datetime",
+            "end_date": "datetime"
+        }
+        for field_name, field_schema in payload_indices.items():
+            try:
+                client.create_payload_index(
+                    collection_name=COLLECTION_NAME,
+                    field_name=field_name,
+                    field_schema=field_schema,
+                )
+            except Exception as e:
+                logger.debug(f"Payload index for {field_name} might already exist or error: {e}")
+    
+    
+    async def ingest_events_from_file(json_path: str) -> Dict[str, Any]:
+        logger.info(f"Loading events from {json_path}")
+        with open(json_path, "r", encoding="utf-8") as f:
+            events_data = json.load(f)
+    
+        events = events_data.get("events", [])
+    
+        semaphore = asyncio.Semaphore(5)
+    
+        async def geocode_event(event):
+            venue = event.get("location", {}).get("venue", "").strip()
+            city = event.get("city", "").strip()
+            if venue and city:
+                async with semaphore:
+                    coords = await async_geocode_structured(venue, city)
+                if coords:
+                    event["location"]["latitude"] = coords["lat"]
+                    event["location"]["longitude"] = coords["lon"]
+                else:
+                    event["location"]["latitude"] = None
+                    event["location"]["longitude"] = None
+            else:
+                event["location"]["latitude"] = None
+                event["location"]["longitude"] = None
+    
+        logger.info("Geocoding events asynchronously")
+        await asyncio.gather(*(geocode_event(event) for event in events))
+    
+        geocoded_path = os.path.splitext(json_path)[0] + "_geocoded_structured.json"
+        logger.info(f"Saving geocoded events to {geocoded_path}")
+        with open(geocoded_path, "w", encoding="utf-8") as f:
+            json.dump(events_data, f, ensure_ascii=False, indent=2)
+    
+        ensure_collection_exists()
+    
+        BATCH_SIZE = 32
+        inserted = 0
+        updated = 0
+        skipped_unchanged = 0
+    
+        for start in tqdm(range(0, len(events), BATCH_SIZE)):
+            batch = events[start : start + BATCH_SIZE]
+            texts = [event.get("description", "") for event in batch]
+            dense_embeddings = list(dense_embedding_model.passage_embed(texts))
+            sparse_embeddings = list(sparse_embedding_model.passage_embed(texts))
+            points = []
+    
+            for i, event in enumerate(batch):
+                event_id = event.get("id")
+                if not event_id:
+                    logger.warning(f"Skipping event without id: {event}")
+                    continue
+                text = texts[i]
+                chunk_hash = calculate_hash(text)
+    
+                existing_points, _ = client.scroll(
+                    collection_name=COLLECTION_NAME,
+                    scroll_filter=models.Filter(
+                        must=[models.FieldCondition(key="id", match=models.MatchValue(value=event_id))]
+                    ),
+                    limit=1,
+                )
+    
+                if existing_points:
+                    existing_point = existing_points[0]
+                    existing_hash = existing_point.payload.get("hash", "")
+                    if existing_hash == chunk_hash:
+                        skipped_unchanged += 1
+                        continue
+                    else:
+                        client.delete(
+                            collection_name=COLLECTION_NAME,
+                            points_selector=models.PointIdsList(points=[existing_point.id]),
+                        )
+                        updated += 1
+                else:
+                    inserted += 1
+    
+                loc = event.get("location", {})
+                loc_geo = {}
+                if "latitude" in loc and "longitude" in loc:
+                    loc_geo = {"lat": loc["latitude"], "lon": loc["longitude"]}
+    
+                location_payload = {**loc, **loc_geo}  # Merges original location dict with lat/lon keys
+    
+                payload = {**event, "location": location_payload, "hash": chunk_hash}
+    
+    
+                points.append(
+                    models.PointStruct(
+                        id=str(uuid4()),
+                        vector={
+                            DENSE_VECTOR_NAME: dense_embeddings[i].tolist(),
+                            SPARSE_VECTOR_NAME: models.SparseVector(
+                                indices=list(sparse_embeddings[i].indices),
+                                values=list(sparse_embeddings[i].values),
+                            ),
+                        },
+                        payload=payload,
+                    )
+                )
+    
+            if points:
+                try:
+                    client.upsert(collection_name=COLLECTION_NAME, points=points, wait=True)
+                except Exception as e:
+                    logger.error(f"Error uploading points batch: {e}")
+    
+        collection_info = client.get_collection(COLLECTION_NAME)
+        logger.info(f"Ingestion complete: inserted={inserted}, updated={updated}, skipped={skipped_unchanged}")
+        return {
+            "inserted": inserted,
+            "updated": updated,
+            "skipped_unchanged": skipped_unchanged,
+            "collection_info": collection_info,
+        }
+Folder: backend/app/services/__pycache__
+  File: ingest_service.cpython-312.pyc
+  File: openrouteservice_client.cpython-312.pyc
+  File: __init__.cpython-312.pyc
+  File: qdrant_client.cpython-312.pyc
+  File: extraction_service.cpython-312.pyc
+Folder: backend/app/core
+  File: __init__.py
+  Content:
+  File: config.py
+  Content:
+    from dotenv import load_dotenv
+    import os
+    
+    load_dotenv(dotenv_path="../.env")
+    
+    OPENROUTE_API_KEY = os.getenv("OPENROUTE_API_KEY")
+    QDRANT_SERVER = os.getenv("QDRANT_SERVER")
+    QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+    
+    
+    OPENROUTE_API_KEY = os.getenv("OPENROUTE_API_KEY")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    OPEN_AI_BASE_URL = os.getenv("OPEN_AI_BASE_URL")
+    OPENAI_MODEL = os.getenv("OPENAI_MODEL")
+    # Add dense and sparse model names to config
+    DENSE_MODEL_NAME = os.getenv("DENSE_MODEL_NAME")
+    SPARSE_MODEL_NAME = os.getenv("SPARSE_MODEL_NAME")
+    COLLECTION_NAME = "veneto_events"
+Folder: backend/app/core/__pycache__
+  File: config.cpython-312.pyc
+  File: __init__.cpython-312.pyc
+Folder: backend/__pycache__
+  File: main.cpython-312.pyc
+Folder: .git
+  File: index
+  File: description
+  File: COMMIT_EDITMSG
+  File: config
+  File: HEAD
+Folder: .git/objects
+Folder: .git/objects/0c
+  File: 0b3a8135657f1d287d23ae17e5985677dae8aa
+  File: 5e67b1b7b208b6a0a91a8eb14e8217017121db
+  File: 46561a9466a877058f461305513dcd8a5c7c5e
+Folder: .git/objects/d6
+  File: 3269ec77f1e3ec31bee44259a28d3ee4153366
+Folder: .git/objects/c1
+  File: 9596f6bad552be278eba6f1a77330e6a9bfcfe
+  File: 4c703a2c83235ce80e7e15dbd615abc3d2631a
+  File: 3abcefec4a1eb15e43137f90b62dfe9a1138f5
+  File: cf4b80c1a5a64ad4db6e3db35a0b3879f8b8fc
+Folder: .git/objects/54
+  File: 59ca53083488c8d746cd1a75e2a379a5888c04
+  File: b5a47541beca2543fa0647ad74c611aa246261
+  File: 387e26c582a9b6c035aeb91e3e17b14c1ee027
+Folder: .git/objects/88
+  File: f8b9705451e345d883c1ae23f9b77f76e77c9c
+Folder: .git/objects/53
+  File: acdf73f2c08b112f4b2954253afa08c57ddbf4
+Folder: .git/objects/d8
+  File: 9a09f77e83051b5ae3813841fcbdfab402c802
+  File: 2ca14d4d0ef658521158637060ee02d61863f5
+  File: 53ca2c7a3d2c35aa50867fabb63f25a4c0a909
+Folder: .git/objects/29
+  File: f3b175331ab880ea0861444771ddc81e2ca913
+Folder: .git/objects/18
+  File: 9a6be60c16faa177bbac11651d881608e800a2
+  File: 77d0c4969e405df693fdb9e1ecf3dff4fb78f7
+  File: 2bffdd43838d93274334ef05b0faeb488fdefd
+Folder: .git/objects/a9
+  File: bee212433ceb6b444d2328b60ed1032af3495a
+  File: f5340407f41dd662ce176835b0e9384d88068d
+Folder: .git/objects/07
+  File: c0ceab3baf082267510af3a6d42b9f7674fb9f
+  File: a03adc03e74c5d1846e07f21c88c6ccd73af82
+Folder: .git/objects/b1
+  File: 9d7c15f4b8b6fd1956558d938abaa6d900d9cb
+Folder: .git/objects/c0
+  File: fee2da52776ac211f2f78ce078495fd7f7385e
+  File: 964af648465481636ff591b5b0fb79bdbdb41b
+Folder: .git/objects/c3
+  File: c4b14a5fe643604f97e3887f41b58c0eb8255c
+  File: ab5ea1cf59bbfa1d10c888aaa06a1d1315bee6
+Folder: .git/objects/de
+  File: d01d8729c96661d9f93bc858a3d366c4346c69
+  File: 0e7f95bbce26dacb5af877a2a5322e7e811ff4
+  File: fa03decfb4a160fae00e997b42d3f14f0f1c76
+Folder: .git/objects/91
+  File: 4f9b5c8fed0cfc091cfca434a668fa086b2c28
+  File: 4f4b2a7cdbadb4cd4e49368cb6f43d8ea19e5c
+  File: 677922fd5549cc9cc8d3978e3d341d2c9cbc62
+  File: 23e5791d6ade59ead6c7dd14dd469d590735a6
+Folder: .git/objects/2f
+  File: 4b9fcd4c9f1102da9a727c58ec0e504764c567
+  File: d2f94b739a50225cbec78bd7e13274773e5b12
+Folder: .git/objects/4a
+  File: 60ee0f10c6f14a12e47c9c9947d03450e2d908
+Folder: .git/objects/cd
+  File: cd7d6f772bcf5aa2bd8a2d4f886103f506bd50
+  File: 7ccddc22c3a158f4048b6729daaf6968939402
+  File: a73e18b6c9fbe76f52b19554cd78d1b9f55952
+  File: 9d580e698e45e39ff47db0455528a10b9386eb
+Folder: .git/objects/d3
+  File: 04fa441b6a40ec9c0a12b3ab69843531858c88
+  File: 3b5b21af7001ffb0006dd38b072d0cf800df55
+Folder: .git/objects/f1
+  File: 9326478ea84c6e9a34bd5b37ef7659fd1b5ae6
+  File: 19e609f5c0d9d81f8201ba405c2c503e886dfc
+  File: 8ec1d4e2c14dd080966d800170cd4b2f3f73aa
+  File: 9454e153bc7e0f2c887a368dddfbfba5acd1e8
+Folder: .git/objects/dd
+  File: a187b66ddc0e328572dd3027be083be27c7dfa
+Folder: .git/objects/9d
+  File: c6f30b0185f1971be555c7619671bb394e8bbd
+  File: 3702a38cd59879f9e57ec876e1e0aa3cd7c2ba
+Folder: .git/objects/93
+  File: 633f1e3f9bb9ea784a19b852f8623590f142fd
+  File: ebeccbd267be4d3769e7579ecd584e15d34540
+Folder: .git/objects/6e
+  File: b27cc6c7d790d4c4eaf78b7eec95a594555cc1
+  File: b7d092ea8e883bb1041ab0fb41cd4c1b2f69e8
+Folder: .git/objects/97
+  File: 1f6ab2ff5620b26e1709ae25485d1d629b9c1f
+  File: cebb0810da6b0ed9f5d29719c91fa759b839c5
+Folder: .git/objects/05
+  File: c9849952f72fb59997bb673e845c4d5c34fd35
+  File: 0dcc53b1fe358ec464da2fee06adeebd4c2fde
+  File: bebfa271e54fb57ba576dbf5972bef3d12c2fa
+  File: 0a3070d590ffeca40c021818c7d4b8ad6d1a4c
+Folder: .git/objects/4c
+  File: 3c02c27cbf3aa01b5b2569e70130e978031205
+  File: ea60fd2fb90ae484406559c94dd037c3cc1d8e
+  File: 653dd354c2250aadebe9dd7219b4bca93a8e71
+Folder: .git/objects/40
+  File: 6744779c9f8028b2549a277a45c6636ecff1ab
+  File: 0588ecb9fa217ca3a433e58c4c58c692520581
+Folder: .git/objects/21
+  File: 5d82c4086c668a7fd0405489a0e2624d55e67f
+  File: 7f2f01d5e5c074d051ce8adc54683701fa9934
+  File: bdad36fbb24bf638f1fed1358a936d781f292e
+Folder: .git/objects/d0
+  File: 73f62f8a1b0dca462eece54ff55554eefdce32
+Folder: .git/objects/a5
+  File: 6de66cf658ce755e2da87b684d5f3ed5941fed
+  File: a091b691a485c97940473cad57c3a8622a5248
+  File: 2dfdd0ea656282facb1d93aeceb3fbac76a52c
+  File: 3434e5e49cfcb155fb956b01544834a5176d6c
+  File: e8a4a6f500d1b21a85f1d992f88a1ba16799eb
+  File: 0add65df8e775215b4e4fafa6c97f31075ed85
+Folder: .git/objects/76
+  File: 509c9c01d34028a2cb35de68dcdeaef3110fe5
+  File: bcf605bed7f165556dff3104a493a0168b4436
+  File: 0708167a6411cb146fd99e4d637ee851d328a5
+Folder: .git/objects/e2
+  File: 2dbbe837f22c83a875b00452409340c7d2bb81
+  File: b155ddc1d375272803cb1761bbd712ba3e0e19
+  File: 78cfebcb7d6dc84342cb5d18092763f0f1d638
+Folder: .git/objects/a0
+  File: 6512c7a46251e6fbffc671af3c536778244afc
+  File: 3824d37443130e755a1e94519cba31b89db61f
+  File: e0e700e105efefef5369a829e4336db8ec91ec
+  File: 43e69382c462e7f01c94e8598c8e9bf9b2309c
+Folder: .git/objects/86
+  File: 7aea01b84543a6139b431661084e850e7596a1
+  File: d3b37908c8e0a1438d12952368d004d6abe489
+Folder: .git/objects/pack
+Folder: .git/objects/28
+  File: d5753bf2b5dc28b76aedde68f81c4cec70d37f
+  File: 035ff0574437244995d22b075fe91bc9e62311
+  File: 3703d68937030e755b74df42bc945a8e6dbf99
+Folder: .git/objects/f3
+  File: 03260c0c97a94f40289b2061d587c340c112c4
+  File: 082ca36c8cb9ed4fde1c29453e1165dac0ef4b
+  File: 51938687b90709d4287b7c6e486fc0e0d26af5
+  File: 1ee437189e8434ad916aa22b4842c17c02cc4d
+Folder: .git/objects/3b
+  File: b5324477c61eac03d3c485077102e99f78faac
+Folder: .git/objects/ad
+  File: 1e5ebc98fdb907de12a92f827ca526cd8e5be1
+  File: 11d77423b1d6864280bfc7493ee4013e8c7dda
+Folder: .git/objects/d5
+  File: 746932e7f37e0db1b0673a1ec621ae90f2b565
+  File: e2f3a843526921f97a93e54b0fdee8de2185ad
+  File: 9ac471ac03e62d86d095bb190ec83dbe928a4d
+Folder: .git/objects/af
+  File: 791fa126ee27aa5e75febd0ab201ebb607a4f1
+  File: e2ef82087a43afd92d829b5b24feb5d256cc7b
+Folder: .git/objects/17
+  File: 1dbde176672b9821efd5d692912ca468152879
+  File: 528d5aa37fc9dd8dda5f55cc2410e648d8e252
+  File: e9aa60d134e08749e96907cd37eaf3ba08b725
+  File: ac10c9c164489da4c9d270af6c01ac0cc71f0d
+  File: ee651800b8e350e2da88b6c912627e3c46fd4f
+  File: 92f261812b237aa6a49549cfc7888abaaa84dc
+Folder: .git/objects/42
+  File: 8f3cd4e177fccd0dea3f5372ea5ab6626d4232
+Folder: .git/objects/a1
+  File: 73b0f72a1120cb27adddedffc0f1781285404e
+  File: af9b4cd4ebd26bab9a2af71ff4e54626e4e401
+  File: e62a7dcfaf33fa0313b63739cc39c6be452eb4
+  File: ea31a596d600be34ae2d1284d1598b10172163
+Folder: .git/objects/1b
+  File: ce5991bf38626a06ffa4fe2dec567d8ef01aff
+Folder: .git/objects/10
+  File: ad9a1f301258eb3473601a822b23db290c373f
+  File: 7895ef78dc63d9add1c064edf251ede7e775b6
+  File: 0f3d45e7583215e3683a93e8e092a3473b2cff
+Folder: .git/objects/19
+  File: 070ce4e3ab0585ee6a8c31520168085f390fc8
+Folder: .git/objects/6b
+  File: be8b62c7143afb18cde5a7f49557775d129e99
+  File: f893e3910d66e439b56f86d26362425c88d741
+  File: ff88f10b3060eb17fe27157e708289f6b55554
+Folder: .git/objects/0e
+  File: 618cef7fd34c3db4a0050b59e2a8e60a43700e
+  File: 6995fb4e4162d162f670cf93d202b1864a8b4d
+  File: 64de170d41c7b79bd135922cd40fd342134435
+  File: 9173a3e1473b3f2ea273ac58e80796190f151d
+  File: ed0ea4208c33700ed6ae4bcd970ff8ffc07944
+Folder: .git/objects/82
+  File: f711ca008bd0da32c6ff3ec38be20a9787cb0b
+Folder: .git/objects/3e
+  File: 91c542d6b00be6938aac28beade93e6840ab93
+Folder: .git/objects/37
+  File: 1ebeb08da65f8a0241ae21120ed835853586db
+  File: 5f711e5c9a0fcf35cf0776feaac90077f57238
+  File: a3b457a4e404c6d961be618f12a148d715151d
+Folder: .git/objects/22
+  File: a9c461a5c0036dfda99b3b48f129bb45d02f82
+Folder: .git/objects/ed
+  File: f7a7b618ca92b746f4dff227332bc4ed108e9e
+  File: bc46db98667cb603fcd75b1f736d260bf354ae
+Folder: .git/objects/e4
+  File: 76a1820f6963705d542c777ca064a9f803d401
+Folder: .git/objects/74
+  File: 2ab2cc33e9ae52e9dc700e98ea7bae0d50fc46
+Folder: .git/objects/2d
+  File: 44c3d19f42768e03f20b66f363101dd0f3e0ef
+Folder: .git/objects/90
+  File: 18da8ecd5839335057280537dab78ced178bcd
+Folder: .git/objects/b2
+  File: e84d45da855f3a4f635d441c26ca2869f6a73f
+  File: 60bd44795bc97b9bd35634344cf2a40575608f
+Folder: .git/objects/ba
+  File: 543bb2ae68b7549dff308b0e9502791a81eab4
+  File: d6035bcf8c1fbb4f79db993b2d410ee8b56e21
+Folder: .git/objects/ce
+  File: 376ff98290e2b623b8719cffe6d7ca6cdeca06
+  File: 046ac2461a36d0ccad67dff0fa18aa187cddb6
+Folder: .git/objects/e3
+  File: d6e1119e7e2dab98c29da5e5b3bf4442835a10
+  File: 46d4a1d3eaadb5ad1d9dab76d6b7500d752a94
+  File: bb019185d10ede492be7dab5b716cb34f2cbd3
+Folder: .git/objects/61
+  File: 99968855e236a4c83333002f1526d2ed45e46a
+  File: 8b988c703e9349d778ec3754268b3d68620e8c
+Folder: .git/objects/69
+  File: 58a279caf2dec0c5a8c1d73269265e24a65fab
+  File: 8cdf1cc71ab7ed107f9aaaf4306e151ce2878a
+  File: fa277af43e49b71ca99be341fa4600253c900c
+Folder: .git/objects/5a
+  File: 48dfd964048cd9b5dae4ddca1747df0e38f375
+  File: 0ed8d7b289dd3d90634166b0c69ba232d0126e
+  File: 52b3449ea59bbd5857b138af4532a9f4ee5588
+Folder: .git/objects/3f
+  File: dde39a6e91985663e8dc90bc5adbe0b59e3d4b
+  File: 8cabd2bcda1a423366d71acb22386e79e2751b
+  File: edb0c219d4b45cdc3c2fd1b7c77494af2bbb22
+Folder: .git/objects/f4
+  File: 8d16dd0779196ac5891a4ce0154040a3a22db5
+  File: 4d4f3d776989c90119507dd73db29a669638f2
+  File: 17e8dca43192f30982b71bba155423085be86f
+Folder: .git/objects/b3
+  File: 41642f3009b0ad35293dcb150f9c996d3a6696
+Folder: .git/objects/9c
+  File: c05d857e22aa7eb24aa3c48831eda3bdf5dc9c
+  File: c89e4725bd278224bff9d38e0ff7e84b6c2a98
+  File: eff1eece23e058d04ff79449fa0353f8553455
+Folder: .git/objects/b5
+  File: 64cd3410df49ba8635a9f7ccee3ff24138b336
+  File: db58bd58220fcd16e6d025c52f9a157075a9c9
+  File: d0c4d91d81d5ff426174761a0fe8fbb4102087
+  File: d6d2c407692c2b23c67ae9455d381d0c5ae2a4
+Folder: .git/objects/ff
+  File: 0fa4ae6e37d29714a40a8852689cf9ad7df4d4
+Folder: .git/objects/2e
+  File: 92f1d9fb86f180a248e72a9b0fbb0812bd5bd5
+Folder: .git/objects/64
+  File: 994792dc289932773257396d5d835d67fbcb41
+  File: e4b1b8131366865cee50567750f85c303f5d7d
+Folder: .git/objects/94
+  File: 7d40748ab3b0d1c046a1d20b665fb02fcbece1
+Folder: .git/objects/a2
+  File: 193bdaae5d6e88c3be86c2e43a944e0ad81176
+  File: ec1452d1feeb2b1a858f7b0550284d29f1837f
+  File: 56ea41250ed289863e93b43359183ce54eaa01
+  File: 866ebaf0c142972c99e5340f8c4f99972b0880
+Folder: .git/objects/3a
+  File: 734b969c44d959ce7b748e5bf354dd8299cace
+Folder: .git/objects/5e
+  File: 3b6b644a09f69e9716337c63b746f000391123
+Folder: .git/objects/c9
+  File: f0d1a82498f891f606bae2247d9a4162e9c3da
+Folder: .git/objects/0b
+  File: c15d964fb7eba2d3c9eb995fa8db1708df9fb3
+  File: a8239b94a6755cfda123d8b74b48aca1592166
+  File: a25e0e9d7e671667d084c8768d71f81498c01e
+  File: 1471a36841b2e6f1b20ae0260b3d1547218f6b
+Folder: .git/objects/2c
+  File: d62c00eaf610f7d0ce3c790e5dcc53948a4d4d
+Folder: .git/objects/8c
+  File: 5c915be9a4df1df13b516e741a793ae3e3b047
+Folder: .git/objects/39
+  File: 3cedd259a15267fd910494f1b0bc1f26427ae0
+  File: b08b99929bfcb4822241bf9d0ff90bddd5059e
+  File: 6c82807db18ddf7f05989376d8a674cad90d20
+Folder: .git/objects/c2
+  File: 70a556f28088ba1c0e1cbcf7c66d5e8272f355
+  File: fb1714a41cc960e67390fac91b3b85056ee868
+Folder: .git/objects/60
+  File: 4470f1300f5beac736911362f9c52e52b53244
+Folder: .git/objects/06
+  File: 361d03bb9c1992da1220dab125b0ed14977251
+  File: cabd6edbb48734feeb2610a95b730712924403
+Folder: .git/objects/db
+  File: 1d8533575eb2f701a6207d76a4612ec5d8afde
+Folder: .git/objects/6d
+  File: bc6427c0ad6682714ec8f1904f04ac7a206f4d
+  File: 35283fedf3db1b4d7257e8dd30a89ef3e5a601
+Folder: .git/objects/ee
+  File: f2ad97bed63c9d02fbe78f05f1241b34352613
+  File: c28eacbaca5cd3afc11688261ef70ad200c299
+Folder: .git/objects/6f
+  File: 9e3680e6058d0dc4c848a02e4fedb925877220
+Folder: .git/objects/a7
+  File: 958317301709972d73848a68c3112b4177c91d
+  File: 36b7c0dbbca15a19efe424675484ea5b4bd935
+  File: 0fd4b00f5f5a74c84cb2b39882d9e8679fee9f
+  File: 136e93e3f044750849fc9f2644399a6497e45f
+  File: 4b9753333a2e10135a82b7a5962da0c13c8edf
+Folder: .git/objects/b4
+  File: 2c5f53c9b8cf3af0b0bf4bb8d45669b7fdc188
+  File: a3c7f420bc057bebfd04711f678e60a2862a77
+  File: 00fb7592d4c15832ab4670ef276eb3f87d80c5
+Folder: .git/objects/9b
+  File: c7dc01375d7a674a6c27466821844de2ba72d4
+Folder: .git/objects/6c
+  File: 58ed4ff1524c65a8eeaf6d4518f183f07c6ce5
+  File: a44c9ecfa229185ad63627beaf5d8003bbfcf9
+  File: 7ad5189b31a005039f9cd9f3f98265b0a46a85
+  File: 8d171d813ee53108207066987c01cde7ea8d83
+Folder: .git/objects/fe
+  File: 35af8ceff1e6f2a20ef0966e596e185d649fa1
+Folder: .git/objects/c6
+  File: bb62c6d2747ba21ba42796611fdd845b223d24
+  File: a3082d21090acce6ad6509d7133574a11fd460
+  File: c3eae2c8b84e8e10ed2d3cbeaa52cc98d2b67e
+  File: b75fac5dd06503ba039f251b00a20105b34756
+  File: 923b6ca67a0d68b649a5ebaf3ba8f65bbc22bb
+Folder: .git/objects/ac
+  File: 9d90d5e8d2c4c26bdee97cece8de5117699dd1
+  File: d1e30622168f191212b77f3b399cf0ced3e5bd
+  File: 66b07655fe51dbd14ca1140d5a7cb91a91e6bc
+Folder: .git/objects/2a
+  File: a1d1804502f9c2d104a72d4ccad8ce4f7cb024
+  File: 5bddbe0a26d3aa1f7330193ad950c7446992b7
+Folder: .git/objects/09
+  File: 0e9ba9f48ce34fb8e8b28a438b82e8a061a816
+  File: db2a4c05bb009eaadcfc979a382871c07dfa99
+  File: 3982cad2e13414497a73c9275e1b54cb43e751
+  File: 654ecb4edd52da296e72675138dee942c6ebcd
+Folder: .git/objects/dc
+  File: a4451dd1b202a64be3775fff616229b4b68cf2
+Folder: .git/objects/d1
+  File: 2b84bfbf80b74602573c333fb4fae5f3b01620
+Folder: .git/objects/96
+  File: 2f516e9ee20f6640174a922aa92a2a11fdc06f
+  File: 69f65767ef50f22e1d3eb66310cb8b51673a4a
+Folder: .git/objects/bb
+  File: 666295abe18bdc342d405573b354ac8178e130
+  File: ed529388bbce80e161d9bc62dfc7d6aac3e7c9
+  File: 03496d08b196635c3644a003c0d2e8748ea9ed
+  File: a4dc96ea394268b4476e935ff8a0e5efcee69c
+Folder: .git/objects/80
+  File: 054cb364c50236e14c4a3bcb6577067b9cdbb6
+  File: 841c90f0c88883d0407e4d583e24c76db9a8fc
+Folder: .git/objects/d4
+  File: c9dc643c7cff1374fef1e87a886698ce45ba3a
+  File: a3dcb8d4d5f03d20bee1ea8033323788d926a5
+  File: 112317697803ea41f065c6e6c8d1ec1d4f7c69
+  File: e251d08fd44564463167fa6f5bd58b50e20627
+  File: 2cd330dc5ffeb9276084d1e9016acdec016fbc
+  File: 57ab8945330add1f5ed8c948bf12b7d2054845
+Folder: .git/objects/9f
+  File: daa5844fbe535af48a83cc96a67018efdba785
+  File: ee1e4eb60953f9ec1221ec9d21509174d66e9a
+  File: 608adc3660f4ccedc996fd8938c6b15b1e4bb0
+Folder: .git/objects/cc
+  File: a306bd01ec75acfd80dee60623921fcf7dea15
+Folder: .git/objects/b7
+  File: 7892e503cc0ba55efd7e6667cc0ad2cf9b6744
+  File: 1535361863fd4d34ff0c697e3cfc25c9190d34
+  File: 476acf7907d4e0294d3245e33f88dc747f5065
+  File: 69a1e0f4c2701b8b5688d1eea68dd751297273
+Folder: .git/objects/65
+  File: 47020d03d8495d3d0834dded3356c1896366cb
+  File: eb1c34ec70c30f57e09f65de6da482b935853c
+Folder: .git/objects/27
+  File: 6631d65b8a5de4b67db4b32d1bc725181345bf
+  File: e03a87c29ddff0812da366d6bd90b3bed6ee4c
+  File: 4606519171f6f5880f29dc1cdcf029d8720a91
+  File: 34a1217ec0d8aeb71c96f58b238768fc60d890
+Folder: .git/objects/ae
+  File: b7787110f2d356dd93519b1c85cd3897fcc140
+  File: 7c25a4cd9d24f267a6818120de745073f8cae5
+  File: ff42d3821de1b86a12d655528a4135b95aa169
+  File: 719556834d8e31628f2b7ab32f18652bdbbb22
+Folder: .git/objects/b9
+  File: 6b2bf78ff60e44a6927a0e88ba37850a685863
+Folder: .git/objects/45
+  File: 73c6e256dd71e6bd6787b5af8851827afe628d
+  File: 5100c389b69ef2fe8bb8e144513fdcc723b93d
+  File: 5d7e0e6d453c697e9f69997ae130d30717b8aa
+Folder: .git/objects/51
+  File: 9c00732cec724cf38f3de049c695aa778ee890
+  File: 49738911abe3e42df35950168feb077e99768d
+Folder: .git/objects/8a
+  File: 93dcd17faa1db6b05fef5c09c4d3876c473ff2
+  File: 526cfbbff686001c8e3e637071dbab772caa9e
+Folder: .git/objects/fb
+  File: 93537bad7ec41120014147fbd26801dcbf7dfa
+  File: 229fe11a6a88b3ed6a3d967080bf320a6d8653
+  File: 875dc9664d36c34ede643c2638d83a9caaed8e
+Folder: .git/objects/7f
+  File: 838c7027c2be577b4092d923871864bd0573eb
+Folder: .git/objects/4f
+  File: 4fe92f14638c9fd60a8fbbd528a9f25c95829b
+  File: 0bd95f76ce6027490dd69b23a47a4a831d172c
+Folder: .git/objects/03
+  File: fb3886e2c2cb25187a5cf8ec25829e68f7211c
+  File: be0f107b0245d1518d13838be23d56966ecb40
+  File: 08b105a8a670b059bc5374d509022c04d3adfc
+Folder: .git/objects/98
+  File: b49e22534b98a1a2ccfce4e125c911bd304990
+  File: b040a602295b2abee8078e1b6a952b2d01d84f
+  File: a189c6c2d75429334a6716c96611a25837093a
+Folder: .git/objects/e1
+  File: 814b3ca24acc3e92bcfc29c0eeab010b647e8d
+Folder: .git/objects/fa
+  File: 3009904d304549c889eb4bbae86c5c5d800c19
+  File: 5b8d0a6ddef3cb7f151b7d6ec8c6421592373a
+Folder: .git/objects/1e
+  File: cf0ae9044948b85b6233ef896d69bc08b749e8
+  File: 904bb99e9a4cb0cb468824030189712c1a42b6
+Folder: .git/objects/08
+  File: cdc362e8ba3f0a1370abd00298975a41834f74
+Folder: .git/objects/01
+  File: 687a344d69a79321925227edd50faa089c61c1
+  File: 8a5bb918c9d859eb10fd48e8e086517c90af6c
+Folder: .git/objects/5c
+  File: 23248b3cb7c6494c7dba71ec291e5adf96dc43
+Folder: .git/objects/31
+  File: 0ce2578d28b7f1f079ed11ecc3def17f45c579
+Folder: .git/objects/6a
+  File: 209920623baa9e805cc727532129867149a58b
+Folder: .git/objects/32
+  File: f8578a2fa163c8df199a759cbd583e60397431
+  File: 55e1083dfea228bd1eac143e0bfaa597aad8f6
+Folder: .git/objects/79
+  File: 51c0c9e8d93e586130b150f04914a5a87a815a
+  File: abd77613e4b319d32e1cbb2ef081c3f057c986
+Folder: .git/objects/c8
+  File: 616b25f2757309b8d335c0d9f3e54ec4f3f0a5
+  File: a9cfc9f9976cd86889aadcd05df9533e4bbf9d
+  File: e85656d6b5fc82618cb55e3b37e724b3870cdc
+  File: e63fef0ef48093616e1894c64252a00c6e71d2
+  File: 28248df158022b71174df0a129506880f0a520
+Folder: .git/objects/a6
+  File: 4a125a283ff67467a224c03882b6e9a9d07d4a
+Folder: .git/objects/59
+  File: 92d62580067988d394014e8cc884bc88ad1e06
+Folder: .git/objects/49
+  File: fe58df4e4b61d5dee7e81a82da3c98984f8d7f
+  File: 37a92878609ef0972d8cf9b9122c987e3ac3a8
+Folder: .git/objects/e6
+  File: 9de29bb2d1d6434b8b29ae775ad8c2e48c5391
+Folder: .git/objects/1d
+  File: 565f94d37503fedc753e368c56071570661b7c
+  File: def14c64f8c0b1e47a7bc238bbdef8184fee4f
+  File: 3ce5fde2c92206977ebb36f8d103c3b0617135
+Folder: .git/objects/36
+  File: b13fc463538c0d43ba09f93d39b369f88cebea
+  File: e57ec72965f38b7b43face00ece04714b2c1ff
+Folder: .git/objects/7d
+  File: eda68057a761d9fef558a9c0b2d6fec3df91e8
+Folder: .git/objects/68
+  File: 0774fdd5e17ea775a5a454ea2f6d6f3de37523
+  File: 447fe0459fe26b3d2e1fcf3a35c1cffaa7e76b
+Folder: .git/objects/ec
+  File: d87c16558a0070e74159b1403cf1c69637ef6b
+  File: 42153f490b50524b75294f2af367381607a69e
+Folder: .git/objects/a4
+  File: be962af929d3c8ae198ab38a0cf2deb403d66e
+  File: 27a5e5966ba2e9e90476b77b74e8aa67430e43
+Folder: .git/objects/24
+  File: 65346333175689f0064ca11fdb46c7b237e98b
+Folder: .git/objects/87
+  File: 40d0c135b608793a355be96c7d61a7a2aa3ffd
+Folder: .git/objects/56
+  File: a5343de80a03a99ce67ef55afd10570439ff61
+Folder: .git/objects/f9
+  File: 358d7d982a5b1efacb21bfd30de90d75f59ad9
+Folder: .git/objects/63
+  File: 8fffc2cb71f2586894d69b05ae9ce62d4bf6cf
+  File: 74787b0c11006a7d16a34ea326a31f66101b5c
+  File: 62ac7e4dc2fd574a42908fc5fdedccbd46ec33
+  File: ba38799f631d0f3514424e92afa0087c0cda93
+Folder: .git/objects/83
+  File: 241f57c1ebeff3323ad5e51165fb23d5b7b0b0
+  File: 1261ebbd28d6a27639f813a7513fcd49ba4a82
+  File: 024559cd160ddfa88a2495dba8bf09515bc1cb
+Folder: .git/objects/f6
+  File: af692f389aa0b00d9a54bd85d1dbf76b82e5d4
+  File: f70ca74ed93dea3908573e2df20623e8236e23
+  File: fd330caa7a31da3ed2653a47f4bd30ad9e0a80
+  File: 7bdd601bf3be5c4c13ff25a6331e85ef0821bb
+  File: 42f4514ca3b709ff062e76aea0630236cd702d
+Folder: .git/objects/c4
+  File: ac7af52ccbcdc4027ddafb47db87abad60f64f
+  File: 80f1975b7f3eb273f5df009bb38211114cc2bd
+  File: 8161721a861d066b7cce958238b80c5cf0b8e7
+Folder: .git/objects/77
+  File: 674fdf1fb4d7af783418ae5ee13b849d60f569
+  File: 4f7e868d22be496fc954de62f6a8847c5d81fa
+  File: 796cbe1bc256b4d283fbd5b5023215cdd3337e
+Folder: .git/objects/a3
+  File: 878eb455f0074de1ad1d3bae888798e75e2af4
+  File: a887f1bf3becf8c94bbdfc038b957e320a39aa
+Folder: .git/objects/8d
+  File: aa5f444f46b87b7b7fccbee9271bdaa8b21f72
+  File: 916eb8b477a33d3753eae7d3686423915a35d2
+Folder: .git/objects/c7
+  File: f565f89d4ebf57f93db22e5d9b6b69bc0d998d
+Folder: .git/objects/3c
+  File: ce8e46d3cd6f59f361cad2885f3eb6f0272f95
+Folder: .git/objects/34
+  File: 4ad01c54b6aa9e82215ea9902e1e050a0f8bc0
+Folder: .git/objects/00
+  File: 8f201bebfad78053638406d99120c665c2ac34
+Folder: .git/objects/e0
+  File: 2efababae8b71b89fd8624274dd0bb5305b62e
+Folder: .git/objects/48
+  File: 1996be981b6dd07549dbaf814d812ebfefcab4
+Folder: .git/objects/d7
+  File: 2de7b765c090d8b2e8b215ab0d050e3d131770
+Folder: .git/objects/30
+  File: 2cc980a6761db8f017119fed79a03c35afaf49
+  File: cc385585022c2b6857f38370bd929b6cd2d342
+Folder: .git/objects/12
+  File: 622ea9d7f98ae5a9899b627f173080830bff67
+  File: 5664724faac2a77228ddb1b8746ffa8b67bc9d
+Folder: .git/objects/52
+  File: 8c6da9e8383a98510a7c6e152257b50a11a96b
+  File: 446521e07bf16e55af5be66e75317080b60aa6
+  File: 9615f257ea099642df061c3ba06720d931a4f7
+Folder: .git/objects/70
+  File: 7834b4063519f451ff0c84e09325af04516b3d
+  File: e3f0f484b3ad8736df8113f067337d0632ab5a
+  File: 81a40ce63a102b110324f4c7e720ce1c1ae22b
+  File: 27b46b75aeadd32d347816f1ef08e253474dd6
+Folder: .git/objects/7e
+  File: c73d2dedc8d54dd74ad82da1ff0697c6af537a
+Folder: .git/objects/cb
+  File: 8f2430cb22fadf776ae72a50b5fd67627b528c
+  File: aebeb1dca50caf341dd9b4ff487082ec257927
+  File: 2c67b9fc81f32f1f3cdee1123a52c7e1401d3e
+Folder: .git/objects/5f
+  File: 967bc6dfd5266fed1336b95361efe760602b66
+  File: 6a1a3ebe8e27f33531520f02c7e4c7d2ff0448
+  File: 7c7bba074379da7e19be90459b813d384f202e
+  File: 058a5921e273051606d5179d4e5c5afc4e7e3d
+  File: bf857086cabe8e5ab241ef8244eb7bf8fb68a4
+Folder: .git/objects/13
+  File: 3147664a0d398be47dc498e296d404b9c44caf
+Folder: .git/objects/f0
+  File: 24643fa05dc426a28aaed8e4add3300b6f2dad
+  File: bad1a13ee0de487f1b70baafdf295180a01aa4
+Folder: .git/objects/67
+  File: 0dfdd03b8278e949787b902a6518b1ab046bca
+  File: a41a581412384dca952ad1a21026883ce47bc3
+Folder: .git/objects/62
+  File: 02946ef3bb772b8454278e90c0f246a7a22740
+  File: 59910e012707cf8a8437257217714af650e377
+Folder: .git/objects/99
+  File: e9bcdda32a2d67efc5deac5514d5223cb51126
+  File: 46b064d3f0ed189f70778ac3d204bb572ac65f
+  File: 3637a16901db8b511a241929879861702bbb6e
+Folder: .git/objects/ea
+  File: 8ce310fb3067656ad8f9929c9b5dc85c2bb109
+  File: c920f1c8b1e85168ef2db164af4b68a1a1726e
+Folder: .git/objects/02
+  File: c017238144eb09e2e802c7619590b7c3a927ec
+  File: 9b7538d87c296e74f259162c047f3f49aa7b69
+  File: c5cafe3c16b36437645a04507fcea642fca6ed
+Folder: .git/objects/15
+  File: 01b6575f833fb35689afca720c73dd49f845bc
+Folder: .git/objects/25
+  File: 0a57b4da4b12d4f2bea171cc64f680382739ef
+Folder: .git/objects/35
+  File: 0189cbfbaac0216818c69ecc3c5dffb69f086e
+  File: 5239ad676fa12c28b54de3cec57cbc331492dc
+  File: 480c9883925b52467d3f8b845a2c7f6a0e37ee
+Folder: .git/objects/c5
+  File: 9f414012dbd11ac75d2fd072813414bf6dc0a6
+Folder: .git/objects/5d
+  File: cc88fe6d0e1089f771fb5868c4a607146f83b1
+  File: d116421149680dcb75ba38e851884757d0e7f1
+  File: 32610e3ef5e4919cae5e685e1e144f57c41726
+Folder: .git/objects/e5
+  File: 2c4cf53a277cef19c6bec7d017eff0985900f2
+Folder: .git/objects/11
+  File: 25435b80eadc05fff9fd06010759149263ea50
+Folder: .git/objects/e9
+  File: 5ca059c2b19e2101b70dec05ab593c5da97816
+Folder: .git/objects/89
+  File: b932464092b3007b8dfa72f27c926ad97024a9
+  File: 560bb81f6ea893a772ff45b6c721123fa325aa
+  File: ed700be07c004acd8c3b44c6a21eb9f22f7322
+  File: 0d3d7fbc694540c34c64156de40c4fb64f8fb9
+  File: b12e1604bfd76ff4fe093fa6cf95a9557e3e9c
+Folder: .git/objects/0a
+  File: 5170dc4194cdab0bd2000ac3a6b6e44b62f9cf
+Folder: .git/objects/43
+  File: f5b77465442f38b0f437a16981b5199d1ffd64
+Folder: .git/objects/95
+  File: 1fa38203b5f62a2a79c5c5983fa7c8934f8483
+Folder: .git/objects/71
+  File: d456416eead392772e5b1ec8827e8c0ff66f11
+  File: b1fe315652ee4d72600bdeeb7db57b562af629
+Folder: .git/objects/38
+  File: 93f4df0652c495f3833064e1435e5b0e6588cc
+Folder: .git/objects/7c
+  File: a15a79e3914160057e7e9ff9f2d25d78b7a390
+  File: 86cb800aa343ccbd1e2de2323feaf14257d357
+  File: fa7eaa87dd371ca025b414af659bfa38add54c
+  File: c42f2dd22c4a0a283a2cc8e50b727c16f8d857
+  File: 3aa27e8b0759cb65d158ba154c2d299af82d7b
+Folder: .git/objects/75
+  File: 17812c8fcd952c00c0fd2f51529a6ef9b3073a
+  File: 2df3a25084a0360d7c245702805d39d984addc
+  File: fb7ae6a57b757fe862cc4f929aedcf975f1dc6
+  File: 41d847e91b396ba06027ccbc73b6370a01a28a
+  File: 13215bf8631ce00e8df56be89a238406f61619
+Folder: .git/objects/a8
+  File: b3e8390292ad73272db67f283239b92cc36d1a
+Folder: .git/objects/be
+  File: bcb776177749d855784864ef9f4050ceadfe19
+Folder: .git/objects/e8
+  File: 62e59420bdcdb3794b2ec22896ae25cef5ac51
+  File: 3130fbf2dcdb428c27c3da18379be459d53111
+  File: 21eba1f886b5ccf5cdda28faa8848b01048528
+Folder: .git/objects/info
+Folder: .git/objects/04
+  File: 29ca5e5e8670f27282188f62b17f142474956c
+  File: e6c89d4e79a73c10394e2dcc78193c4e2bfa33
+  File: c03e4bceb87a4c7c1e2057934fd7e0ca77c371
+Folder: .git/objects/57
+  File: c03eac1c373edf78b4ada8ae3a16d699b487d3
+  File: 8fe250df9c0bddbe8d343f35f40ad7c8aac556
+Folder: .git/objects/20
+  File: cd0709d0baf0081859769f016b005517c795bb
+  File: 2fd351a76aed4e3125c166b4a12adf12df14cd
+Folder: .git/objects/ef
+  File: 72235e73b3a13181e115f43009e5eb222399e7
+  File: 0ee1f7c3116060de98696663616526756f6b77
+  File: f0b68179d34b925072200f07b4f54bc97d15e5
+  File: 18655258eaf1e033bf891fddbfd4468cb5d4b6
+  File: 1d3b0460bac32b6f503b4a2bfdc9c517a3ecb3
+Folder: .git/objects/cf
+  File: f7383b370c5f4f0a029fd1cc0313e7cd412de9
+  File: dd048e3b226b466ba4769703100b02e3533ccd
+  File: 0fc6af2f0f7cf61a039bd1993459a9ee006c85
+Folder: .git/objects/f5
+  File: 60a199f1088530e8074b3be18f8a1b70d281e6
+  File: 5031304d24b61f607c8970dec94c1c65afa0a7
+Folder: .git/objects/16
+  File: 7c5809baf0e41d64a75c5488285ebfb6d31630
+Folder: .git/objects/8b
+  File: b16cca2e4998ed3565558ddc14d11e5d915a00
+Folder: .git/objects/92
+  File: e7a913cf1514caded89ca4e1a61fc73968f26b
+  File: 6e63f086787e6acb712def0deb919e0e3ea3fd
+  File: 24337cf34b3f77282ff7a25bfa2422e7b649d3
+Folder: .git/objects/bf
+  File: c6657a6ba5c21c32f68e4d68f72e11f2931e9c
+  File: 3fe2cef05cba424cdd1a988cc5d948efd9a567
+  File: 893db136582e1dce7ee34320cb36f65ce66fd7
+Folder: .git/objects/26
+  File: 14c0594394a715e730aaa0b6bdbbcc018c66f0
+  File: ffa4c8e1f63fb77dd4d4e5a36314b1dc67d7f9
+  File: cbb6aeb2aab5686aafed0ab6c75c67729c0993
+Folder: .git/objects/50
+  File: d38a969d320c7da22db8dfe72d34f010aaf124
+  File: 59ec182d33f1743d7a819176e8d227ed514549
+Folder: .git/objects/1c
+  File: b68470875de6970b18e6aec55378735698ce56
+  File: c4592555ec82c2a2ed7011a51d18bf53cc5e65
+Folder: .git/objects/aa
+  File: c828f5755018860e52917f1f88afc691c8ce90
+  File: f4e4830e3baaf260ae74a2db335d106f7508f3
+Folder: .git/objects/81
+  File: 15f6af444c92b13666e83800b8acfc2aad0c7a
+Folder: .git/objects/46
+  File: 7206833e4571723b1726da01f9775d4dbab9b3
+  File: 3b23ac31720e7023c2ee487ea234de11cb0da8
+Folder: .git/objects/7b
+  File: 2a3a1e4103d73483ed7cb326f9609e6a6f68fc
+  File: 491ee75b862fc2a9e33e0dfde62f559dd28fca
+  File: 962b4b7141b0190fbc785a85597a6596170773
+  File: 31bb89136ef3b5ae3fdcddd29cfeaf7e69e1b6
+  File: 0da3432dca23afc0fce4857c24ea4bb5403f5d
+Folder: .git/objects/14
+  File: 4563d2c7235af33f5d4d32e768022d3b2560e1
+Folder: .git/objects/8f
+  File: 8ec1e5ca7ae0b272c5dca5800880b512550d53
+  File: a9c4f2715466c7f25e1f0a38e44905888c6b76
+Folder: .git/objects/4d
+  File: c307f5827c4350f1c3393204c76ad4bea5c6f4
+  File: 956808cad913541583d304f54ab200fd073279
+  File: cdc5e30c04e4f73c96c4fbf5db3690cdb33626
+Folder: .git/objects/0d
+  File: 56f0d14bcb3f122ef32be45215d003ad00925d
+Folder: .git/objects/4e
+  File: 1673ad99a7dac81728d429b3e30b68ffbda228
+  File: 0ad417d0fe566d003954ee96341b71a33d7dab
+Folder: .git/objects/73
+  File: 9fe9c6967661594bc09cc1e832d35e24b3272e
+  File: faff517337478955a5e633a59009c4590f5957
+Folder: .git/objects/b6
+  File: 464d4a971ff4b3866074fe5eaab2ddd65412ec
+  File: d7b3594b152c50cc6aad0966a361ef19a9ce79
+  File: f3060d794ca7e60ad075ea9a711a8eac7fd016
+  File: 3a05aa1908c84cf5941de950c565135e3d092c
+Folder: .git/objects/84
+  File: db877c5d328859e8eda018351be07399e09462
+  File: 47373383da49fc8dd5a34e69223608fe061e67
+  File: e92578a8b76754a404f88780525c5f21862d41
+Folder: .git/objects/1f
+  File: aac00377e06a9d4119dc3f59cd4ba41dd00663
+  File: 4a4705674b60ae54ef37f0bf54d8b5cca15c12
+Folder: .git/objects/72
+  File: 5cacc70672c7fa6710f0bc1f42010d9b73610f
+  File: d4d1f1b075c4ed5254a754ba57b94e7a1a6d23
+  File: 412794349815f7bfe7894166cf4665a24d7027
+  File: 57392878f5729a108b33e5cf81f259c7bfb5f3
+  File: 552e823dc72392a20752ea883c9d7cd1719000
+Folder: .git/objects/e7
+  File: 8e125c416ce8148efff213cc61a8d1badc8e93
+  File: 90e3aa3cdba7a46a6cce29556f3c82f592b8e2
+  File: bb89eb24848f9e5de59a0fb1fd9d9e815c9fd5
+Folder: .git/objects/d9
+  File: 6ba678bbc2d39b489cfe55bad5bb357f11f37d
+  File: f383375a27b45ef87386297467d40380ecdc78
+  File: d21b2cd16848c7160b24a856b20de63f72565b
+Folder: .git/refs
+Folder: .git/refs/tags
+Folder: .git/refs/remotes
+Folder: .git/refs/remotes/origin
+  File: main
+Folder: .git/refs/heads
+  File: main
+Folder: .git/hooks
+  File: push-to-checkout.sample
+  File: pre-rebase.sample
+  File: post-update.sample
+  File: pre-merge-commit.sample
+  File: update.sample
+  File: prepare-commit-msg.sample
+  File: applypatch-msg.sample
+  File: pre-applypatch.sample
+  File: fsmonitor-watchman.sample
+  File: pre-commit.sample
+  File: commit-msg.sample
+  File: pre-receive.sample
+  File: sendemail-validate.sample
+  File: pre-push.sample
+Folder: .git/branches
+Folder: .git/info
+  File: exclude
+Folder: .git/logs
+  File: HEAD
+Folder: .git/logs/refs
+Folder: .git/logs/refs/remotes
+Folder: .git/logs/refs/remotes/origin
+  File: main
+Folder: .git/logs/refs/heads
+  File: main
+Folder: notebooks
+  File: 03_querying.ipynb
+  File: 00_utility.ipynb
+  File: remap_structure.txt
+  File: 02_crewai_sentencetopayload.ipynb
+  File: 01_eda_events.ipynb

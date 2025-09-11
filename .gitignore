@@ -28,3 +28,6 @@ dataset/veneto_events_geocoded_structured.json
 
 # docs
 docs/old/
+
+# notebooks for local utility
+notebooks/00_utility.ipynb
