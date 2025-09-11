@@ -19,9 +19,9 @@ The **ReMap** project consists of three main components:
 
 ### Core Modules 🧱
 
-- `app/api` — FastAPI routers managing HTTP endpoints.
-- `app/services` — Business logic layer (event ingestion, embeddings, geocoding, Qdrant querying).
-- `app/models` — Pydantic schemas for data validation and serialization.
+- `app/api` — FastAPI routers managing HTTP endpoints.  
+- `app/services` — Business logic layer (event ingestion, embeddings, geocoding, Qdrant querying).  
+- `app/models` — Pydantic schemas for data validation and serialization.  
 - `app/core/config.py` — Configuration (constants and environment variables).
 
 ### Key Backend Components 🧩
@@ -34,15 +34,15 @@ The **ReMap** project consists of three main components:
 
 - **API Endpoints**:
 
-  - `POST /create_map` — Generate route, search nearby events, return sorted list and geometry.  
+  - `POST /createmap` — Generate route, search nearby events, return sorted list and geometry.  
   - `POST /ingestevents` — Upload and ingest JSON event files to Qdrant with deduplication.  
   - `POST /sentencetopayload` — Convert natural language into structured query parameters.
 
 ### Data Flow 🔄
 
-1. User request triggers map creation or event ingestion.
-2. Backend geocodes addresses using **OpenRouteService**.
-3. Events are retrieved or stored in **Qdrant** using vector search and geospatial/date filters.
+1. User request triggers map creation or event ingestion.  
+2. Backend geocodes addresses using **OpenRouteService**.  
+3. Events are retrieved or stored in **Qdrant** using vector search and geospatial/date filters.  
 4. JSON responses return event lists, route coordinates, and buffer polygons.
 
 ---
@@ -59,14 +59,14 @@ The **ReMap** project consists of three main components:
 
 - `streamlit_app.py` — Entry point and UI logic.  
 - Supports:
-  - Manual form input
-  - Natural language input (e.g., “Find events between Paris and Berlin this weekend”)
+  - Manual form input  
+  - Natural language input (e.g., “Find events between Paris and Berlin this weekend”)  
 - Interacts with backend for:
-  - Route generation
-  - Payload extraction from user queries
+  - Route generation  
+  - Payload extraction from user queries  
 - Displays:
-  - Interactive route map
-  - Events as styled markers
+  - Interactive route map  
+  - Events as styled markers  
   - Filters for date, transport profile, keywords, and number of events
 
 ---
@@ -80,7 +80,7 @@ Event datasets reside in the `dataset/` directory as geolocated, structured `.js
 
 ## API Reference 📡
 
-### `POST /create_map` — Route-Based Event Map
+### `POST /createmap` — Route-Based Event Map
 
 Generates route and fetches relevant events from origin to destination.
 
@@ -161,21 +161,20 @@ The backend integrates **CrewAI** and **Mistral LLM** to enable intelligent extr
 
 ### Service Function: `extract_payload(sentence: str)` 📤
 
-- Invokes `crew.kickoff()` with the sentence.
-- Validates output against `Payload` Pydantic schema.
+- Invokes `crew.kickoff()` with the sentence.  
+- Validates output against `Payload` Pydantic schema.  
 - Returns valid JSON or `None` on failure.
 
 ### Benefits 💡
 
-- Enhances `/sentencetopayload` endpoint to support **flexible, unstructured user queries**.
-- Converts user-friendly input (e.g., "Find me concerts along my trip from Berlin to Munich next weekend") into strict backend-compatible parameters.
+- Enhances `/sentencetopayload` endpoint to support **flexible, unstructured user queries**.  
+- Converts user-friendly input (e.g., "Find me concerts along my trip from Berlin to Munich next weekend") into strict backend-compatible parameters.  
 - Ensures **schema validation** and consistent user experience powered by **AI and vector search**.
 
 ---
 
 ## Notes 🗒️
 
-- ⚡ The backend uses Qdrant's hybrid search (dense + sparse) and geo-filtering to efficiently fetch relevant events.
-- 🧩 Frontend leverages **Streamlit's session state** for reactive, smooth user experience.
+- ⚡ The backend uses Qdrant's hybrid search (dense + sparse) and geo-filtering to efficiently fetch relevant events.  
+- 🧩 Frontend leverages **Streamlit's session state** for reactive, smooth user experience.  
 - 🧱 Designed for extensibility — new endpoints, models, and UI features can be added easily.
-

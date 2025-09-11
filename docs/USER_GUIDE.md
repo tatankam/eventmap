@@ -2,52 +2,26 @@
 
 ## 📘 Introduction
 
-Welcome to the **ReMap** project! This application allows you to visualize events along a route using a combined backend and frontend system. The backend provides API services, and the frontend offers an interactive UI built with Streamlit.
+Welcome to the **ReMap** project! This application allows you to visualize events along a route using combined backend and frontend services. The backend provides required APIs, and a Streamlit UI enables interactive route and event visualization.
 
 ## 💻 System Requirements
 
-- Docker and Docker Compose installed (for easy deployment)
-- Python 3.13+ if running locally without Docker
-- Required API keys and configured endpoints as environment variables (see below)
+- Docker and Docker Compose installed (for easy deployment), or  
+- Python 3.13+ if running locally without Docker.  
+- Required API keys configured as environment variables.
 
-## 🔐 Required API Keys and Service Endpoints
+## 🔐 Required API Keys (Environment Variables)
 
-To run **ReMap** successfully, the following API keys and endpoints must be configured as environment variables and used accordingly:
+To run **ReMap** you must configure the following environment variables:
 
-### API Keys
+- `QDRANT_SERVER`  
+- `QDRANT_API_KEY`  
+- `OPENROUTE_API_KEY`  
+- `OPENAI_API_KEY`  
+- `OPEN_AI_BASE_URL`  
+- `OPENAI_MODEL`  
 
-- **Qdrant Vector Database:**  
-  - `QDRANT_SERVER`: The URL of the Qdrant server (can be self-hosted or cloud-based).  
-  - `QDRANT_API_KEY`: API key for authenticating with Qdrant.
-
-- **OpenRouteService API:**  
-  - `OPENROUTE_API_KEY`: Key for accessing OpenRouteService APIs used for geocoding and routing.
-
-- **OpenAI-Compatible LLM (Mistral via CrewAI):**  
-  - `OPENAI_API_KEY`: API key for the large language model service.  
-  - `OPEN_AI_BASE_URL`: Base URL endpoint for the LLM (can be public OpenAI or a private deployment).  
-  - `OPENAI_MODEL`: Model name used for natural language parsing.
-
-### Backend Service Endpoints
-
-These are the key API endpoints the backend exposes:
-
-- `POST /createmap`  
-  Generate an event map based on inputs like origin, destination, buffer distance, travel time window, query text, number of events, and transport profile.
-
-- `POST /ingestevents`  
-  Upload and ingest new event data provided as JSON files into the system for indexing and querying.
-
-- `POST /sentencetopayload`  
-  Convert natural language travel plan sentences into structured query parameters to drive event searches.
-
-- `GET /docs`  
-  Access API documentation and interactive schema exploration.
-
----
-
-Ensure these keys and endpoints are securely stored and accessible to both backend and frontend services during deployment. Correct configuration and usage of these elements are essential for ReMap to function properly.
-
+Ensure these keys are securely stored and accessible to services at runtime.
 
 ## ⚙️ Installation and Setup
 
@@ -116,15 +90,19 @@ Open `.env` in a text editor and provide the required API keys and endpoints as 
 
 ---
 
-### 🌐 Accessing the Application
+## 🌐 Accessing the Application
 
-- Access the frontend UI at: [http://localhost:8501](http://localhost:8501)  
-
-- Access the backend API documentation at: [http://localhost:8000/docs](http://localhost:8000/docs)  
+- Frontend UI: [http://localhost:8501](http://localhost:8501)  
+- Backend API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Getting Started
+
+- Use manual or natural language input modes to query events along travel routes.  
+- Upload event data via provided tools.  
+- Explore interactive map with event markers and filters.  
+- Review troubleshooting tips if issues arise.
 
 ### 🧭 User Interface Overview
 
@@ -176,19 +154,11 @@ These JSON files can then be uploaded to the system via the backend `/ingesteven
 
 ## 🛠️ Troubleshooting
 
-- Ensure Docker is running and ports 8000 and 8501 are free.
-- Verify that required API keys and endpoints are properly configured in your environment.
-- Check backend logs for errors during event ingestion or route creation.
-- Clear browser cache if frontend UI behaves unexpectedly.
+- Ensure Docker is running and required ports (8000, 8501) are free.  
+- Verify environment variables are correctly set.  
+- Check backend logs for errors.  
+- Clear browser cache as needed.
 
----
-
-## ❓ FAQs
-
-**Q:** Can I use the backend API independently?  
-**A:** Yes, the API is fully accessible via HTTP endpoints documented and available at `/docs` on the backend server (e.g., `http://localhost:8000/docs`).
-
----
 
 ## 📬 Contact and Support
 
@@ -196,5 +166,4 @@ For issues or questions, please open an issue on the GitHub repository.
 
 ---
 
-Thank you for using **ReMap**!  
-Happy mapping and discovery!
+Thank you for using **ReMap**! Happy mapping and discovery!
