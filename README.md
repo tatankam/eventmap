@@ -16,13 +16,14 @@ Currently, ReMap uses synthetically generated event data for demonstration and t
 
 ## ✨ Features
 
-- Store detailed event metadata including title, description, venue, address, latitude, and longitude.
-- Perform advanced semantic search using sparse and dense embeddings of event descriptions stored in the powerful Qdrant vector database.
-- Combine search with robust geospatial filtering within buffer zones along routes and temporal filtering by travel windows.
-- Support multiple transport profiles (driving, cycling, walking) with routing via OpenRouteService API.
-- Limit the number of returned events for tailored results.
-- Interactive frontend built with Streamlit and OpenStreetMap for route visualization, buffered search areas, event markers, and detailed information panels.
-- Input validation to ensure consistent date/time windows and query parameters.
+- Store detailed event metadata in Qdrant, including title, description, venue, address, latitude, and longitude for accurate geospatial referencing.
+- Leverage hybrid vector search by indexing both dense and sparse embeddings of event descriptions in Qdrant, improving semantic search precision.
+- Combine semantic similarity with advanced geospatial filtering using buffer zones along routes and temporal filtering based on travel time windows.
+- Support multiple transport profiles (driving, cycling, walking) with routing provided by the OpenRouteService API.
+- Limit the number of returned events to tailor result sets to user preferences.
+- Interactive frontend built with Streamlit and OpenStreetMap for route visualization, buffered search areas, event markers, and detailed event info panels.
+- Robust input validation to ensure consistent and correct date/time windows and query parameters.
+
 
 ---
 
