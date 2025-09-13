@@ -14,6 +14,8 @@ import shutil
 # Import the extraction function and Pydantic models
 from app.services.extraction_service import extract_payload
 from app.models.schemas import SentenceInput
+from pydantic import ValidationError
+from fastapi import HTTPException
 
 router = APIRouter()
 
@@ -149,8 +151,14 @@ async def ingest_events_endpoint(file: UploadFile = File(...)):
 @router.post("/sentencetopayload")
 async def sentence_to_payload(data: SentenceInput):
     sentence = data.sentence
-    output = extract_payload(sentence)
-    if output:
-        return output.model_dump()
-    else:
-        raise HTTPException(status_code=400, detail="Failed to extract valid payload or validation error")
+    try:
+        output = extract_payload(sentence)
+        if output:
+            return output.model_dump()
+        else:
+            raise HTTPException(status_code=400, detail="Failed to extract valid payload or validation error")
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=e.errors())
+    except Exception as e:
+        # Other unexpected errors
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
