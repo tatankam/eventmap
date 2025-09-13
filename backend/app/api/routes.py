@@ -3,8 +3,8 @@ from app.services.ingest_service import ingest_events_from_file
 from app.services import openrouteservice_client, qdrant_client
 from app.models import schemas
 from shapely.geometry import LineString, Point
-import geopandas as gpd
 import numpy as np
+import geopandas as gpd
 from qdrant_client.http import models as qmodels
 from app.core.config import DENSE_MODEL_NAME, SPARSE_MODEL_NAME, COLLECTION_NAME
 from fastembed import TextEmbedding, SparseTextEmbedding
